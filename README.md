@@ -25,10 +25,6 @@ Make sure you have `gradle>=v2.10` installed. Run the following to build the app
   gradle build
 ```
 
-## Contributing
-
-See `CONTRIBUTING.md`.
-
 ## Copyright
 
 This project is licensed under the AGPL version 3 license (see LICENSE).
