@@ -1,6 +1,6 @@
 package io.leonis.subra.game.engine;
 
-import io.leonis.subra.game.engine.FilterDeducer.FilteredSSLGame;
+import io.leonis.subra.game.engine.FilterDeducer.FilteredGameState;
 import io.leonis.subra.math.filter.*;
 import io.leonis.zosma.game.engine.*;
 import java.util.Set;
@@ -21,7 +21,7 @@ import reactor.core.publisher.Flux;
 @Value
 @AllArgsConstructor
 public class FilterDeducer<I extends Player.SetSupplier & Goal.SetSupplier & Field.Supplier & Ball.SetSupplier & Referee.Supplier & Temporal>
-    implements Deducer<I, FilteredSSLGame> {
+    implements Deducer<I, FilteredGameState> {
   private final Deducer<I, Ball> ballFilter;
   private final Deducer<I, Set<Player>> robotFilter;
 
@@ -34,17 +34,17 @@ public class FilterDeducer<I extends Player.SetSupplier & Goal.SetSupplier & Fie
   }
 
   @Override
-  public Publisher<FilteredSSLGame> apply(final Publisher<I> soccerGamePublisher) {
+  public Publisher<FilteredGameState> apply(final Publisher<I> soccerGamePublisher) {
     return Flux.from(soccerGamePublisher)
         .transform(new ParallelDeducer<>(
             new Deducer.Identity<>(),
             this.getBallFilter(),
             this.getRobotFilter(),
-            FilteredSSLGame::build));
+            FilteredGameState::build));
   }
 
   @Value
-  public static class FilteredSSLGame
+  public static class FilteredGameState
       implements Player.SetSupplier, Goal.SetSupplier, Field.Supplier, Ball.Supplier,
       Referee.Supplier, Temporal {
     private final Set<Player> agents;
@@ -55,8 +55,8 @@ public class FilterDeducer<I extends Player.SetSupplier & Goal.SetSupplier & Fie
     private final long timestamp = System.currentTimeMillis();
 
     public static <I extends Player.SetSupplier & Goal.SetSupplier & Field.Supplier & Ball.SetSupplier & Referee.Supplier & Temporal>
-    FilteredSSLGame build(final I unfilteredGameState, final Ball ball, final Set<Player> robots) {
-      return new FilteredSSLGame(
+    FilteredGameState build(final I unfilteredGameState, final Ball ball, final Set<Player> robots) {
+      return new FilteredGameState(
           robots,
           unfilteredGameState.getGoals(),
           ball,
