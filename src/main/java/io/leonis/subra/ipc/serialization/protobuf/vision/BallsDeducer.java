@@ -27,10 +27,7 @@ public class BallsDeducer implements Deducer<WrapperPacket, Set<Ball>> {
                         input.getTCapture(),
                         ball.getX(),
                         ball.getY(),
-                        ball.getZ(),
-                        0d,
-                        0d,
-                        0d))
+                        ball.getZ()))
                 .collect(Collectors.toSet()));
   }
 }

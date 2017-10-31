@@ -1,10 +1,10 @@
 package io.leonis.subra.game.engine;
 
+import io.leonis.subra.game.data.*;
 import io.leonis.zosma.game.engine.Deducer;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.reactivestreams.Publisher;
-import io.leonis.subra.game.data.Ball;
 import reactor.core.publisher.Flux;
 
 /**
@@ -15,9 +15,9 @@ import reactor.core.publisher.Flux;
  * @param <I> The type of state carrying a {@link Set} of {@link Ball}.
  * @author Rimon Oz
  */
-public class BallsVelocityDeducer<I extends Ball.SetSupplier> implements Deducer<I, Set<Ball>> {
+public class BallsVelocityDeducer<I extends Ball.SetSupplier> implements Deducer<I, Set<MovingBall>> {
   @Override
-  public Publisher<Set<Ball>> apply(final Publisher<I> iPublisher) {
+  public Publisher<Set<MovingBall>> apply(final Publisher<I> iPublisher) {
     return Flux.from(iPublisher)
         .scan(Collections.emptySet(), (previousGame, currentGame) ->
             currentGame.getBalls().stream()
@@ -32,7 +32,7 @@ public class BallsVelocityDeducer<I extends Ball.SetSupplier> implements Deducer
                         .map(closestBall ->
                             this.calculateVelocity(currentBall, closestBall))
                         .orElse(
-                            new Ball.State(
+                            new MovingBall.State(
                                 currentBall.getTimestamp(),
                                 currentBall.getX(),
                                 currentBall.getY(),
@@ -48,8 +48,8 @@ public class BallsVelocityDeducer<I extends Ball.SetSupplier> implements Deducer
    * @param previousBall The previous state of the {@link Ball}.
    * @return An updated state representation of the current {@link Ball} with velocity data.
    */
-  private Ball calculateVelocity(final Ball currentBall, final Ball previousBall) {
-    return new Ball.State(
+  private MovingBall calculateVelocity(final Ball currentBall, final MovingBall previousBall) {
+    return new MovingBall.State(
         currentBall.getTimestamp(),
         currentBall.getX(),
         currentBall.getY(),

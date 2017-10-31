@@ -16,7 +16,7 @@ public class GameWriter<G extends Player.SetSupplier & SetSupplier & Field.Suppl
 
   public GameWriter() {
     this.gson = new GsonBuilder()
-        .registerTypeAdapter(Player.class, new PlayerSerializer())
+        .registerTypeAdapter(Player.class, new MovingPlayerSerializer())
         .registerTypeAdapter(FieldArc.class, new FieldArcSerializer())
         .registerTypeAdapter(FieldLine.class, new FieldLineSerializer())
         .registerTypeAdapter(Field.class, new FieldSerializer())

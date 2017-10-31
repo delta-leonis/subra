@@ -11,12 +11,12 @@ import io.leonis.algieba.Temporal;
 import reactor.core.publisher.Flux;
 
 /**
- * The Class BallKalmanFilter.
+ * The Class MovingBallsKalmanFilter.
  *
  * @author Rimon Oz
  */
-public class BallKalmanFilter<I extends Ball.SetSupplier & Referee.Supplier & Temporal>
-    implements Deducer<I, Ball> {
+public class MovingBallsKalmanFilter<I extends MovingBall.SetSupplier & Referee.Supplier>
+    implements Deducer<I, MovingBall> {
 
   private final KalmanFilter kalmanFilter = new KalmanFilter();
 
@@ -66,13 +66,13 @@ public class BallKalmanFilter<I extends Ball.SetSupplier & Referee.Supplier & Te
       new int[]{7, 7});
 
   @Override
-  public Publisher<Ball> apply(final Publisher<I> inputPublisher) {
+  public Publisher<MovingBall> apply(final Publisher<I> inputPublisher) {
     return Flux.from(inputPublisher)
         .scan(
-            new Ball.State(0, 0, 0, 0, 0, 0, 0),
+            new MovingBall.State(0, 0, 0, 0, 0, 0, 0),
             (previousResult, input) -> input.getBalls().stream()
                 .reduce((previousBall, foundPlayer) ->
-                    new Ball.State(
+                    new MovingBall.State(
                         this.kalmanFilter.apply(
                             getStateTransitionMatrix(
                                 (input.getReferee().getTimestamp()
@@ -85,7 +85,7 @@ public class BallKalmanFilter<I extends Ball.SetSupplier & Referee.Supplier & Te
                                 previousBall.getState().getMean(),
                                 MEASUREMENT_COVARIANCE_MATRIX),
                             foundPlayer.getState())))
-                .orElse(new Ball.State(0, 0, 0, 0, 0, 0, 0)));
+                .orElse(new MovingBall.State(0, 0, 0, 0, 0, 0, 0)));
   }
 
   public static INDArray getStateTransitionMatrix(final double timeDifference) {

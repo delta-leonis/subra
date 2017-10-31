@@ -1,7 +1,7 @@
 package io.leonis.subra.ipc.serialization.gson;
 
 import com.google.gson.*;
-import io.leonis.subra.game.data.Ball;
+import io.leonis.subra.game.data.*;
 import java.lang.reflect.Type;
 
 /**
@@ -9,10 +9,10 @@ import java.lang.reflect.Type;
  *
  * @author Ryan Meulenkamp
  */
-final class BallSerializer implements JsonSerializer<Ball> {
+final class MovingBallSerializer implements JsonSerializer<MovingBall> {
   @Override
   public JsonElement serialize(
-      final Ball ball,
+      final MovingBall ball,
       final Type typeOfSrc,
       final JsonSerializationContext context
   ) {
@@ -21,6 +21,9 @@ final class BallSerializer implements JsonSerializer<Ball> {
     jsonObject.addProperty("x", ball.getX());
     jsonObject.addProperty("y", ball.getY());
     jsonObject.addProperty("z", ball.getZ());
+    jsonObject.addProperty("xVelocity", ball.getXVelocity());
+    jsonObject.addProperty("yVelocity", ball.getYVelocity());
+    jsonObject.addProperty("zVelocity", ball.getZVelocity());
     return jsonObject;
   }
 }

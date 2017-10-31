@@ -36,14 +36,13 @@ public class PotentialFieldDeducer<G extends Player.SetSupplier & Field.Supplier
               this.origin,
               Stream.concat(
                   game.getAgents().stream()
-                      .map(agent -> new GaussianPotentialField(
-                          agent.getPosition(),
-                          agent.getTeamColor().equals(this.getTeamColor())
+                      .map(player -> new GaussianPotentialField(
+                          player.getPosition(),
+                          player.getTeamColor().equals(this.getTeamColor())
                               ? getAllySourceScale()
                               : getOpponentSourceScale(),
                           false)),
                   game.getBalls().stream()
-                      // balls
                       .map(ball ->
                           new GaussianPotentialField(
                               ball.getPosition(),
@@ -52,11 +51,11 @@ public class PotentialFieldDeducer<G extends Player.SetSupplier & Field.Supplier
                   .collect(Collectors.toSet()));
 
           return () -> game.getAgents().stream()
-              .filter(agent -> agent.getTeamColor().equals(this.getTeamColor()))
+              .filter(player -> player.getTeamColor().equals(this.getTeamColor()))
               .collect(Collectors.toMap(
-                  agent -> agent,
-                  agent -> new PlayerCommand.State(
-                      aggregatedPotentialField.getForce(agent.getPosition()),
+                  Player::getIdentity,
+                  player -> new PlayerCommand.State(
+                      aggregatedPotentialField.getForce(player.getPosition()),
                       0,
                       0,
                       0)));

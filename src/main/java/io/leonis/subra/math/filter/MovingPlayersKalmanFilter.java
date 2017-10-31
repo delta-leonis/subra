@@ -2,26 +2,24 @@ package io.leonis.subra.math.filter;
 
 import io.leonis.algieba.filter.KalmanFilter;
 import io.leonis.algieba.statistic.SimpleDistribution;
+import io.leonis.subra.game.data.*;
+import io.leonis.zosma.game.engine.Deducer;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.Value;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.reactivestreams.Publisher;
-import io.leonis.subra.game.data.*;
-import io.leonis.subra.game.data.Goal.SetSupplier;
-import io.leonis.zosma.game.engine.Deducer;
-import io.leonis.algieba.Temporal;
 import reactor.core.publisher.Flux;
 
 /**
- * The Class RobotKalmanFilter.
+ * The Class MovingPlayersKalmanFilter.
  *
  * @author Rimon Oz
  */
 @Value
-public class RobotKalmanFilter<I extends Player.SetSupplier & SetSupplier & Field.Supplier & Ball.SetSupplier & Referee.Supplier & Temporal>
-    implements Deducer<I, Set<Player>> {
+public class MovingPlayersKalmanFilter<I extends MovingPlayer.SetSupplier & Referee.Supplier>
+    implements Deducer<I, Set<MovingPlayer>> {
 
   private final KalmanFilter kalmanFilter = new KalmanFilter();
 
@@ -71,7 +69,7 @@ public class RobotKalmanFilter<I extends Player.SetSupplier & SetSupplier & Fiel
       new int[]{7, 7});
 
   @Override
-  public Publisher<Set<Player>> apply(final Publisher<I> inputPublisher) {
+  public Publisher<Set<MovingPlayer>> apply(final Publisher<I> inputPublisher) {
     return Flux.from(inputPublisher)
         .scan(Collections.emptySet(),
             (previousResult, input) ->
@@ -79,9 +77,9 @@ public class RobotKalmanFilter<I extends Player.SetSupplier & SetSupplier & Fiel
                     .map(player ->
                         previousResult.stream()
                             .filter(foundPlayer ->
-                                foundPlayer.equals(player))
+                                foundPlayer.getIdentity().equals(player.getIdentity()))
                             .findFirst()
-                            .<Player>map(foundPlayer -> new Player.State(
+                            .<MovingPlayer>map(foundPlayer -> new MovingPlayer.State(
                                 player.getId(),
                                 this.kalmanFilter.apply(
                                     getStateTransitionMatrix(

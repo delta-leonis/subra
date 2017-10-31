@@ -1,30 +1,23 @@
 package io.leonis.subra.game.data;
 
+import io.leonis.algieba.*;
+import io.leonis.algieba.statistic.*;
+import io.leonis.zosma.game.Agent;
 import java.io.Serializable;
 import java.util.Set;
 import lombok.*;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
-import io.leonis.zosma.game.Agent;
-import io.leonis.algieba.*;
-import io.leonis.algieba.geometry.Orientation;
-import io.leonis.algieba.spatial.Moving;
-import io.leonis.algieba.statistic.*;
 
 /**
  * The Interface Player.
  *
- * This interface represents a {@link Agent robot} in the  of a Small Size League game.
+ * This interface represents a {@link Agent robot} in a Small Size League game.
  *
  * @author Rimon Oz
  */
-public interface Player extends Spatial, Moving, Orientation, Agent, Temporal, Serializable {
-
-  /**
-   * @return The {@link TeamColor} of the {@link Team} to which this agent belongs.
-   */
-  TeamColor getTeamColor();
+public interface Player extends Spatial, Agent, Temporal, Serializable {
 
   default double getX() {
     return this.getState().getMean().getDouble(1, 0);
@@ -43,27 +36,6 @@ public interface Player extends Spatial, Moving, Orientation, Agent, Temporal, S
   }
 
   /**
-   * @return The X-velocity coordinate of the {@link Agent}.
-   */
-  default double getXVelocity() {
-    return this.getState().getMean().getDouble(4, 0);
-  }
-
-  /**
-   * @return The Y-velocity coordinate of the {@link Agent}.
-   */
-  default double getYVelocity() {
-    return this.getState().getMean().getDouble(5, 0);
-  }
-
-  /**
-   * @return The orientation velocity of the {@link Agent}.
-   */
-  default double getOrientationVelocity() {
-    return this.getState().getMean().getDouble(6, 0);
-  }
-
-  /**
    * @return The orientation of the {@link Agent}.
    */
   default double getOrientation() {
@@ -72,12 +44,7 @@ public interface Player extends Spatial, Moving, Orientation, Agent, Temporal, S
 
   @Override
   default INDArray getPosition() {
-    return this.getState().getMean().get(NDArrayIndex.interval(1, 3), NDArrayIndex.all());
-  }
-
-  @Override
-  default INDArray getVelocity() {
-    return this.getState().getMean().get(NDArrayIndex.interval(4, 6), NDArrayIndex.all());
+    return this.getState().getMean().get(NDArrayIndex.interval(1, 4), NDArrayIndex.all());
   }
 
   @Override
@@ -85,6 +52,18 @@ public interface Player extends Spatial, Moving, Orientation, Agent, Temporal, S
     // fixed point conversion
     return Math.round(1000000L * this.getState().getMean().getDouble(0, 0));
   }
+
+  /**
+   * @return The identity for the {@link Player}, containing only its identifier and team color.
+   */
+  default Player.Identity getIdentity() {
+    return new Player.Identity(this.getId(), this.getTeamColor());
+  }
+
+  /**
+   * @return The {@link TeamColor} of the {@link Team} to which this agent belongs.
+   */
+  TeamColor getTeamColor();
 
   interface SetSupplier extends Agent.SetSupplier<Player> {
     Set<Player> getAgents();
@@ -103,9 +82,6 @@ public interface Player extends Spatial, Moving, Orientation, Agent, Temporal, S
         final double x,
         final double y,
         final double orientation,
-        final double velocityX,
-        final double velocityY,
-        final double velocityR,
         final TeamColor teamColor
     ) {
       this(
@@ -115,14 +91,17 @@ public interface Player extends Spatial, Moving, Orientation, Agent, Temporal, S
                   timestamp,
                   x,
                   y,
-                  orientation,
-                  velocityX,
-                  velocityY,
-                  velocityR
+                  orientation
               },
-              new int[]{7, 1}), Nd4j.eye(7)),
+              new int[]{4, 1}), Nd4j.eye(4)),
           teamColor);
 
     }
+  }
+
+  @Value
+  class Identity implements Agent {
+    private final int id;
+    private final TeamColor teamColor;
   }
 }

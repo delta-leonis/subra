@@ -19,11 +19,11 @@ import reactor.core.publisher.Flux;
 @AllArgsConstructor
 public class GamepadPublisher implements Publisher<Frame> {
   private final Publisher<JamepadController> controllerPublisher;
-  private final Publisher<Set<Player>> agentPublisher;
+  private final Publisher<Set<Player>> playerPublisher;
 
   @Override
   public void subscribe(final Subscriber<? super Frame> subscriber) {
-    Flux.combineLatest(this.controllerPublisher, this.agentPublisher, (controllers, agents) ->
+    Flux.combineLatest(this.controllerPublisher, this.playerPublisher, (controllers, agents) ->
         new Frame(agents, Collections.emptyMap()))
         .subscribe(subscriber);
   }

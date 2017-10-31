@@ -1,5 +1,6 @@
 package io.leonis.subra.game.data;
 
+import io.leonis.algieba.Temporal;
 import java.io.Serializable;
 import java.util.List;
 import lombok.Value;
@@ -11,7 +12,7 @@ import lombok.Value;
  *
  * @author Rimon Oz
  */
-public interface Team extends Serializable {
+public interface Team extends Serializable, Temporal {
 
   /**
    * @return The {@link TeamColor color} of the team.
@@ -60,6 +61,7 @@ public interface Team extends Serializable {
 
   @Value
   class State implements Team {
+    private final long timestamp;
     private final String name;
     private final int score;
     private final int redCardCount;

@@ -10,6 +10,6 @@ import io.leonis.subra.game.data.*;
  */
 public interface Strategy {
   interface Supplier {
-    Map<Player, PlayerCommand> getStrategy();
+    Map<Player.Identity, PlayerCommand> getStrategy();
   }
 }

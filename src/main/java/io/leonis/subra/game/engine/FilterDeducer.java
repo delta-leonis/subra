@@ -20,17 +20,17 @@ import reactor.core.publisher.Flux;
  */
 @Value
 @AllArgsConstructor
-public class FilterDeducer<I extends Player.SetSupplier & Goal.SetSupplier & Field.Supplier & Ball.SetSupplier & Referee.Supplier & Temporal>
+public class FilterDeducer<I extends MovingPlayer.SetSupplier & Goal.SetSupplier & Field.Supplier & MovingBall.SetSupplier & Referee.Supplier & Temporal>
     implements Deducer<I, FilteredGameState> {
-  private final Deducer<I, Ball> ballFilter;
-  private final Deducer<I, Set<Player>> robotFilter;
+  private final Deducer<I, MovingBall> ballFilter;
+  private final Deducer<I, Set<MovingPlayer>> robotFilter;
 
   /**
-   * Constructs a new FilterDeducer with a set of first-order {@link BallKalmanFilter} and {@link
-   * RobotKalmanFilter}.
+   * Constructs a new FilterDeducer with a set of first-order {@link MovingBallsKalmanFilter} and {@link
+   * MovingPlayersKalmanFilter}.
    */
   public FilterDeducer() {
-    this(new BallKalmanFilter<>(), new RobotKalmanFilter<>());
+    this(new MovingBallsKalmanFilter<>(), new MovingPlayersKalmanFilter<>());
   }
 
   @Override
@@ -45,17 +45,17 @@ public class FilterDeducer<I extends Player.SetSupplier & Goal.SetSupplier & Fie
 
   @Value
   public static class FilteredGameState
-      implements Player.SetSupplier, Goal.SetSupplier, Field.Supplier, Ball.Supplier,
+      implements MovingPlayer.SetSupplier, Goal.SetSupplier, Field.Supplier, MovingBall.Supplier,
       Referee.Supplier, Temporal {
-    private final Set<Player> agents;
+    private final Set<MovingPlayer> agents;
     private final Set<Goal> goals;
-    private final Ball ball;
+    private final MovingBall ball;
     private final Field field;
     private final Referee referee;
     private final long timestamp = System.currentTimeMillis();
 
-    public static <I extends Player.SetSupplier & Goal.SetSupplier & Field.Supplier & Ball.SetSupplier & Referee.Supplier & Temporal>
-    FilteredGameState build(final I unfilteredGameState, final Ball ball, final Set<Player> robots) {
+    public static <I extends MovingPlayer.SetSupplier & Goal.SetSupplier & Field.Supplier & MovingBall.SetSupplier & Referee.Supplier & Temporal>
+    FilteredGameState build(final I unfilteredGameState, final MovingBall ball, final Set<MovingPlayer> robots) {
       return new FilteredGameState(
           robots,
           unfilteredGameState.getGoals(),

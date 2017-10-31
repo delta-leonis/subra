@@ -38,9 +38,6 @@ public class PlayersDeducer implements Deducer<WrapperPacket, Set<Player>> {
         robotData.getX(),
         robotData.getY(),
         robotData.getOrientation(),
-        0d,
-        0d,
-        0d,
         teamColor);
   }
 }

@@ -5,6 +5,7 @@ import io.leonis.zosma.game.engine.Deducer;
 import java.util.stream.Collectors;
 import lombok.Value;
 import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.indexing.NDArrayIndex;
 import org.nd4j.linalg.ops.transforms.Transforms;
 import org.reactivestreams.Publisher;
 import io.leonis.subra.game.data.*;
@@ -32,14 +33,17 @@ public class BallTrackerFormationDeducer<G extends Player.SetSupplier & Ball.Sup
         .map(game ->
             new PositionFormation(
                 game.getAgents().stream()
-                    .filter(agent -> agent.getTeamColor().equals(this.getTeamColor()))
+                    .filter(player -> player.getTeamColor().equals(this.getTeamColor()))
                     .collect(Collectors.toMap(
-                        agent -> agent,
-                        agent ->
+                        Player::getIdentity,
+                        player ->
                             Nd4j.vstack(
                                 game.getBall().getPosition()
                                     .add(Transforms.unitVec(
-                                        game.getBall().getPosition().sub(agent.getPosition()))
+                                        game.getBall().getPosition()
+                                            .get(NDArrayIndex.interval(0, 2), NDArrayIndex.all())
+                                            .sub(player.getPosition()
+                                                .get(NDArrayIndex.interval(0, 2), NDArrayIndex.all())))
                                         .mul(this.getDistanceFromBall())))))));
   }
 }

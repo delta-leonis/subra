@@ -17,7 +17,7 @@ import io.leonis.algieba.statistic.*;
  *
  * @author Rimon Oz
  */
-public interface Ball extends Spatial, Moving, Temporal, Serializable {
+public interface Ball extends Spatial, Temporal, Serializable {
 
   @Override
   default long getTimestamp() {
@@ -51,35 +51,10 @@ public interface Ball extends Spatial, Moving, Temporal, Serializable {
     return this.getState().getMean().getDouble(3, 0);
   }
 
-  /**
-   * @return The X-velocity coordinate of the {@link Ball}.
-   */
-  default double getXVelocity() {
-    return this.getState().getMean().getDouble(4, 0);
-  }
-
-  /**
-   * @return The Y-velocity coordinate of the {@link Ball}.
-   */
-  default double getYVelocity() {
-    return this.getState().getMean().getDouble(5, 0);
-  }
-
-  /**
-   * @return The Z-velocity coordinate of the {@link Ball}.
-   */
-  default double getZVelocity() {
-    return this.getState().getMean().getDouble(6, 0);
-  }
 
   @Override
   default INDArray getPosition() {
-    return this.getState().getMean().get(NDArrayIndex.interval(1, 3), NDArrayIndex.all());
-  }
-
-  @Override
-  default INDArray getVelocity() {
-    return this.getState().getMean().get(NDArrayIndex.interval(4, 7), NDArrayIndex.all());
+    return this.getState().getMean().get(NDArrayIndex.interval(1, 4), NDArrayIndex.all());
   }
 
   interface SetSupplier {
@@ -99,22 +74,16 @@ public interface Ball extends Spatial, Moving, Temporal, Serializable {
         final double timestamp,
         final double x,
         final double y,
-        final double z,
-        final double velocityX,
-        final double velocityY,
-        final double velocityZ
+        final double z
     ) {
       this(new SimpleDistribution(Nd4j.create(
           new double[]{
               timestamp,
               x,
               y,
-              z,
-              velocityX,
-              velocityY,
-              velocityZ
+              z
           },
-          new int[]{7, 1}), Nd4j.eye(7)));
+          new int[]{4, 1}), Nd4j.eye(4)));
     }
   }
 }
