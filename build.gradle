@@ -30,10 +30,6 @@ javadoc {
     classpath = configurations.compile
 }
 
-compileJava {
-    options.compilerArgs << '-parameters'
-}
-
 dependencies {
     // delta-leonis
     compile 'io.leonis:zosma:0.0.2'
