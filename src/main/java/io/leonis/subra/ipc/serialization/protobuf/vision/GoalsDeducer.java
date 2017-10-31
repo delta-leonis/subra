@@ -81,7 +81,8 @@ public class GoalsDeducer implements Deducer<WrapperPacket, Set<Goal>> {
                 }),
             teamColor,
             direction);
+      default:
+        return new Goal.State(Nd4j.zeros(1, 4), TeamColor.NONE, CardinalDirection.NORTH);
     }
-    return new Goal.State(Nd4j.zeros(1, 4), TeamColor.NONE, CardinalDirection.NORTH);
   }
 }

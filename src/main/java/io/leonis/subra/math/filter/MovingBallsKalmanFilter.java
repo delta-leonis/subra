@@ -2,12 +2,11 @@ package io.leonis.subra.math.filter;
 
 import io.leonis.algieba.filter.KalmanFilter;
 import io.leonis.algieba.statistic.SimpleDistribution;
+import io.leonis.subra.game.data.*;
+import io.leonis.zosma.game.engine.Deducer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.reactivestreams.Publisher;
-import io.leonis.subra.game.data.*;
-import io.leonis.zosma.game.engine.Deducer;
-import io.leonis.algieba.Temporal;
 import reactor.core.publisher.Flux;
 
 /**

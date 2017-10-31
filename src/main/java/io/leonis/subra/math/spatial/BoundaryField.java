@@ -75,7 +75,8 @@ public class BoundaryField implements PotentialField {
             this.getPotential(-1d * (this.getLength() / 2d) - positionVector.getDouble(1, 0)),
             0
         }, new int[]{2, 1});
+      default:
+        return Nd4j.zeros(2, 1);
     }
-    return Nd4j.zeros(2, 1);
   }
 }
