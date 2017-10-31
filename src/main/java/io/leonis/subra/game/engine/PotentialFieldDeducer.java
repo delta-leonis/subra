@@ -1,15 +1,13 @@
 package io.leonis.subra.game.engine;
 
-import io.leonis.subra.game.data.Strategy;
-import io.leonis.subra.game.data.Strategy.Supplier;
+import io.leonis.algieba.spatial.AggregatedPotentialField;
+import io.leonis.subra.game.data.*;
 import io.leonis.subra.math.spatial.GaussianPotentialField;
 import io.leonis.zosma.game.engine.Deducer;
 import java.util.stream.*;
 import lombok.Value;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.reactivestreams.Publisher;
-import io.leonis.subra.game.data.*;
-import io.leonis.algieba.spatial.*;
 import reactor.core.publisher.Flux;
 
 /**
@@ -19,7 +17,7 @@ import reactor.core.publisher.Flux;
  */
 @Value
 public class PotentialFieldDeducer<G extends Player.SetSupplier & Field.Supplier & Ball.SetSupplier>
-    implements Deducer<G, Supplier> {
+    implements Deducer<G, Strategy.Supplier> {
   private final TeamColor teamColor;
   private final INDArray origin;
   private final double opponentSourceScale;

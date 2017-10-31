@@ -1,15 +1,14 @@
 package io.leonis.subra.ipc.serialization.gson;
 
 import com.google.gson.*;
-import java.lang.reflect.Type;
-import io.leonis.subra.game.data.*;
-import io.leonis.subra.game.data.Goal.SetSupplier;
 import io.leonis.algieba.Temporal;
+import io.leonis.subra.game.data.*;
+import java.lang.reflect.Type;
 
 /**
  * @author Jeroen de Jong
  */
-public class GameSerializer<G extends Player.SetSupplier & SetSupplier & Field.Supplier & Ball.SetSupplier & Referee.Supplier & Temporal>
+public class GameSerializer<G extends Player.SetSupplier & Goal.SetSupplier & Field.Supplier & Ball.SetSupplier & Referee.Supplier & Temporal>
     implements JsonSerializer<G> {
   @Override
   public JsonElement serialize(final G src, final Type typeOfSrc,

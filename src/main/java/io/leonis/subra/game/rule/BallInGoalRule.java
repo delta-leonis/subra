@@ -1,11 +1,10 @@
 package io.leonis.subra.game.rule;
 
+import io.leonis.algieba.geometry.CardinalDirection;
+import io.leonis.subra.game.data.*;
+import io.leonis.zosma.game.Rule;
 import java.util.Set;
 import java.util.stream.Collectors;
-import io.leonis.zosma.game.Rule;
-import io.leonis.subra.game.data.*;
-import io.leonis.subra.game.data.Goal.SetSupplier;
-import io.leonis.algieba.geometry.CardinalDirection;
 
 /**
  * The Class BallInGoalRule.
@@ -15,7 +14,7 @@ import io.leonis.algieba.geometry.CardinalDirection;
  *
  * @author Rimon Oz
  */
-public class BallInGoalRule<I extends SetSupplier & Ball.SetSupplier>
+public class BallInGoalRule<I extends Goal.SetSupplier & Ball.SetSupplier>
     implements Rule<I, TeamColor> {
 
   @Override

@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
  *
  * @author Ryan Meulenkamp
  */
-final class MovingBallSerializer implements JsonSerializer<MovingBall> {
+public final class MovingBallSerializer implements JsonSerializer<MovingBall> {
   @Override
   public JsonElement serialize(
       final MovingBall ball,
