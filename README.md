@@ -30,7 +30,7 @@ Make sure you have `gradle>=v2.10` installed. Run the following to build the app
 This project is licensed under the AGPL version 3 license (see LICENSE).
 
 ```
-subra
+subra - delta-leonis
 Copyright (C) 2017 Rimon Oz, Jeroen de Jong, Ryan Meulenkamp, Thomas Hakkers
 
 This program is free software: you can redistribute it and/or modify
