@@ -17,8 +17,6 @@ import reactor.core.publisher.Flux;
 public class MovingBallsKalmanFilter<I extends MovingBall.SetSupplier & Referee.Supplier>
     implements Deducer<I, MovingBall> {
 
-  private final KalmanFilter kalmanFilter = new KalmanFilter();
-
   public static final INDArray MEASUREMENT_TRANSITION_MATRIX = Nd4j.create(
       new double[]{
           1, 0, 0, 0, 0, 0, 0,
@@ -63,6 +61,7 @@ public class MovingBallsKalmanFilter<I extends MovingBall.SetSupplier & Referee.
           0, 0, 0, 0, 0, 0, 0.01f
       },
       new int[]{7, 7});
+  private final KalmanFilter kalmanFilter = new KalmanFilter();
 
   @Override
   public Publisher<MovingBall> apply(final Publisher<I> inputPublisher) {
@@ -70,12 +69,12 @@ public class MovingBallsKalmanFilter<I extends MovingBall.SetSupplier & Referee.
         .scan(
             new MovingBall.State(0, 0, 0, 0, 0, 0, 0),
             (previousResult, input) -> input.getBalls().stream()
-                .reduce((previousBall, foundPlayer) ->
+                .reduce((previousBall, foundBall) ->
                     new MovingBall.State(
                         this.kalmanFilter.apply(
                             getStateTransitionMatrix(
-                                (input.getReferee().getTimestamp()
-                                    - previousResult.getTimestamp()) / 1000000d),
+                                (foundBall.getTimestamp() - previousBall.getTimestamp())
+                                    / 1000000d),
                             MEASUREMENT_TRANSITION_MATRIX,
                             CONTROL_TRANSITION_MATRIX,
                             Nd4j.zeros(7, 1),
@@ -83,7 +82,7 @@ public class MovingBallsKalmanFilter<I extends MovingBall.SetSupplier & Referee.
                             new SimpleDistribution(
                                 previousBall.getState().getMean(),
                                 MEASUREMENT_COVARIANCE_MATRIX),
-                            foundPlayer.getState())))
+                            foundBall.getState())))
                 .orElse(new MovingBall.State(0, 0, 0, 0, 0, 0, 0)));
   }
 

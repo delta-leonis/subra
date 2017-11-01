@@ -41,7 +41,6 @@ public interface MovingPlayer extends Player, Moving {
     Set<MovingPlayer> getPlayers();
   }
 
-
   @Value
   @AllArgsConstructor
   class State implements MovingPlayer {

@@ -95,7 +95,6 @@ public interface Player extends Spatial, Agent, Temporal, Serializable {
               },
               new int[]{4, 1}), Nd4j.eye(4)),
           teamColor);
-
     }
   }
 

@@ -21,8 +21,6 @@ import reactor.core.publisher.Flux;
 public class MovingPlayersKalmanFilter<I extends MovingPlayer.SetSupplier & Referee.Supplier>
     implements Deducer<I, Set<MovingPlayer>> {
 
-  private final KalmanFilter kalmanFilter = new KalmanFilter();
-
   public static final INDArray MEASUREMENT_TRANSITION_MATRIX = Nd4j.create(
       new double[]{
           1, 0, 0, 0, 0, 0, 0,
@@ -67,6 +65,7 @@ public class MovingPlayersKalmanFilter<I extends MovingPlayer.SetSupplier & Refe
           0, 0, 0, 0, 0, 0, 0.01f
       },
       new int[]{7, 7});
+  private final KalmanFilter kalmanFilter = new KalmanFilter();
 
   @Override
   public Publisher<Set<MovingPlayer>> apply(final Publisher<I> inputPublisher) {
@@ -74,27 +73,27 @@ public class MovingPlayersKalmanFilter<I extends MovingPlayer.SetSupplier & Refe
         .scan(Collections.emptySet(),
             (previousResult, input) ->
                 input.getPlayers().stream()
-                    .map(player ->
+                    .map(foundPlayer ->
                         previousResult.stream()
-                            .filter(foundPlayer ->
-                                foundPlayer.getIdentity().equals(player.getIdentity()))
+                            .filter(previousPlayer ->
+                                previousPlayer.getIdentity().equals(foundPlayer.getIdentity()))
                             .findFirst()
-                            .<MovingPlayer>map(foundPlayer -> new MovingPlayer.State(
-                                player.getId(),
+                            .<MovingPlayer>map(previousPlayer -> new MovingPlayer.State(
+                                foundPlayer.getId(),
                                 this.kalmanFilter.apply(
                                     getStateTransitionMatrix(
-                                        (input.getReferee().getTimestamp()
-                                            - foundPlayer.getTimestamp()) / 1000000d),
+                                        (foundPlayer.getTimestamp() - previousPlayer.getTimestamp())
+                                            / 1000000d),
                                     MEASUREMENT_TRANSITION_MATRIX,
                                     CONTROL_TRANSITION_MATRIX,
                                     Nd4j.zeros(7, 1),
                                     PROCESS_COVARIANCE_MATRIX,
                                     new SimpleDistribution(
-                                        player.getState().getMean(),
+                                        foundPlayer.getState().getMean(),
                                         MEASUREMENT_COVARIANCE_MATRIX),
-                                    foundPlayer.getState()),
-                                player.getTeamColor()))
-                            .orElse(player))
+                                    previousPlayer.getState()),
+                                foundPlayer.getTeamColor()))
+                            .orElse(foundPlayer))
                     .collect(Collectors.toSet()));
   }
 
