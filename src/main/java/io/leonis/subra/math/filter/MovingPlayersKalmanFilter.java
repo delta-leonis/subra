@@ -73,7 +73,7 @@ public class MovingPlayersKalmanFilter<I extends MovingPlayer.SetSupplier & Refe
     return Flux.from(inputPublisher)
         .scan(Collections.emptySet(),
             (previousResult, input) ->
-                input.getAgents().stream()
+                input.getPlayers().stream()
                     .map(player ->
                         previousResult.stream()
                             .filter(foundPlayer ->

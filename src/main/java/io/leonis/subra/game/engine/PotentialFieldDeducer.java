@@ -33,7 +33,7 @@ public class PotentialFieldDeducer<G extends Player.SetSupplier & Field.Supplier
           final AggregatedPotentialField aggregatedPotentialField = new AggregatedPotentialField(
               this.origin,
               Stream.concat(
-                  game.getAgents().stream()
+                  game.getPlayers().stream()
                       .map(player -> new GaussianPotentialField(
                           player.getPosition(),
                           player.getTeamColor().equals(this.getTeamColor())
@@ -48,7 +48,7 @@ public class PotentialFieldDeducer<G extends Player.SetSupplier & Field.Supplier
                               true)))
                   .collect(Collectors.toSet()));
 
-          return () -> game.getAgents().stream()
+          return () -> game.getPlayers().stream()
               .filter(player -> player.getTeamColor().equals(this.getTeamColor()))
               .collect(Collectors.toMap(
                   Player::getIdentity,

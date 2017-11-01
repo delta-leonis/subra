@@ -18,7 +18,7 @@ public class StopRule<I extends Player.SetSupplier & Ball.SetSupplier>
 
   @Override
   public Set<Player> getViolators(final I input) {
-    return input.getAgents().stream()
+    return input.getPlayers().stream()
         .filter(player -> this.test(input, player))
         .collect(Collectors.toSet());
   }
@@ -41,7 +41,7 @@ public class StopRule<I extends Player.SetSupplier & Ball.SetSupplier>
 
   @Override
   public boolean test(final I input) {
-    return input.getAgents().stream()
+    return input.getPlayers().stream()
         .anyMatch(player -> this.test(input, player));
   }
 }

@@ -47,7 +47,7 @@ public class FilterDeducer<I extends MovingPlayer.SetSupplier & Goal.SetSupplier
   public static class FilteredGameState
       implements MovingPlayer.SetSupplier, Goal.SetSupplier, Field.Supplier, MovingBall.Supplier,
       Referee.Supplier, Temporal {
-    private final Set<MovingPlayer> agents;
+    private final Set<MovingPlayer> players;
     private final Set<Goal> goals;
     private final MovingBall ball;
     private final Field field;

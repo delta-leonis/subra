@@ -37,7 +37,7 @@ public class SSLVisionDeducer implements Deducer<WrapperPacket, VisionPacket> {
   @Value
   public static class VisionPacket
       implements Player.SetSupplier, Goal.SetSupplier, Field.Supplier, Ball.SetSupplier, Temporal {
-    private final Set<Player> agents;
+    private final Set<Player> players;
     private final Set<Goal> goals;
     private final Set<Ball> balls;
     private final Field field;

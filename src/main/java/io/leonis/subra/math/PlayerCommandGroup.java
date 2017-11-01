@@ -105,7 +105,7 @@ public interface PlayerCommandGroup extends Group<PlayerCommand> {
    * @param combiner The {@link BinaryOperator combiner function}.
    * @return The combined {@link Strategy.Supplier}.
    */
-  default Strategy.Supplier combineByAgent(
+  default Strategy.Supplier combineByPlayer(
       final Strategy.Supplier leftMap,
       final Strategy.Supplier rightMap,
       final BinaryOperator<PlayerCommand> combiner

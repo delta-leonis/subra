@@ -25,13 +25,13 @@ public class PlayersDeducer implements Deducer<WrapperPacket, Set<Player>> {
             Stream.of(packet)
                 .flatMap(input -> Stream.concat(
                     input.getRobotsYellowList().stream()
-                        .map(robot -> this.createAgent(TeamColor.YELLOW, input.getTCapture(), robot)),
+                        .map(robot -> this.createPlayer(TeamColor.YELLOW, input.getTCapture(), robot)),
                     input.getRobotsBlueList().stream()
-                        .map(robot -> this.createAgent(TeamColor.BLUE, input.getTCapture(), robot))))
+                        .map(robot -> this.createPlayer(TeamColor.BLUE, input.getTCapture(), robot))))
                 .collect(Collectors.toSet()));
   }
 
-  private Player createAgent(final TeamColor teamColor, final Double timestamp, final DetectionRobot robotData) {
+  private Player createPlayer(final TeamColor teamColor, final Double timestamp, final DetectionRobot robotData) {
     return new Player.State(
         robotData.getRobotId(),
         timestamp,

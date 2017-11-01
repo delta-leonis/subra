@@ -51,7 +51,7 @@ public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.
       final List<Tuple2<F, Map<Player.Identity, Tuple2<Player, INDArray>>>> gameBuffer
   ) {
     return () ->
-        gameBuffer.get(0).getT1().getAgents().stream()
+        gameBuffer.get(0).getT1().getPlayers().stream()
             .collect(Collectors.toMap(
                 Player::getIdentity,
                 player -> new PlayerCommand.State(
@@ -121,7 +121,7 @@ public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.
   ) {
     return Tuples.of(
         gameBuffer.get(0),
-        gameBuffer.get(0).getAgents().stream()
+        gameBuffer.get(0).getPlayers().stream()
             .collect(Collectors.toMap(
                 Player::getIdentity,
                 player -> Tuples.of(

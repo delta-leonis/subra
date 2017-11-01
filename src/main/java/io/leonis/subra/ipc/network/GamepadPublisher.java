@@ -23,14 +23,14 @@ public class GamepadPublisher implements Publisher<Frame> {
 
   @Override
   public void subscribe(final Subscriber<? super Frame> subscriber) {
-    Flux.combineLatest(this.controllerPublisher, this.playerPublisher, (controllers, agents) ->
-        new Frame(agents, Collections.emptyMap()))
+    Flux.combineLatest(this.controllerPublisher, this.playerPublisher, (controllers, players) ->
+        new Frame(players, Collections.emptyMap()))
         .subscribe(subscriber);
   }
 
   @Value
   public static class Frame implements Controller.MappingSupplier<JamepadController, Player>, Player.SetSupplier {
-    private final Set<Player> agents;
+    private final Set<Player> players;
     private final Map<JamepadController, Set<Player>> agentMapping;
   }
 }

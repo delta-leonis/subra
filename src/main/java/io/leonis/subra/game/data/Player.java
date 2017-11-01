@@ -65,8 +65,8 @@ public interface Player extends Spatial, Agent, Temporal, Serializable {
    */
   TeamColor getTeamColor();
 
-  interface SetSupplier extends Agent.SetSupplier<Player> {
-    Set<Player> getAgents();
+  interface SetSupplier {
+    Set<Player> getPlayers();
   }
 
   @Value

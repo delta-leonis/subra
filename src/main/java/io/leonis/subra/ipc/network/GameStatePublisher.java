@@ -39,7 +39,7 @@ public final class GameStatePublisher implements Publisher<GameState> {
   public static class GameState
       implements Player.SetSupplier, Goal.SetSupplier, Field.Supplier, Ball.SetSupplier,
       Referee.Supplier, Temporal {
-    private final Set<Player> agents;
+    private final Set<Player> players;
     private final Set<Goal> goals;
     private final Set<Ball> balls;
     private final Field field;
@@ -49,7 +49,7 @@ public final class GameStatePublisher implements Publisher<GameState> {
     /**
      * Constructs a new GameState from a {@link VisionPacket} and a {@link Referee}.
      *
-     * @param visionPacket The {@link VisionPacket} to extract the agents, goals, balls, and field
+     * @param visionPacket The {@link VisionPacket} to extract the players, goals, balls, and field
      *                     from.
      * @param refboxPacket The {@link Referee}.
      * @param <V>          The type of {@link VisionPacket}.
@@ -58,7 +58,7 @@ public final class GameStatePublisher implements Publisher<GameState> {
     public static <V extends Player.SetSupplier & Goal.SetSupplier & Field.Supplier & Ball.SetSupplier & Temporal>
     GameState build(final V visionPacket, final Referee refboxPacket) {
       return new GameState(
-          visionPacket.getAgents(),
+          visionPacket.getPlayers(),
           visionPacket.getGoals(),
           visionPacket.getBalls(),
           visionPacket.getField(),

@@ -37,8 +37,8 @@ public interface MovingPlayer extends Player, Moving {
     return this.getState().getMean().get(NDArrayIndex.interval(4, 7), NDArrayIndex.all());
   }
 
-  interface SetSupplier extends Agent.SetSupplier<MovingPlayer> {
-    Set<MovingPlayer> getAgents();
+  interface SetSupplier {
+    Set<MovingPlayer> getPlayers();
   }
 
 

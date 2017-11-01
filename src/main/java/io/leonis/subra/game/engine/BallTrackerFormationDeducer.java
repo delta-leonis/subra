@@ -32,7 +32,7 @@ public class BallTrackerFormationDeducer<G extends Player.SetSupplier & Ball.Sup
     return Flux.from(inputPublisher)
         .map(game ->
             new PositionFormation(
-                game.getAgents().stream()
+                game.getPlayers().stream()
                     .filter(player -> player.getTeamColor().equals(this.getTeamColor()))
                     .collect(Collectors.toMap(
                         Player::getIdentity,

@@ -23,7 +23,7 @@ public class PlayersVelocityDeducer<I extends Player.SetSupplier>
         .scan(
             Collections.emptySet(),
             (previousGame, currentGame) ->
-                currentGame.getAgents().stream()
+                currentGame.getPlayers().stream()
                     .map(currentPlayer ->
                         previousGame.stream()
                             .filter(previousPlayer ->

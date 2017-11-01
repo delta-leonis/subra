@@ -13,15 +13,15 @@ import io.leonis.zosma.game.Rule;
 public class HaltRule implements Rule<MovingPlayer.SetSupplier, MovingPlayer> {
 
   @Override
-  public Set<MovingPlayer> getViolators(final MovingPlayer.SetSupplier agentSupplier) {
-    return agentSupplier.getAgents().stream()
+  public Set<MovingPlayer> getViolators(final MovingPlayer.SetSupplier playerSupplier) {
+    return playerSupplier.getPlayers().stream()
         .filter(this::test)
         .collect(Collectors.toSet());
   }
 
   @Override
   public boolean test(final MovingPlayer.SetSupplier playerSupplier) {
-    return playerSupplier.getAgents().stream()
+    return playerSupplier.getPlayers().stream()
         .anyMatch(this::test);
   }
 

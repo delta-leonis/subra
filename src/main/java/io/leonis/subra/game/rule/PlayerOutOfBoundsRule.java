@@ -4,19 +4,19 @@ import java.util.Set;
 import io.leonis.subra.game.data.*;
 
 /**
- * The Class AgentOutOfBoundsRule.
+ * The Class PlayerOutOfBoundsRule.
  *
  * This class describes the rule in Small Size League soccer
  * which determines whether a robot is within the bounds of the field.
  *
  * @author Rimon Oz
  */
-public class AgentOutOfBoundsRule<I extends Field.Supplier & Player.SetSupplier>
+public class PlayerOutOfBoundsRule<I extends Field.Supplier & Player.SetSupplier>
     implements OutOfBoundsRule<I, Player> {
 
   @Override
   public Set<Player> getObjectsFromState(final I input) {
-    return input.getAgents();
+    return input.getPlayers();
   }
 
   @Override
