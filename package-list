@@ -1,0 +1,13 @@
+io.leonis.subra.game.data
+io.leonis.subra.game.engine
+io.leonis.subra.game.formations
+io.leonis.subra.game.rule
+io.leonis.subra.ipc.network
+io.leonis.subra.ipc.peripheral
+io.leonis.subra.ipc.serialization.gson
+io.leonis.subra.ipc.serialization.json
+io.leonis.subra.ipc.serialization.protobuf
+io.leonis.subra.ipc.serialization.protobuf.vision
+io.leonis.subra.math
+io.leonis.subra.math.filter
+io.leonis.subra.math.spatial
