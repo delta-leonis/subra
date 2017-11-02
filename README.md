@@ -9,6 +9,7 @@ to run `subra`.
 ## Dependency
 
 #### Maven
+
 ```
 <dependency>
     <groupId>io.leonis</groupId>
@@ -18,6 +19,7 @@ to run `subra`.
 ```
 
 #### Gradle
+
 ```
 compile 'io.leonis:subra:0.0.2'
 ```
@@ -31,7 +33,7 @@ The javadoc for the current code on `master` can be found on https://delta-leoni
 Make sure you have `gradle>=v2.10` installed. Run the following to build the application:
 
 ```
-  gradle build
+gradle build
 ```
 
 ## Copyright
