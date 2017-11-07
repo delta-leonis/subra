@@ -1,16 +1,27 @@
 # `subra`
-> project subra v1.0-SNAPSHOT
+[![CircleCI](https://circleci.com/gh/delta-leonis/subra.svg?style=svg)](https://circleci.com/gh/delta-leonis/subra)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b6afbe5d52da40ac8478d42bb84af7b5)](https://www.codacy.com/app/delta-leonis/subra?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=delta-leonis/subra&amp;utm_campaign=Badge_Grade)
 
 You'll need at least Java 1.8 ([jre](https://www.java.com/download/)
-/[jdk](http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html)) 
+/[jdk](http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html))
 to run `subra`.
 
-## How to use
+## Dependency
 
-In order to use `subra` clone this repository:
+#### Maven
 
 ```
-  git clone git@github.com:delta-leonis/subra.git
+<dependency>
+    <groupId>io.leonis</groupId>
+    <artifactId>subra</artifactId>
+    <version>0.0.2</version>
+</dependency>
+```
+
+#### Gradle
+
+```
+compile 'io.leonis:subra:0.0.2'
 ```
 
 ## Documentation
@@ -22,7 +33,7 @@ The javadoc for the current code on `master` can be found on https://delta-leoni
 Make sure you have `gradle>=v2.10` installed. Run the following to build the application:
 
 ```
-  gradle build
+gradle build
 ```
 
 ## Copyright
