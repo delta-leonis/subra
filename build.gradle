@@ -35,6 +35,7 @@ dependencies {
     compile 'io.leonis:zosma:0.0.5'
     compile 'io.leonis:algieba:0.0.4'
     compile 'io.leonis:subra-protocol:0.0.1'
+    compile 'io.leonis:torch:0.0.1'
 
     // math
     compile 'org.nd4j:nd4j-native:0.8.0'
