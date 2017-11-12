@@ -1,6 +1,7 @@
 package io.leonis.subra.game.data;
 
 import io.leonis.algieba.*;
+import io.leonis.algieba.geometry.Orientation;
 import io.leonis.algieba.statistic.*;
 import io.leonis.zosma.game.Agent;
 import java.io.Serializable;
@@ -17,7 +18,7 @@ import org.nd4j.linalg.indexing.NDArrayIndex;
  *
  * @author Rimon Oz
  */
-public interface Player extends Spatial, Agent, Temporal, Serializable {
+public interface Player extends Spatial, Agent, Orientation, Temporal, Serializable {
   /**
    * @return The X-position coordinate of the {@link Player} in mm.
    */
@@ -40,6 +41,7 @@ public interface Player extends Spatial, Agent, Temporal, Serializable {
   /**
    * @return The orientation of the {@link Player} in radians.
    */
+  @Override
   default double getOrientation() {
     return this.getState().getMean().getDouble(3, 0);
   }
