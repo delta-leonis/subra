@@ -16,15 +16,16 @@ import org.nd4j.linalg.factory.Nd4j;
 @Value
 public class GaussianPotentialField implements PotentialField, Rotation {
   private final INDArray origin;
-  private final double scale;
+  private final double height;
+  private final double width;
   private final boolean sink;
 
   @Override
   public INDArray getPotential(final INDArray positionVector) {
     return Nd4j.create(new double[]{
-        StrictMath
-            .exp(-1d * StrictMath
-            .pow(scale * this.origin.add(positionVector).norm2Number().doubleValue(), 2))
+        this.height * Math
+            .exp(-1d * Math
+                .pow(this.width * this.origin.add(positionVector).norm2Number().doubleValue(), 2))
     });
   }
 
@@ -35,12 +36,12 @@ public class GaussianPotentialField implements PotentialField, Rotation {
         Nd4j.zeros(positionVector.rows(), 1)
             .put(0, 0,
                 (sink ? -1 : 1) *
-                    (-2d * this.origin.add(positionVector).norm2Number().doubleValue()
-                        * StrictMath.pow(this.scale, 2)
-                        * StrictMath
-                        .exp(-1d * StrictMath
-                            .pow(
-                                scale * this.origin.add(positionVector).norm2Number().doubleValue(),
+                    (-2d * this.height * this.origin.add(positionVector).norm2Number().doubleValue()
+                        * Math.pow(this.height, 2)
+                        * Math
+                        .exp(-1d * Math
+                            .pow(this.width
+                                    * this.origin.add(positionVector).norm2Number().doubleValue(),
                                 2)))),
         // vector angle
         positionVector.sub(this.origin)

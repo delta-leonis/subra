@@ -1,9 +1,9 @@
 package io.leonis.subra.game.engine;
 
-import io.leonis.algieba.spatial.AggregatedPotentialField;
+import io.leonis.algieba.spatial.*;
 import io.leonis.subra.game.data.*;
-import io.leonis.subra.math.spatial.GaussianPotentialField;
 import io.leonis.zosma.game.engine.Deducer;
+import java.util.function.*;
 import java.util.stream.*;
 import lombok.Value;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -16,13 +16,13 @@ import reactor.core.publisher.Flux;
  * @author Rimon Oz
  */
 @Value
-public class PotentialFieldDeducer<G extends Player.SetSupplier & Field.Supplier & Ball.SetSupplier>
+public class PotentialFieldDeducer<G extends MovingPlayer.SetSupplier & Field.Supplier & MovingBall.SetSupplier>
     implements Deducer<G, Strategy.Supplier> {
   private final TeamColor teamColor;
   private final INDArray origin;
-  private final double opponentSourceScale;
-  private final double allySourceScale;
-  private final double ballSinkScale;
+  private final Function<MovingPlayer, PotentialField> playerFieldGenerator;
+  private final Function<MovingBall, PotentialField> ballFieldGenerator;
+  private final BiFunction<MovingPlayer, PotentialField, PlayerCommand> commandGenerator;
 
   @Override
   public Publisher<Strategy.Supplier> apply(
@@ -33,30 +33,15 @@ public class PotentialFieldDeducer<G extends Player.SetSupplier & Field.Supplier
           final AggregatedPotentialField aggregatedPotentialField = new AggregatedPotentialField(
               this.origin,
               Stream.concat(
-                  game.getPlayers().stream()
-                      .map(player -> new GaussianPotentialField(
-                          player.getPosition(),
-                          player.getTeamColor().equals(this.getTeamColor())
-                              ? getAllySourceScale()
-                              : getOpponentSourceScale(),
-                          false)),
-                  game.getBalls().stream()
-                      .map(ball ->
-                          new GaussianPotentialField(
-                              ball.getPosition(),
-                              this.getBallSinkScale(),
-                              true)))
+                  game.getPlayers().stream().map(this.playerFieldGenerator),
+                  game.getBalls().stream().map(this.ballFieldGenerator))
                   .collect(Collectors.toSet()));
 
           return () -> game.getPlayers().stream()
               .filter(player -> player.getTeamColor().equals(this.getTeamColor()))
               .collect(Collectors.toMap(
                   Player::getIdentity,
-                  player -> new PlayerCommand.State(
-                      aggregatedPotentialField.getForce(player.getPosition()),
-                      0,
-                      0,
-                      0)));
+                  player -> this.commandGenerator.apply(player, aggregatedPotentialField)));
         });
   }
 }

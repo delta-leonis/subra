@@ -127,8 +127,6 @@ public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.
                 player -> Tuples.of(
                     player,
                     gameBuffer.get(0).getFormation().getFormationFor(player)
-                        .sub(Nd4j.vstack(
-                            player.getPosition(),
-                            Nd4j.create(new double[]{player.getOrientation()})))))));
+                        .sub(player.getPosition())))));
   }
 }
