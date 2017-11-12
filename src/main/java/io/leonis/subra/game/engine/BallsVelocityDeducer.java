@@ -4,6 +4,7 @@ import io.leonis.subra.game.data.*;
 import io.leonis.zosma.game.engine.Deducer;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.nd4j.linalg.ops.transforms.Transforms;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 
@@ -15,7 +16,8 @@ import reactor.core.publisher.Flux;
  * @param <I> The type of state carrying a {@link Set} of {@link Ball}.
  * @author Rimon Oz
  */
-public class BallsVelocityDeducer<I extends Ball.SetSupplier> implements Deducer<I, Set<MovingBall>> {
+public class BallsVelocityDeducer<I extends Ball.SetSupplier>
+    implements Deducer<I, Set<MovingBall>> {
   @Override
   public Publisher<Set<MovingBall>> apply(final Publisher<I> iPublisher) {
     return Flux.from(iPublisher)
@@ -24,13 +26,12 @@ public class BallsVelocityDeducer<I extends Ball.SetSupplier> implements Deducer
                 .map(currentBall ->
                     previousGame.stream()
                         .reduce((closerBall, newBall) ->
-                            newBall.getPosition()
-                                .sub(currentBall.getPosition()).norm2Number().doubleValue()
-                                > closerBall.getPosition()
-                                .sub(currentBall.getPosition()).norm2Number().doubleValue()
-                                ? newBall : closerBall)
-                        .map(closestBall ->
-                            this.calculateVelocity(currentBall, closestBall))
+                            Transforms.euclideanDistance(newBall.getXY(), currentBall.getXY())
+                                > Transforms.euclideanDistance(
+                                closerBall.getXY(), currentBall.getXY())
+                                ? newBall
+                                : closerBall)
+                        .map(closestBall -> this.calculateVelocity(currentBall, closestBall))
                         .orElse(
                             new MovingBall.State(
                                 currentBall.getTimestamp(),

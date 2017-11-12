@@ -50,6 +50,12 @@ public interface Ball extends Spatial, Temporal, Serializable {
     return this.getState().getMean().getDouble(3, 0);
   }
 
+  /**
+   * @return The XY-position of the {@link Ball}.
+   */
+  default INDArray getXY() {
+    return this.getState().getMean().get(NDArrayIndex.interval(1, 3), NDArrayIndex.all());
+  }
 
   @Override
   default INDArray getPosition() {

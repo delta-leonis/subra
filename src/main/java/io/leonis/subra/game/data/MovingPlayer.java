@@ -9,6 +9,13 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
+/**
+ * The Interface MovingPlayer.
+ *
+ * This interface represents a {@link Moving} {@link Player robot} in a Small Size League game.
+ *
+ * @author Rimon Oz
+ */
 public interface MovingPlayer extends Player, Moving {
 
   /**
@@ -30,6 +37,13 @@ public interface MovingPlayer extends Player, Moving {
    */
   default double getOrientationVelocity() {
     return this.getState().getMean().getDouble(6, 0);
+  }
+
+  /**
+   * @return The XY-velocity of the {@link Player}.
+   */
+  default INDArray getXYVelocity() {
+    return this.getState().getMean().get(NDArrayIndex.interval(4, 6), NDArrayIndex.all());
   }
 
   @Override

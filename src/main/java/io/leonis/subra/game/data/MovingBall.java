@@ -8,6 +8,13 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
+/**
+ * The Interface MovingBall.
+ *
+ * This interface describes the functionality of a {@link Moving} {@link Ball}.
+ *
+ * @author Rimon Oz
+ */
 public interface MovingBall extends Ball, Moving {
 
   /**
@@ -29,6 +36,13 @@ public interface MovingBall extends Ball, Moving {
    */
   default double getZVelocity() {
     return this.getState().getMean().getDouble(6, 0);
+  }
+
+  /**
+   * @return The XY-velocity coordinate of the {@link Ball}.
+   */
+  default INDArray getXYVelocity() {
+    return this.getState().getMean().get(NDArrayIndex.interval(4, 6), NDArrayIndex.all());
   }
 
   @Override
