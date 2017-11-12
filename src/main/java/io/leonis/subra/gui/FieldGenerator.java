@@ -8,7 +8,6 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 /**
- * @author jeroen.dejong.
  * todo remove
  */
 public class FieldGenerator {
