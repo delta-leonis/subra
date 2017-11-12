@@ -30,28 +30,28 @@ public interface Ball extends Spatial, Temporal, Serializable {
   Distribution getState();
 
   /**
-   * @return The X-position coordinate of the {@link Ball}.
+   * @return The X-position coordinate of the {@link Ball} in mm.
    */
   default double getX() {
     return this.getState().getMean().getDouble(1, 0);
   }
 
   /**
-   * @return The Y-position coordinate of the {@link Ball}.
+   * @return The Y-position coordinate of the {@link Ball} in mm.
    */
   default double getY() {
     return this.getState().getMean().getDouble(2, 0);
   }
 
   /**
-   * @return The Z-position coordinate of the {@link Ball}.
+   * @return The Z-position coordinate of the {@link Ball} in mm.
    */
   default double getZ() {
     return this.getState().getMean().getDouble(3, 0);
   }
 
   /**
-   * @return The XY-position of the {@link Ball}.
+   * @return The XY-position of the {@link Ball} in (mm, mm).
    */
   default INDArray getXY() {
     return this.getState().getMean().get(NDArrayIndex.interval(1, 3), NDArrayIndex.all());

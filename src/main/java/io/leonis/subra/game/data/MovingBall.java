@@ -18,28 +18,28 @@ import org.nd4j.linalg.indexing.NDArrayIndex;
 public interface MovingBall extends Ball, Moving {
 
   /**
-   * @return The X-velocity coordinate of the {@link Ball}.
+   * @return The X-velocity coordinate of the {@link Ball} in mm / us.
    */
   default double getXVelocity() {
     return this.getState().getMean().getDouble(4, 0);
   }
 
   /**
-   * @return The Y-velocity coordinate of the {@link Ball}.
+   * @return The Y-velocity coordinate of the {@link Ball} in mm / us.
    */
   default double getYVelocity() {
     return this.getState().getMean().getDouble(5, 0);
   }
 
   /**
-   * @return The Z-velocity coordinate of the {@link Ball}.
+   * @return The Z-velocity coordinate of the {@link Ball} in mm / us.
    */
   default double getZVelocity() {
     return this.getState().getMean().getDouble(6, 0);
   }
 
   /**
-   * @return The XY-velocity coordinate of the {@link Ball}.
+   * @return The XY-velocity coordinate of the {@link Ball} in (mm / us, mm / us).
    */
   default INDArray getXYVelocity() {
     return this.getState().getMean().get(NDArrayIndex.interval(4, 6), NDArrayIndex.all());

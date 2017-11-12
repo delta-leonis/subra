@@ -38,11 +38,11 @@ public interface PlayerCommandGroup extends Group<PlayerCommand> {
                   + Math.pow(entry.getValue().getVelocityX(), 2));
               return new PlayerCommand.State(
                   (float) (speedLimit / velocityMagnitude
-                          * StrictMath.tanh(entry.getValue().getVelocityX())),
+                          * Math.tanh(entry.getValue().getVelocityX())),
                   (float) (speedLimit / velocityMagnitude
-                          * StrictMath.tanh(entry.getValue().getVelocityY())),
+                          * Math.tanh(entry.getValue().getVelocityY())),
                   (float) (speedLimit / velocityMagnitude
-                          * StrictMath.tanh(entry.getValue().getVelocityR())),
+                          * Math.tanh(entry.getValue().getVelocityR())),
                   entry.getValue().getFlatKick(),
                   entry.getValue().getChipKick(),
                   entry.getValue().getDribblerSpin());

@@ -23,8 +23,8 @@ public class GaussianPotentialField implements PotentialField, Rotation {
   @Override
   public INDArray getPotential(final INDArray positionVector) {
     return Nd4j.create(new double[]{
-        this.height * StrictMath
-            .exp(-1d * StrictMath
+        this.height * Math
+            .exp(-1d * Math
                 .pow(this.width * this.origin.add(positionVector).norm2Number().doubleValue(), 2))
     });
   }
@@ -37,9 +37,9 @@ public class GaussianPotentialField implements PotentialField, Rotation {
             .put(0, 0,
                 (sink ? -1 : 1) *
                     (-2d * this.height * this.origin.add(positionVector).norm2Number().doubleValue()
-                        * StrictMath.pow(this.height, 2)
-                        * StrictMath
-                        .exp(-1d * StrictMath
+                        * Math.pow(this.height, 2)
+                        * Math
+                        .exp(-1d * Math
                             .pow(this.width
                                     * this.origin.add(positionVector).norm2Number().doubleValue(),
                                 2)))),

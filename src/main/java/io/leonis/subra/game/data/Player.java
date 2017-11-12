@@ -18,7 +18,9 @@ import org.nd4j.linalg.indexing.NDArrayIndex;
  * @author Rimon Oz
  */
 public interface Player extends Spatial, Agent, Temporal, Serializable {
-
+  /**
+   * @return The X-position coordinate of the {@link Player} in mm.
+   */
   default double getX() {
     return this.getState().getMean().getDouble(1, 0);
   }
@@ -29,21 +31,21 @@ public interface Player extends Spatial, Agent, Temporal, Serializable {
   Distribution getState();
 
   /**
-   * @return The Y-position coordinate of the {@link Player}.
+   * @return The Y-position coordinate of the {@link Player} in mm.
    */
   default double getY() {
     return this.getState().getMean().getDouble(2, 0);
   }
 
   /**
-   * @return The orientation of the {@link Player}.
+   * @return The orientation of the {@link Player} in radians.
    */
   default double getOrientation() {
     return this.getState().getMean().getDouble(3, 0);
   }
 
   /**
-   * @return The XY-position of the {@link Player}.
+   * @return The XY-position of the {@link Player} in (mm, mm).
    */
   default INDArray getXY() {
     return this.getState().getMean().get(NDArrayIndex.interval(1, 3), NDArrayIndex.all());

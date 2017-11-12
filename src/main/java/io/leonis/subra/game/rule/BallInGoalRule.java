@@ -37,12 +37,12 @@ public class BallInGoalRule<I extends Goal.SetSupplier & Ball.SetSupplier>
    * @return True if the ball is in the goal, false otherwise.
    */
   public boolean isBallInGoal(final Ball ball, final Goal goal) {
-    return StrictMath.abs(ball.getX() - goal.getX())
+    return Math.abs(ball.getX() - goal.getX())
         < ((goal.getCardinalDirection().equals(CardinalDirection.NORTH)
         || goal.getCardinalDirection().equals(CardinalDirection.SOUTH))
         ? goal.getDepth() / 2f
         : goal.getWidth() / 2f)
-        && StrictMath.abs(ball.getY() - goal.getY())
+        && Math.abs(ball.getY() - goal.getY())
         < ((goal.getCardinalDirection().equals(CardinalDirection.EAST)
         || goal.getCardinalDirection().equals(CardinalDirection.WEST))
         ? goal.getDepth() / 2f

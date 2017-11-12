@@ -19,21 +19,21 @@ import org.nd4j.linalg.indexing.NDArrayIndex;
 public interface MovingPlayer extends Player, Moving {
 
   /**
-   * @return The X-velocity coordinate of the {@link Agent}.
+   * @return The X-velocity coordinate of the {@link Agent} in mm / us.
    */
   default double getXVelocity() {
     return this.getState().getMean().getDouble(4, 0);
   }
 
   /**
-   * @return The Y-velocity coordinate of the {@link Agent}.
+   * @return The Y-velocity coordinate of the {@link Agent} in mm / us.
    */
   default double getYVelocity() {
     return this.getState().getMean().getDouble(5, 0);
   }
 
   /**
-   * @return The orientation velocity of the {@link Agent}.
+   * @return The orientation velocity of the {@link Agent} in mm / us.
    */
   default double getOrientationVelocity() {
     return this.getState().getMean().getDouble(6, 0);
