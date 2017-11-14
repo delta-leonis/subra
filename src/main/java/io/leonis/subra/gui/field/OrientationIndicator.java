@@ -14,14 +14,14 @@ public class OrientationIndicator implements Function<TerminalPosition, Characte
 
   public OrientationIndicator(final Set<Player> players) {
     this.orientations = Arrays.asList(
-        new SingleOrientationIndicator(players, CardinalDirection.NORTH, new TerminalPosition(0, -1), '^'),
-        new SingleOrientationIndicator(players, CardinalDirection.NORTH_EAST, new TerminalPosition(1, -1), '┐'),
-        new SingleOrientationIndicator(players, CardinalDirection.EAST, new TerminalPosition(1, 0), '>'),
-        new SingleOrientationIndicator(players, CardinalDirection.SOUTH_EAST, new TerminalPosition(1, 1), '┘'),
-        new SingleOrientationIndicator(players, CardinalDirection.SOUTH, new TerminalPosition(0, 1), 'v'),
-        new SingleOrientationIndicator(players, CardinalDirection.SOUTH_WEST, new TerminalPosition(-1, 1), '└'),
-        new SingleOrientationIndicator(players, CardinalDirection.WEST, new TerminalPosition(-1, 0), '<'),
-        new SingleOrientationIndicator(players, CardinalDirection.NORTH_WEST, new TerminalPosition(-1, -1), '┌'));
+        new SingleOrientationIndicator(players, CardinalDirection.NORTH, new TerminalPosition(0, -1), '↑'),
+        new SingleOrientationIndicator(players, CardinalDirection.NORTH_EAST, new TerminalPosition(1, -1), '↗'),
+        new SingleOrientationIndicator(players, CardinalDirection.EAST, new TerminalPosition(1, 0), '→'),
+        new SingleOrientationIndicator(players, CardinalDirection.SOUTH_EAST, new TerminalPosition(1, 1), '↘'),
+        new SingleOrientationIndicator(players, CardinalDirection.SOUTH, new TerminalPosition(0, 1), '↓'),
+        new SingleOrientationIndicator(players, CardinalDirection.SOUTH_WEST, new TerminalPosition(-1, 1), '↙'),
+        new SingleOrientationIndicator(players, CardinalDirection.WEST, new TerminalPosition(-1, 0), '←'),
+        new SingleOrientationIndicator(players, CardinalDirection.NORTH_WEST, new TerminalPosition(-1, -1), '↖'));
   }
 
   @Override
