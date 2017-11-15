@@ -67,6 +67,7 @@ public class TestGuI {
                         new PotentialBackground(data, new Gradient(Color.GREEN.darker(), Color.RED))
                     ),
                     Arrays.asList(
+                        new FieldLines(fieldLines),
                         new Corners(fieldLines),
                         new OrientationIndicator(robots),
                         balls.stream().collect(Collectors.toMap(b -> new TerminalPosition((int) b.getX(), (int) b.getY()), b -> 'O'))::get,
