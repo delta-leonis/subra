@@ -11,7 +11,7 @@ import io.leonis.torch.component.ComponentBackground;
 import io.leonis.torch.component.graph.Gradient;
 import java.awt.Color;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**
@@ -19,7 +19,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  */
 public class TestGuI {
 
-  public static void main(String[] args){
+  public static void main(String[] args) throws NoSuchMethodException {
     final Set<Player> robots =
         new HashSet<>(
             Arrays.asList(
@@ -42,7 +42,7 @@ public class TestGuI {
                     System.currentTimeMillis(),
                     14,
                     20,
-                    98,
+                    140,
                     TeamColor.BLUE)));
     final Set<Ball> balls = new HashSet<>(
         Arrays.asList(
@@ -61,12 +61,13 @@ public class TestGuI {
                 new Field(
                     data,
                     Arrays.asList(
+                        new BallBackground(balls, TextColor.RGB.Indexed.fromRGB(255,165,0)),
                         new TeamColorBackground(robots, TextColor.Indexed.fromRGB(255, 255, 50)),
                         new PotentialBackground(data, new Gradient(Color.GREEN.darker(), Color.RED))
                     ),
                     Arrays.asList(
                         new OrientationIndicator(robots),
-                        balls.stream().collect(Collectors.toMap(b -> new TerminalPosition((int) b.getX(), (int) b.getY()), b -> 'B'))::get,
+                        balls.stream().collect(Collectors.toMap(b -> new TerminalPosition((int) b.getX(), (int) b.getY()), b -> 'O'))::get,
                         robots.stream().collect(Collectors.toMap(r -> new TerminalPosition((int)r.getX(), (int)r.getY()), r -> String.valueOf(r.getId()).charAt(0)))::get
                     )), ANSI.BLUE))
     ).start();
