@@ -53,6 +53,7 @@ public class TestGuI {
                 System.currentTimeMillis(),
                 5, 5, 0)));
     final INDArray data = FieldGenerator.whatever(robots);
+    final Set<FieldLine> fieldLines = Collections.emptySet();
     //FIXME might want to wrap the character in a label and set the textstyle to BOLD or something.
     new Thread(
         new Torch(
@@ -66,6 +67,7 @@ public class TestGuI {
                         new PotentialBackground(data, new Gradient(Color.GREEN.darker(), Color.RED))
                     ),
                     Arrays.asList(
+                        new Corners(fieldLines),
                         new OrientationIndicator(robots),
                         balls.stream().collect(Collectors.toMap(b -> new TerminalPosition((int) b.getX(), (int) b.getY()), b -> 'O'))::get,
                         robots.stream().collect(Collectors.toMap(r -> new TerminalPosition((int)r.getX(), (int)r.getY()), r -> String.valueOf(r.getId()).charAt(0)))::get
