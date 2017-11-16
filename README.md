@@ -1,4 +1,6 @@
 # `subra`
+>soccer is simple, but it is difficult to play simple
+
 [![CircleCI](https://circleci.com/gh/delta-leonis/subra.svg?style=svg)](https://circleci.com/gh/delta-leonis/subra)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b6afbe5d52da40ac8478d42bb84af7b5)](https://www.codacy.com/app/delta-leonis/subra?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=delta-leonis/subra&amp;utm_campaign=Badge_Grade)
 
