@@ -9,7 +9,7 @@ import java.util.function.Function;
 import lombok.AllArgsConstructor;
 
 /**
- * @author jeroen.dejong.
+ * @author Jeroen de Jong
  */
 @AllArgsConstructor
 public class Robots extends AbstractComponent<Robots> {

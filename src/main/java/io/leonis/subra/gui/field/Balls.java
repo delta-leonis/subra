@@ -8,7 +8,7 @@ import java.util.Set;
 import lombok.*;
 
 /**
- * @author jeroen.dejong.
+ * @author Jeroen de Jong
  */
 @AllArgsConstructor
 public final class Balls extends AbstractComponent<Balls> {
