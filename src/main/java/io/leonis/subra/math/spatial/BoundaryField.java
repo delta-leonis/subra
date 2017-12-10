@@ -34,10 +34,10 @@ public class BoundaryField implements PotentialField {
   @Override
   public INDArray getPotential(final INDArray positionVector) {
     return Nd4j.create(new double[]{
-        this.getPotential((this.getWidth() / 2d) - positionVector.getDouble(0, 0))
-            + this.getPotential(-1d * (this.getWidth() / 2d) - positionVector.getDouble(0, 0))
-            + this.getPotential((this.getLength() / 2d) - positionVector.getDouble(1, 0))
-            + this.getPotential(-1d * (this.getLength() / 2d) - positionVector.getDouble(1, 0))});
+        this.getPotential(positionVector.getDouble(0, 0))
+            + this.getPotential(this.getWidth() - positionVector.getDouble(0, 0))
+            + this.getPotential(positionVector.getDouble(1, 0))
+            + this.getPotential(this.getLength() - positionVector.getDouble(1, 0))});
 
   }
 
@@ -57,22 +57,22 @@ public class BoundaryField implements PotentialField {
     switch (direction) {
       case NORTH:
         return Nd4j.create(new double[]{
-            this.getPotential((this.getWidth() / 2d) - positionVector.getDouble(0, 0)),
-            0
+            0,
+            this.getPotential(positionVector.getDouble(0, 0)),
         }, new int[]{2, 1});
       case SOUTH:
         return Nd4j.create(new double[]{
-            this.getPotential(-1d * (this.getWidth() / 2d) - positionVector.getDouble(0, 0)),
-            0
+            0,
+            this.getPotential(this.getWidth() - positionVector.getDouble(0, 0)),
         }, new int[]{2, 1});
       case EAST:
         return Nd4j.create(new double[]{
-            this.getPotential((this.getLength() / 2d) - positionVector.getDouble(1, 0)),
+            this.getPotential(positionVector.getDouble(1, 0)),
             0
         }, new int[]{2, 1});
       case WEST:
         return Nd4j.create(new double[]{
-            this.getPotential(-1d * (this.getLength() / 2d) - positionVector.getDouble(1, 0)),
+            this.getPotential(this.getLength() - positionVector.getDouble(1, 0)),
             0
         }, new int[]{2, 1});
       default:
