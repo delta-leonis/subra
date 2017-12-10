@@ -62,9 +62,6 @@ public class TestGuI {
         ));
     Field field = new Field.State(60, 90, lines, Collections.emptySet());
     GaussianPotentialField pf = new GaussianPotentialField(data, 60, 90, false);
-    final BiFunction<Integer, Integer, TextColor> backgroundSupplier = new GaussianPotentialFieldBackground(
-        pf,
-        new Gradient(Color.GREEN.darker(), Color.RED));
     StatesMaarWeer s = new StatesMaarWeer(
         balls,
         robots,
