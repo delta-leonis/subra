@@ -18,9 +18,9 @@ public class JamepadPublisher<A extends Agent> implements
   private final Map<Integer, Set<A>> controllerMapping;
   private final ControllerManager controllers;
 
-  public JamepadPublisher(final int controllerCount, final Map<Integer, Set<A>> controllerMapping) {
+  public JamepadPublisher(final Map<Integer, Set<A>> controllerMapping) {
     this.controllerMapping = controllerMapping;
-    this.controllers = new ControllerManager(controllerCount);
+    this.controllers = new ControllerManager(controllerMapping.size());
     this.controllers.initSDLGamepad();
   }
 
