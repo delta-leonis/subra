@@ -12,9 +12,10 @@ import org.nd4j.linalg.factory.Nd4j;
  */
 public class FieldGenerator {
 
-  public static INDArray whatever(final Set<Player> players){
+  public static INDArray whatever(final Set<Player> players) {
     return createArray(100, 30, 3, 3,
-        players.stream().map(player -> Nd4j.create(new double[]{player.getX(), player.getY()}, new int[]{2, 1}))
+        players.stream()
+            .map(player -> Nd4j.create(new double[]{player.getX(), player.getY()}, new int[]{2, 1}))
             .collect(Collectors.toSet())).get();
   }
 

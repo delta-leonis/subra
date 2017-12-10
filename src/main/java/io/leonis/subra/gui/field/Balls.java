@@ -1,18 +1,19 @@
 package io.leonis.subra.gui.field;
 
-import com.googlecode.lanterna.*;
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor.RGB;
 import com.googlecode.lanterna.gui2.*;
 import io.leonis.subra.game.data.Ball;
 import java.util.Set;
-import lombok.*;
+import lombok.AllArgsConstructor;
 
 /**
  * @author Jeroen de Jong
  */
 @AllArgsConstructor
 public final class Balls extends AbstractComponent<Balls> {
-  final Set<Ball> balls;
+
+  private final Set<Ball> balls;
 
   @Override
   protected ComponentRenderer<Balls> createDefaultRenderer() {
@@ -27,8 +28,8 @@ public final class Balls extends AbstractComponent<Balls> {
       public void drawComponent(final TextGUIGraphics graphics, final Balls component) {
         graphics.setForegroundColor(new RGB(255, 255, 255));
         component.balls.forEach(ball -> {
-          graphics.setBackgroundColor(new RGB(255,165,0));
-          graphics.setCharacter((int)ball.getX(), (int)ball.getY(), '0');
+          graphics.setBackgroundColor(new RGB(255, 165, 0));
+          graphics.setCharacter((int) ball.getX(), (int) ball.getY(), '0');
         });
       }
     };

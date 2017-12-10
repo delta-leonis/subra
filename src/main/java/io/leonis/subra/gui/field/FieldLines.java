@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public class FieldLines extends AbstractComponent<FieldLines> {
+
   private final Collection<FieldLine> fieldLines;
   private final BiFunction<Integer, Integer, TextColor> backgroundSupplier;
 
@@ -27,13 +28,14 @@ public class FieldLines extends AbstractComponent<FieldLines> {
       @Override
       public void drawComponent(final TextGUIGraphics graphics, final FieldLines component) {
         component.fieldLines.forEach(fieldLine ->
-          IntStream.range((int)fieldLine.getXStart(), (int)fieldLine.getXEnd())
-            .forEach(x -> IntStream.range((int)fieldLine.getYStart(), (int)fieldLine.getYEnd())
-              .forEach(y -> {
-                graphics.setBackgroundColor(backgroundSupplier.apply(x, y));
-                // TODO The determination of the character should be more obvious.
-                graphics.setCharacter(x, y, this.getCharacter(x, y, fieldLine));
-              })));
+            IntStream.range((int) fieldLine.getXStart(), (int) fieldLine.getXEnd())
+                .forEach(
+                    x -> IntStream.range((int) fieldLine.getYStart(), (int) fieldLine.getYEnd())
+                        .forEach(y -> {
+                          graphics.setBackgroundColor(backgroundSupplier.apply(x, y));
+                          // TODO The determination of the character should be more obvious.
+                          graphics.setCharacter(x, y, this.getCharacter(x, y, fieldLine));
+                        })));
       }
 
       private Character getCharacter(
@@ -42,8 +44,9 @@ public class FieldLines extends AbstractComponent<FieldLines> {
           final FieldLine fieldLine
       ) {
         if ((fieldLine.getYStart() == y && fieldLine.getXStart() == x) ||
-                (fieldLine.getYEnd() == y && fieldLine.getXEnd() == x))
+            (fieldLine.getYEnd() == y && fieldLine.getXEnd() == x)) {
           return '+';
+        }
         return fieldLine.getYStart() == fieldLine.getYEnd() ? '|' : '–';
       }
     };

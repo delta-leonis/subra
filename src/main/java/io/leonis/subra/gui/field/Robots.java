@@ -1,11 +1,10 @@
 package io.leonis.subra.gui.field;
 
-import com.googlecode.lanterna.*;
+import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor.*;
 import com.googlecode.lanterna.gui2.*;
 import io.leonis.subra.game.data.*;
 import java.util.Set;
-import java.util.function.Function;
 import lombok.AllArgsConstructor;
 
 /**
@@ -13,6 +12,7 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public class Robots extends AbstractComponent<Robots> {
+
   private final Set<Player> players;
 
   @Override
@@ -28,8 +28,10 @@ public class Robots extends AbstractComponent<Robots> {
       public void drawComponent(final TextGUIGraphics graphics, final Robots component) {
         graphics.setForegroundColor(new RGB(255, 255, 255));
         players.forEach(player -> {
-          graphics.setBackgroundColor(player.getTeamColor() == TeamColor.BLUE ? ANSI.BLUE : ANSI.YELLOW);
-          graphics.setCharacter((int)player.getX(), (int)player.getY(), String.valueOf(player.getId()).charAt(0));
+          graphics.setBackgroundColor(
+              player.getTeamColor() == TeamColor.BLUE ? ANSI.BLUE : ANSI.YELLOW);
+          graphics.setCharacter((int) player.getX(), (int) player.getY(),
+              String.valueOf(player.getId()).charAt(0));
         });
       }
     };

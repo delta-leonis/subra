@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public class EmptySpace extends AbstractComponent<EmptySpace> {
+
   private final BiFunction<Integer, Integer, TextColor> backgroundSupplier;
 
   @Override
@@ -24,10 +25,10 @@ public class EmptySpace extends AbstractComponent<EmptySpace> {
       @Override
       public void drawComponent(final TextGUIGraphics graphics, final EmptySpace component) {
         IntStream.range(0, this.getPreferredSize(component).getColumns()).forEach(x ->
-          IntStream.range(0, this.getPreferredSize(component).getRows()).forEach(y -> {
-            graphics.setBackgroundColor(backgroundSupplier.apply(x, y));
-            graphics.setCharacter(x, y, ' ');
-          }));
+            IntStream.range(0, this.getPreferredSize(component).getRows()).forEach(y -> {
+              graphics.setBackgroundColor(backgroundSupplier.apply(x, y));
+              graphics.setCharacter(x, y, ' ');
+            }));
       }
     };
   }
