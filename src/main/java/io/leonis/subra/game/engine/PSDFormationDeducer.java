@@ -26,7 +26,7 @@ import reactor.util.function.*;
  * @author Rimon Oz
  */
 @Value
-public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.Supplier<Formation<INDArray, Player>>>
+public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.Supplier<Formation<Player.Identity, INDArray>>>
     implements PlayerCommandGroup, Rotation, Deducer<F, Strategy.Supplier> {
 
   private final double proportionalFactorX;
@@ -126,7 +126,7 @@ public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.
                 Player::getIdentity,
                 player -> Tuples.of(
                     player,
-                    gameBuffer.get(0).getFormation().getFormationFor(player)
+                    gameBuffer.get(0).getFormation().getFormationFor(player.getIdentity())
                         .sub(player.getPosition())))));
   }
 }

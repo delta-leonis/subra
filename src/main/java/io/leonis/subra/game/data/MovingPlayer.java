@@ -2,7 +2,6 @@ package io.leonis.subra.game.data;
 
 import io.leonis.algieba.spatial.Moving;
 import io.leonis.algieba.statistic.*;
-import io.leonis.zosma.game.Agent;
 import java.util.Set;
 import lombok.*;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -19,21 +18,21 @@ import org.nd4j.linalg.indexing.NDArrayIndex;
 public interface MovingPlayer extends Player, Moving {
 
   /**
-   * @return The X-velocity coordinate of the {@link Agent} in mm / us.
+   * @return The X-velocity coordinate of the {@link Player robot} in mm / us.
    */
   default double getXVelocity() {
     return this.getState().getMean().getDouble(4, 0);
   }
 
   /**
-   * @return The Y-velocity coordinate of the {@link Agent} in mm / us.
+   * @return The Y-velocity coordinate of the {@link Player robot} in mm / us.
    */
   default double getYVelocity() {
     return this.getState().getMean().getDouble(5, 0);
   }
 
   /**
-   * @return The orientation velocity of the {@link Agent} in mm / us.
+   * @return The orientation velocity of the {@link Player robot} in mm / us.
    */
   default double getOrientationVelocity() {
     return this.getState().getMean().getDouble(6, 0);
@@ -46,15 +45,25 @@ public interface MovingPlayer extends Player, Moving {
     return this.getState().getMean().get(NDArrayIndex.interval(4, 6), NDArrayIndex.all());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   default INDArray getVelocity() {
     return this.getState().getMean().get(NDArrayIndex.interval(4, 7), NDArrayIndex.all());
   }
 
+  /**
+   * Represents the functionality of an object which can supply a {@link Set} of {@link
+   * MovingPlayer}.
+   */
   interface SetSupplier {
     Set<MovingPlayer> getPlayers();
   }
 
+  /**
+   * Represents the calculated state of a {@link MovingPlayer}.
+   */
   @Value
   @AllArgsConstructor
   class State implements MovingPlayer {

@@ -18,11 +18,11 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  */
 @Value
 @Slf4j
-public class PositionFormation implements Formation<INDArray, Player> {
-  private final Map<Identity, INDArray> positions;
+public class PositionFormation implements Formation<Player.Identity, INDArray> {
+  private final Map<Player.Identity, INDArray> positions;
 
   @Override
-  public INDArray getFormationFor(final Player player) {
-    return this.getPositions().get(player.getIdentity());
+  public INDArray getFormationFor(final Player.Identity player) {
+    return this.getPositions().get(player);
   }
 }

@@ -29,8 +29,8 @@ public class GamepadPublisher implements Publisher<Frame> {
   }
 
   @Value
-  public static class Frame implements Controller.MappingSupplier<JamepadController, Player>, Player.SetSupplier {
+  public static class Frame implements Controller.MappingSupplier<JamepadController, Player.Identity>, Player.SetSupplier {
     private final Set<Player> players;
-    private final Map<JamepadController, Set<Player>> agentMapping;
+    private final Map<JamepadController, Set<Player.Identity>> agentMapping;
   }
 }

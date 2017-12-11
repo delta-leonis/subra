@@ -3,7 +3,7 @@ package io.leonis.subra.game.data;
 import io.leonis.algieba.*;
 import io.leonis.algieba.geometry.Orientation;
 import io.leonis.algieba.statistic.*;
-import io.leonis.zosma.game.Agent;
+import io.leonis.zosma.game.Identity;
 import java.io.Serializable;
 import java.util.Set;
 import lombok.*;
@@ -14,11 +14,12 @@ import org.nd4j.linalg.indexing.NDArrayIndex;
 /**
  * The Interface Player.
  *
- * This interface represents a {@link Agent robot} in a Small Size League game.
+ * This interface represents a robot in a Small Size League game.
  *
  * @author Rimon Oz
  */
-public interface Player extends Spatial, Agent, Orientation, Temporal, Serializable {
+public interface Player extends Spatial, Identity.Supplier, Orientation, Temporal, Serializable {
+
   /**
    * @return The X-position coordinate of the {@link Player} in mm.
    */
@@ -53,11 +54,17 @@ public interface Player extends Spatial, Agent, Orientation, Temporal, Serializa
     return this.getState().getMean().get(NDArrayIndex.interval(1, 3), NDArrayIndex.all());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   default INDArray getPosition() {
     return this.getState().getMean().get(NDArrayIndex.interval(1, 4), NDArrayIndex.all());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   default long getTimestamp() {
     // fixed point conversion
@@ -72,14 +79,25 @@ public interface Player extends Spatial, Agent, Orientation, Temporal, Serializa
   }
 
   /**
+   * @return The number of the player {@link Player}.
+   */
+  int getId();
+
+  /**
    * @return The {@link TeamColor} of the {@link Team} to which this Player belongs.
    */
   TeamColor getTeamColor();
 
+  /**
+   * Represents the functionality of an object which can supply a {@link Set} of {@link Player}.
+   */
   interface SetSupplier {
     Set<Player> getPlayers();
   }
 
+  /**
+   * Represents the measured state of a {@link Player}.
+   */
   @Value
   @AllArgsConstructor
   class State implements Player {
@@ -109,8 +127,11 @@ public interface Player extends Spatial, Agent, Orientation, Temporal, Serializa
     }
   }
 
+  /**
+   * The {@link io.leonis.zosma.game.Identity identity} of the robot.
+   */
   @Value
-  class Identity implements Agent {
+  class Identity implements io.leonis.zosma.game.Identity {
     private final int id;
     private final TeamColor teamColor;
   }
