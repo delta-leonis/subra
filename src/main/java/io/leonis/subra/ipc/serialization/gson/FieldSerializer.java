@@ -1,8 +1,8 @@
 package io.leonis.subra.ipc.serialization.gson;
 
 import com.google.gson.*;
-import java.lang.reflect.Type;
 import io.leonis.subra.game.data.Field;
+import java.lang.reflect.Type;
 
 /**
  * Class for handling serialization of Field objects.

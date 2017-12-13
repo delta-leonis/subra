@@ -1,9 +1,9 @@
 package io.leonis.subra.game.rule;
 
 import io.leonis.subra.game.data.*;
+import io.leonis.zosma.game.Rule;
 import java.util.Set;
 import java.util.stream.Collectors;
-import io.leonis.zosma.game.Rule;
 
 /**
  * The Class HaltRule.

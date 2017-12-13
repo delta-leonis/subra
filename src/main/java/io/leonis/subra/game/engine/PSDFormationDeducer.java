@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.leonis.algieba.control.PSDController;
 import io.leonis.algieba.geometry.Rotation;
 import io.leonis.subra.game.data.*;
+import io.leonis.subra.game.data.Player.PlayerIdentity;
 import io.leonis.subra.math.PlayerCommandGroup;
 import io.leonis.zosma.game.Formation;
 import io.leonis.zosma.game.engine.Deducer;
@@ -26,7 +27,7 @@ import reactor.util.function.*;
  * @author Rimon Oz
  */
 @Value
-public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.Supplier<Formation<INDArray, Player>>>
+public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.Supplier<Formation<PlayerIdentity, INDArray>>>
     implements PlayerCommandGroup, Rotation, Deducer<F, Strategy.Supplier> {
 
   private final double proportionalFactorX;
@@ -48,7 +49,7 @@ public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.
    * Player agent} positions and their {@link Formation} positions.
    */
   public Strategy.Supplier strategize(
-      final List<Tuple2<F, Map<Player.Identity, Tuple2<Player, INDArray>>>> gameBuffer
+      final List<Tuple2<F, Map<PlayerIdentity, Tuple2<Player, INDArray>>>> gameBuffer
   ) {
     return () ->
         gameBuffer.get(0).getT1().getPlayers().stream()
@@ -75,7 +76,7 @@ public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.
    * @return The coordinate magnitude as an INDArray.
    */
   private INDArray computeCoordinateMagnitude(
-      final List<Tuple2<F, Map<Player.Identity, Tuple2<Player, INDArray>>>> gameBuffer,
+      final List<Tuple2<F, Map<PlayerIdentity, Tuple2<Player, INDArray>>>> gameBuffer,
       final Player player,
       final int coordinateIndex
   ) {
@@ -116,7 +117,7 @@ public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.
    * and a mapping from {@link Player} to a vector representing the difference between the agent's
    * current position and the desired position.
    */
-  private Tuple2<F, Map<Player.Identity, Tuple2<Player, INDArray>>> computeError(
+  private Tuple2<F, Map<PlayerIdentity, Tuple2<Player, INDArray>>> computeError(
       final List<F> gameBuffer
   ) {
     return Tuples.of(
@@ -126,7 +127,7 @@ public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.
                 Player::getIdentity,
                 player -> Tuples.of(
                     player,
-                    gameBuffer.get(0).getFormation().getFormationFor(player)
+                    gameBuffer.get(0).getFormation().getFormationFor(player.getIdentity())
                         .sub(player.getPosition())))));
   }
 }

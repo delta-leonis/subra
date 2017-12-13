@@ -1,9 +1,9 @@
 package io.leonis.subra.ipc.serialization.json;
 
 import com.google.gson.*;
+import io.leonis.subra.game.data.PlayerCommand;
 import io.leonis.subra.ipc.serialization.gson.PlayerCommandSerializer;
 import java.util.function.Function;
-import io.leonis.subra.game.data.*;
 
 /**
  * @author Jeroen de Jong

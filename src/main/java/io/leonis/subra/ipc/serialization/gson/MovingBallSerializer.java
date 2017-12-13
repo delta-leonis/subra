@@ -1,7 +1,7 @@
 package io.leonis.subra.ipc.serialization.gson;
 
 import com.google.gson.*;
-import io.leonis.subra.game.data.*;
+import io.leonis.subra.game.data.MovingBall;
 import java.lang.reflect.Type;
 
 /**

@@ -1,13 +1,13 @@
 package io.leonis.subra.game.engine;
 
+import io.leonis.algieba.Temporal;
+import io.leonis.subra.game.data.*;
 import io.leonis.subra.game.engine.FilterDeducer.FilteredGameState;
 import io.leonis.subra.math.filter.*;
 import io.leonis.zosma.game.engine.*;
 import java.util.Set;
 import lombok.*;
 import org.reactivestreams.Publisher;
-import io.leonis.subra.game.data.*;
-import io.leonis.algieba.Temporal;
 import reactor.core.publisher.Flux;
 
 /**

@@ -1,13 +1,12 @@
 package io.leonis.subra.math;
 
-import io.leonis.subra.game.data.Strategy;
+import io.leonis.algieba.algebra.Group;
+import io.leonis.subra.game.data.*;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.BinaryOperator;
 import java.util.stream.*;
-import io.leonis.subra.game.data.*;
-import io.leonis.algieba.algebra.Group;
 
 /**
  * The Class PlayerCommandGroup.
