@@ -1,7 +1,7 @@
 package io.leonis.subra.game.data;
 
+import io.leonis.subra.game.data.Player.PlayerIdentity;
 import java.util.Map;
-import io.leonis.subra.game.data.*;
 
 /**
  * The Interface Strategy.
@@ -10,6 +10,6 @@ import io.leonis.subra.game.data.*;
  */
 public interface Strategy {
   interface Supplier {
-    Map<Player.Identity, PlayerCommand> getStrategy();
+    Map<PlayerIdentity, PlayerCommand> getStrategy();
   }
 }

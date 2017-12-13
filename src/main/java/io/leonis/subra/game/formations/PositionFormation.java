@@ -1,11 +1,10 @@
 package io.leonis.subra.game.formations;
 
 import io.leonis.subra.game.data.Player;
-import io.leonis.subra.game.data.Player.Identity;
+import io.leonis.subra.game.data.Player.PlayerIdentity;
 import io.leonis.zosma.game.Formation;
 import java.util.Map;
 import lombok.Value;
-import lombok.extern.slf4j.Slf4j;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**
@@ -17,12 +16,11 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  * @author Rimon Oz
  */
 @Value
-@Slf4j
-public class PositionFormation implements Formation<Player.Identity, INDArray> {
-  private final Map<Player.Identity, INDArray> positions;
+public class PositionFormation implements Formation<PlayerIdentity, INDArray> {
+  private final Map<PlayerIdentity, INDArray> positions;
 
   @Override
-  public INDArray getFormationFor(final Player.Identity player) {
+  public INDArray getFormationFor(final PlayerIdentity player) {
     return this.getPositions().get(player);
   }
 }

@@ -74,8 +74,8 @@ public interface Player extends Spatial, Identity.Supplier, Orientation, Tempora
   /**
    * @return The identity for the {@link Player}, containing only its identifier and team color.
    */
-  default Player.Identity getIdentity() {
-    return new Player.Identity(this.getId(), this.getTeamColor());
+  default PlayerIdentity getIdentity() {
+    return new PlayerIdentity(this.getId(), this.getTeamColor());
   }
 
   /**
@@ -131,7 +131,7 @@ public interface Player extends Spatial, Identity.Supplier, Orientation, Tempora
    * The {@link io.leonis.zosma.game.Identity identity} of the robot.
    */
   @Value
-  class Identity implements io.leonis.zosma.game.Identity {
+  class PlayerIdentity implements Identity {
     private final int id;
     private final TeamColor teamColor;
   }

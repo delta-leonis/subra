@@ -1,7 +1,7 @@
 package io.leonis.subra.game.rule;
 
-import java.util.Set;
 import io.leonis.subra.game.data.*;
+import java.util.Set;
 
 /**
  * The Class BallOutOfBoundsRule.

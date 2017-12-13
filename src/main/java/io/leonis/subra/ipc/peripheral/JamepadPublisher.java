@@ -1,7 +1,8 @@
 package io.leonis.subra.ipc.peripheral;
 
 import com.studiohartman.jamepad.ControllerManager;
-import io.leonis.subra.game.data.Player;
+import io.leonis.subra.game.data.Player.PlayerIdentity;
+import io.leonis.subra.ipc.peripheral.JamepadController.JamepadControllerIdentity;
 import io.leonis.zosma.ipc.peripheral.*;
 import io.leonis.zosma.ipc.peripheral.Controller.MappingSupplier;
 import java.util.*;
@@ -19,19 +20,19 @@ import reactor.core.publisher.Flux;
  */
 @Value
 public class JamepadPublisher implements
-    ControllerPublisher<JamepadController.Identity, Player.Identity, JamepadController> {
-  private final Map<JamepadController.Identity, Set<Player.Identity>> controllerMapping;
+    ControllerPublisher<JamepadControllerIdentity, PlayerIdentity, JamepadController> {
+  private final Map<JamepadControllerIdentity, Set<PlayerIdentity>> controllerMapping;
   private final ControllerManager controllers;
 
   /**
    * Constructs a new {@link JamepadPublisher} based on the supplied mapping of {@link
-   * JamepadController.Identity} to a set of {@link Player.Identity} which it controls.
+   * JamepadControllerIdentity} to a set of {@link PlayerIdentity} which it controls.
    *
-   * @param controllerMapping The mapping of {@link JamepadController.Identity} to a set of {@link
-   *                          Player.Identity} which it controls.
+   * @param controllerMapping The mapping of {@link JamepadControllerIdentity} to a set of {@link
+   *                          PlayerIdentity} which it controls.
    */
   public JamepadPublisher(
-      final Map<JamepadController.Identity, Set<Player.Identity>> controllerMapping
+      final Map<JamepadControllerIdentity, Set<PlayerIdentity>> controllerMapping
   ) {
     this.controllerMapping = controllerMapping;
     this.controllers = new ControllerManager(controllerMapping.size());
@@ -40,9 +41,9 @@ public class JamepadPublisher implements
 
   @Override
   public void subscribe(
-      final Subscriber<? super MappingSupplier<JamepadController, Player.Identity>> subscriber
+      final Subscriber<? super MappingSupplier<JamepadController, PlayerIdentity>> subscriber
   ) {
-    Flux.<Controller.MappingSupplier<JamepadController, Player.Identity>>create(fluxSink -> {
+    Flux.<Controller.MappingSupplier<JamepadController, PlayerIdentity>>create(fluxSink -> {
       while (true) {
         IntStream.range(0, this.getControllers().getNumControllers())
             .boxed()
@@ -51,9 +52,9 @@ public class JamepadPublisher implements
             .forEach(index ->
                 fluxSink.next(() ->
                     Collections.singletonMap(new JamepadController(
-                            new JamepadController.Identity(index),
+                            new JamepadControllerIdentity(index),
                             this.getControllers().getState(index)),
-                        this.getControllerMapping().get(new JamepadController.Identity(index)))));
+                        this.getControllerMapping().get(new JamepadControllerIdentity(index)))));
       }
     }).subscribe(subscriber);
   }

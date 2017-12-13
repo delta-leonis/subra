@@ -1,12 +1,12 @@
 package io.leonis.subra.game.data;
 
+import io.leonis.algieba.Spatial;
+import io.leonis.algieba.geometry.CardinalDirection;
 import java.io.Serializable;
 import java.util.Set;
 import lombok.Value;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.indexing.NDArrayIndex;
-import io.leonis.algieba.Spatial;
-import io.leonis.algieba.geometry.CardinalDirection;
 
 /**
  * The Interface Goal.

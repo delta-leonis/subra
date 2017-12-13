@@ -1,12 +1,12 @@
 package io.leonis.subra.ipc.serialization.protobuf.vision;
 
+import io.leonis.algieba.geometry.CardinalDirection;
+import io.leonis.subra.game.data.*;
+import io.leonis.zosma.game.engine.Deducer;
 import java.util.Set;
 import java.util.stream.*;
 import org.nd4j.linalg.factory.Nd4j;
 import org.reactivestreams.Publisher;
-import io.leonis.subra.game.data.*;
-import io.leonis.zosma.game.engine.Deducer;
-import io.leonis.algieba.geometry.CardinalDirection;
 import org.robocup.ssl.Geometry.*;
 import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;

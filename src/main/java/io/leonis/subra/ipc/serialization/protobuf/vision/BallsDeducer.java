@@ -1,9 +1,9 @@
 package io.leonis.subra.ipc.serialization.protobuf.vision;
 
-import java.util.Set;
-import java.util.stream.Collectors;
 import io.leonis.subra.game.data.Ball;
 import io.leonis.zosma.game.engine.Deducer;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.reactivestreams.Publisher;
 import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;

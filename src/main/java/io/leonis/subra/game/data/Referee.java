@@ -1,9 +1,9 @@
 package io.leonis.subra.game.data;
 
+import io.leonis.algieba.Temporal;
 import java.io.Serializable;
 import java.util.Set;
 import lombok.Value;
-import io.leonis.algieba.Temporal;
 
 /**
  * The Class RefereeState.

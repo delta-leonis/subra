@@ -1,12 +1,13 @@
 package io.leonis.subra.ipc.network;
 
+import io.leonis.subra.game.data.Player;
+import io.leonis.subra.game.data.Player.PlayerIdentity;
 import io.leonis.subra.ipc.network.GamepadPublisher.Frame;
 import io.leonis.subra.ipc.peripheral.JamepadController;
 import io.leonis.zosma.ipc.peripheral.Controller;
 import java.util.*;
 import lombok.*;
 import org.reactivestreams.*;
-import io.leonis.subra.game.data.Player;
 import reactor.core.publisher.Flux;
 
 /**
@@ -29,8 +30,8 @@ public class GamepadPublisher implements Publisher<Frame> {
   }
 
   @Value
-  public static class Frame implements Controller.MappingSupplier<JamepadController, Player.Identity>, Player.SetSupplier {
+  public static class Frame implements Controller.MappingSupplier<JamepadController, PlayerIdentity>, Player.SetSupplier {
     private final Set<Player> players;
-    private final Map<JamepadController, Set<Player.Identity>> agentMapping;
+    private final Map<JamepadController, Set<PlayerIdentity>> agentMapping;
   }
 }

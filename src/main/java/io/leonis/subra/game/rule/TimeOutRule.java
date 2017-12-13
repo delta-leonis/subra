@@ -1,9 +1,9 @@
 package io.leonis.subra.game.rule;
 
-import java.util.*;
-import io.leonis.zosma.game.Rule;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.game.data.Referee.Command;
+import io.leonis.zosma.game.Rule;
+import java.util.*;
 
 /**
  * The Class TimeOutRule.

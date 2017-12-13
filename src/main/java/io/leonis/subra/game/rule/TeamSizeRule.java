@@ -1,10 +1,10 @@
 package io.leonis.subra.game.rule;
 
+import io.leonis.subra.game.data.*;
+import io.leonis.zosma.game.Rule;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.Value;
-import io.leonis.zosma.game.Rule;
-import io.leonis.subra.game.data.*;
 
 /**
  * The Class TeamSizeRule.
