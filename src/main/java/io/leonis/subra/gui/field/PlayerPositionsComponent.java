@@ -27,7 +27,7 @@ public class PlayerPositionsComponent extends AbstractComponent<PlayerPositionsC
     return new ComponentRenderer<PlayerPositionsComponent>() {
       @Override
       public TerminalSize getPreferredSize(final PlayerPositionsComponent component) {
-        return component.getParent().getPreferredSize();
+        return TerminalSize.ZERO;
       }
 
       @Override

@@ -54,7 +54,7 @@ public final class OrientationIndicatorComponent extends
     return new ComponentRenderer<OrientationIndicatorComponent>() {
       @Override
       public TerminalSize getPreferredSize(final OrientationIndicatorComponent component) {
-        return component.getParent().getPreferredSize();
+        return TerminalSize.ZERO;
       }
 
       @Override

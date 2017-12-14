@@ -33,7 +33,7 @@ public final class FieldLinesComponent extends AbstractComponent<FieldLinesCompo
     return new ComponentRenderer<FieldLinesComponent>() {
       @Override
       public TerminalSize getPreferredSize(final FieldLinesComponent component) {
-        return component.getParent().getPreferredSize();
+        return TerminalSize.ZERO;
       }
 
       @Override

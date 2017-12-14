@@ -28,7 +28,7 @@ public final class BallPositionsComponent extends AbstractComponent<BallPosition
     return new ComponentRenderer<BallPositionsComponent>() {
       @Override
       public TerminalSize getPreferredSize(final BallPositionsComponent component) {
-        return component.getParent().getPreferredSize();
+        return TerminalSize.ZERO;
       }
 
       @Override
