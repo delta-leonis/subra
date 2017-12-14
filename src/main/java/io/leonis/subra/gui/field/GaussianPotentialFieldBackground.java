@@ -8,18 +8,34 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 /**
+ * The class GaussianPotentialFieldBackground.
+ *
+ * Provides a {@link TextColor} based on a provided {@link Function gradient} and the potential at
+ * a specific x and y.
+ *
  * @author Jeroen de Jong
  */
 @AllArgsConstructor
-public class GaussianPotentialFieldBackground implements BiFunction<Integer, Integer, TextColor> {
+public final class GaussianPotentialFieldBackground implements
+    BiFunction<Integer, Integer, TextColor> {
 
+  /**
+   * Value considered absolute max of any value of the potentialField
+   */
   private final static double LIMIT = 100;
+  /**
+   * The GaussianPotentialField as source for the gradient
+   */
   private final GaussianPotentialField potentialField;
+  /**
+   * Gradient to determine color based on ratio
+   */
   private final Function<Double, TextColor.RGB> gradient;
 
   @Override
   public TextColor apply(final Integer x, final Integer y) {
-    final INDArray positionVector = potentialField.getPotential(Nd4j.create(new double[]{x, y}));
-    return gradient.apply(positionVector.getDouble(0, 0) / LIMIT);
+    final INDArray potential = potentialField
+        .getPotential(Nd4j.create(new double[]{x, y}, new int[]{2, 1}));
+    return gradient.apply(Math.min(potential.getDouble(0, 0) / LIMIT, 1));
   }
 }

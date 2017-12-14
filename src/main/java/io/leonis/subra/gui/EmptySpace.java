@@ -1,4 +1,4 @@
-package io.leonis.subra.gui.field;
+package io.leonis.subra.gui;
 
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.gui2.*;
@@ -7,11 +7,18 @@ import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
 
 /**
+ * The class EmptySpace.
+ *
+ * Draws an rectangle the same size as it's parent a dynamic color.
+ *
  * @author Jeroen de Jong
  */
 @AllArgsConstructor
 public class EmptySpace extends AbstractComponent<EmptySpace> {
 
+  /**
+   * Function to determine background color at a specific position
+   */
   private final BiFunction<Integer, Integer, TextColor> backgroundSupplier;
 
   @Override

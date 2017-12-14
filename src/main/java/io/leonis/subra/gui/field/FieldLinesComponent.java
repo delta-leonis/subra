@@ -9,24 +9,36 @@ import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
 
 /**
+ * The class FieldLinesComponent.
+ *
+ * Draws vertical and horizontal {@link FieldLine field lines}. Draws a + at the begin and end of
+ * every line.
+ *
  * @author Jeroen de Jong
  */
 @AllArgsConstructor
-public class FieldLines extends AbstractComponent<FieldLines> {
+public final class FieldLinesComponent extends AbstractComponent<FieldLinesComponent> {
 
+  /**
+   * Collection of lines to draw
+   */
   private final Collection<FieldLine> fieldLines;
+  /**
+   * Function to determine background color at a specific position
+   */
   private final BiFunction<Integer, Integer, TextColor> backgroundSupplier;
 
   @Override
-  protected ComponentRenderer<FieldLines> createDefaultRenderer() {
-    return new ComponentRenderer<FieldLines>() {
+  protected ComponentRenderer<FieldLinesComponent> createDefaultRenderer() {
+    return new ComponentRenderer<FieldLinesComponent>() {
       @Override
-      public TerminalSize getPreferredSize(final FieldLines component) {
-        return null;
+      public TerminalSize getPreferredSize(final FieldLinesComponent component) {
+        return component.getParent().getPreferredSize();
       }
 
       @Override
-      public void drawComponent(final TextGUIGraphics graphics, final FieldLines component) {
+      public void drawComponent(final TextGUIGraphics graphics,
+          final FieldLinesComponent component) {
         component.fieldLines.forEach(fieldLine ->
             IntStream.range((int) fieldLine.getXStart(), (int) fieldLine.getXEnd())
                 .forEach(

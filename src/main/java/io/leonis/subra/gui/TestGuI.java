@@ -1,18 +1,14 @@
 package io.leonis.subra.gui;
 
-import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.TextColor.ANSI;
 import com.googlecode.lanterna.gui2.BasicWindow;
 import io.leonis.algieba.spatial.PotentialField;
 import io.leonis.subra.game.data.*;
-import io.leonis.subra.gui.field.*;
+import io.leonis.subra.gui.field.GaussianFieldPanel;
 import io.leonis.subra.math.spatial.GaussianPotentialField;
 import io.leonis.torch.Torch;
 import io.leonis.torch.component.ComponentBackground;
-import io.leonis.torch.component.graph.Gradient;
-import java.awt.Color;
 import java.util.*;
-import java.util.function.BiFunction;
 import lombok.Value;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
@@ -71,7 +67,7 @@ public class TestGuI {
     new Thread(
         new Torch(
             gui -> gui.addWindowAndWait(new BasicWindow("wat")),
-            new ComponentBackground(new GaussianField<>(s), ANSI.BLUE))
+            new ComponentBackground(new GaussianFieldPanel<>(s), ANSI.BLUE))
     ).start();
   }
 
