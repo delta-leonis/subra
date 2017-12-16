@@ -7,14 +7,14 @@ import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
 
 /**
- * The class EmptySpace.
+ * The class CanvasComponent.
  *
  * Draws an rectangle the same size as it's parent a dynamic color.
  *
  * @author Jeroen de Jong
  */
 @AllArgsConstructor
-public class EmptySpace extends AbstractComponent<EmptySpace> {
+public class CanvasComponent extends AbstractComponent<CanvasComponent> {
 
   /**
    * Function to determine background color at a specific position
@@ -22,15 +22,15 @@ public class EmptySpace extends AbstractComponent<EmptySpace> {
   private final BiFunction<Integer, Integer, TextColor> backgroundSupplier;
 
   @Override
-  protected ComponentRenderer<EmptySpace> createDefaultRenderer() {
-    return new ComponentRenderer<EmptySpace>() {
+  protected ComponentRenderer<CanvasComponent> createDefaultRenderer() {
+    return new ComponentRenderer<CanvasComponent>() {
       @Override
-      public TerminalSize getPreferredSize(final EmptySpace component) {
-        return component.getParent().getPreferredSize();
+      public TerminalSize getPreferredSize(final CanvasComponent component) {
+        return new TerminalSize(0, 0);
       }
 
       @Override
-      public void drawComponent(final TextGUIGraphics graphics, final EmptySpace component) {
+      public void drawComponent(final TextGUIGraphics graphics, final CanvasComponent component) {
         IntStream.range(0, this.getPreferredSize(component).getColumns()).forEach(x ->
             IntStream.range(0, this.getPreferredSize(component).getRows()).forEach(y -> {
               graphics.setBackgroundColor(backgroundSupplier.apply(x, y));
