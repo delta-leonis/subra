@@ -1,7 +1,7 @@
 package io.leonis.subra.gui.field;
 
 import com.googlecode.lanterna.TextColor;
-import io.leonis.subra.math.spatial.GaussianPotentialField;
+import io.leonis.algieba.spatial.PotentialField;
 import java.util.function.*;
 import lombok.AllArgsConstructor;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -16,7 +16,7 @@ import org.nd4j.linalg.factory.Nd4j;
  * @author Jeroen de Jong
  */
 @AllArgsConstructor
-public final class GaussianPotentialFieldBackground implements
+public final class PotentialFieldBackground implements
     BiFunction<Integer, Integer, TextColor> {
 
   /**
@@ -26,7 +26,7 @@ public final class GaussianPotentialFieldBackground implements
   /**
    * The GaussianPotentialField as source for the gradient
    */
-  private final GaussianPotentialField potentialField;
+  private final PotentialField potentialField;
   /**
    * Gradient to determine color based on ratio
    */
