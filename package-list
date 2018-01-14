@@ -10,4 +10,3 @@ io.leonis.subra.ipc.serialization.protobuf
 io.leonis.subra.ipc.serialization.protobuf.vision
 io.leonis.subra.math
 io.leonis.subra.math.filter
-io.leonis.subra.math.spatial
