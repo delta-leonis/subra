@@ -1,6 +1,6 @@
 package io.leonis.subra.math;
 
-import io.leonis.algieba.algebra.Group;
+import io.leonis.algieba.algebra.Ring;
 import io.leonis.subra.game.data.*;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Map;
@@ -9,13 +9,13 @@ import java.util.function.BinaryOperator;
 import java.util.stream.*;
 
 /**
- * The Class PlayerCommandGroup.
+ * The Class PlayerCommandRing.
  *
  * This class contains the functionality for transforming {@link PlayerCommand}.
  *
  * @author Rimon Oz
  */
-public interface PlayerCommandGroup extends Group<PlayerCommand> {
+public interface PlayerCommandRing extends Ring<PlayerCommand> {
 
   /**
    * Limits the velocity vectors contained inside the strategy.
@@ -37,11 +37,11 @@ public interface PlayerCommandGroup extends Group<PlayerCommand> {
                   + Math.pow(entry.getValue().getVelocityX(), 2));
               return new PlayerCommand.State(
                   (float) (speedLimit / velocityMagnitude
-                          * Math.tanh(entry.getValue().getVelocityX())),
+                      * Math.tanh(entry.getValue().getVelocityX())),
                   (float) (speedLimit / velocityMagnitude
-                          * Math.tanh(entry.getValue().getVelocityY())),
+                      * Math.tanh(entry.getValue().getVelocityY())),
                   (float) (speedLimit / velocityMagnitude
-                          * Math.tanh(entry.getValue().getVelocityR())),
+                      * Math.tanh(entry.getValue().getVelocityR())),
                   entry.getValue().getFlatKick(),
                   entry.getValue().getChipKick(),
                   entry.getValue().getDribblerSpin());
@@ -49,7 +49,7 @@ public interface PlayerCommandGroup extends Group<PlayerCommand> {
   }
 
   /**
-   * Computes the sum of two {@link PlayerCommand PlayerCommandGroup}.
+   * Computes the sum of two {@link PlayerCommand PlayerCommandRing}.
    *
    * @param leftCommand  The first {@link PlayerCommand} to be summed.
    * @param rightCommand The second {@link PlayerCommand} to be summed.
@@ -85,18 +85,18 @@ public interface PlayerCommandGroup extends Group<PlayerCommand> {
   }
 
   /**
-   * Computes the sum of two (or more) {@link PlayerCommand PlayerCommandGroup}.
+   * Computes the sum of two (or more) {@link PlayerCommand PlayerCommandRing}.
    *
-   * @param commands A primitive array of {@link PlayerCommand PlayerCommandGroup} to be
+   * @param commands A primitive array of {@link PlayerCommand PlayerCommandRing} to be
    *                 summed.
-   * @return The sum of the supplied {@link PlayerCommand PlayerCommandGroup}.
+   * @return The sum of the supplied {@link PlayerCommand PlayerCommandRing}.
    */
   default PlayerCommand add(final PlayerCommand... commands) {
     return Stream.of(commands).reduce(PlayerCommand.State.STOP, this::add);
   }
 
   /**
-   * Combines the {@link PlayerCommand PlayerCommandGroup} by the {@link Player} they are
+   * Combines the {@link PlayerCommand PlayerCommandRing} by the {@link Player} they are
    * addressed to in the supplied strategies using the supplied binary operator.
    *
    * @param leftMap  The first {@link Map} to combine.
@@ -119,5 +119,29 @@ public interface PlayerCommandGroup extends Group<PlayerCommand> {
         .collect(Collectors.toMap(
             SimpleImmutableEntry::getKey,
             SimpleImmutableEntry::getValue));
+  }
+
+  @Override
+  default PlayerCommand multiply(PlayerCommand firstElement, PlayerCommand secondElement) {
+    return new PlayerCommand.State(
+        firstElement.getVelocityX() * secondElement.getVelocityX(),
+        firstElement.getVelocityY() * secondElement.getVelocityY(),
+        firstElement.getVelocityR() * secondElement.getVelocityR(),
+        firstElement.getFlatKick() * secondElement.getFlatKick(),
+        firstElement.getChipKick() * secondElement.getChipKick(),
+        firstElement.getDribblerSpin() * secondElement.getDribblerSpin());
+  }
+
+  @Override
+  default PlayerCommand getMultiplicativeInverse(
+      PlayerCommand fieldElement
+  ) {
+    return new PlayerCommand.State(
+        1f / fieldElement.getVelocityX(),
+        1f / fieldElement.getVelocityY(),
+        1f / fieldElement.getVelocityR(),
+        1f / fieldElement.getFlatKick(),
+        1f / fieldElement.getChipKick(),
+        1f / fieldElement.getDribblerSpin());
   }
 }
