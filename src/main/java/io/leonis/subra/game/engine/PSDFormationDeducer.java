@@ -5,7 +5,7 @@ import io.leonis.algieba.control.PSDController;
 import io.leonis.algieba.geometry.Rotation;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.game.data.Player.PlayerIdentity;
-import io.leonis.subra.math.PlayerCommandGroup;
+import io.leonis.subra.math.PlayerCommandRing;
 import io.leonis.zosma.game.Formation;
 import io.leonis.zosma.game.engine.Deducer;
 import java.util.*;
@@ -28,7 +28,7 @@ import reactor.util.function.*;
  */
 @Value
 public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.Supplier<Formation<PlayerIdentity, INDArray>>>
-    implements PlayerCommandGroup, Rotation, Deducer<F, Strategy.Supplier> {
+    implements PlayerCommandRing, Rotation, Deducer<F, Strategy.Supplier> {
 
   private final double proportionalFactorX;
   private final double summationFactorX;
