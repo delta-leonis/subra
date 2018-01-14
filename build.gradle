@@ -10,7 +10,7 @@ apply plugin: 'signing'
 apply plugin: 'maven'
 
 group 'io.leonis'
-version '0.0.3'
+version '0.0.4'
 archivesBaseName = "subra"
 rootProject.description = 'soccer is simple, but it is difficult to play simple'
 sourceCompatibility = 1.8
