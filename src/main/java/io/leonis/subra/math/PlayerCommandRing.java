@@ -122,7 +122,10 @@ public interface PlayerCommandRing extends Ring<PlayerCommand> {
   }
 
   @Override
-  default PlayerCommand multiply(PlayerCommand firstElement, PlayerCommand secondElement) {
+  default PlayerCommand multiply(
+      final PlayerCommand firstElement,
+      final PlayerCommand secondElement
+  ) {
     return new PlayerCommand.State(
         firstElement.getVelocityX() * secondElement.getVelocityX(),
         firstElement.getVelocityY() * secondElement.getVelocityY(),
@@ -133,9 +136,7 @@ public interface PlayerCommandRing extends Ring<PlayerCommand> {
   }
 
   @Override
-  default PlayerCommand getMultiplicativeInverse(
-      PlayerCommand fieldElement
-  ) {
+  default PlayerCommand getMultiplicativeInverse(final PlayerCommand fieldElement) {
     return new PlayerCommand.State(
         1f / fieldElement.getVelocityX(),
         1f / fieldElement.getVelocityY(),
