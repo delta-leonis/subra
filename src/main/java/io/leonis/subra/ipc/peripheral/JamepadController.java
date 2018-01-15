@@ -11,7 +11,7 @@ import lombok.Value;
  */
 @Value
 public class JamepadController implements Controller<JamepadControllerIdentity, ControllerState> {
-  private final JamepadControllerIdentity identifier;
+  private final JamepadControllerIdentity identity;
   private final ControllerState controls;
 
   @Value
