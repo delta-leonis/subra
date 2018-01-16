@@ -1,7 +1,6 @@
 package io.leonis.subra.math;
 
 import io.leonis.subra.game.data.PlayerCommand;
-import java.util.stream.Stream;
 import lombok.experimental.Delegate;
 
 /**
@@ -22,8 +21,7 @@ public class AveragePlayerCommand implements PlayerCommand {
    */
   public AveragePlayerCommand(final PlayerCommand... commands) {
     this.playerCommand = new MultiplyPlayerCommand(
-        Stream.of(commands)
-            .reduce(PlayerCommand.State.STOP, AddPlayerCommand::new),
+        new AddPlayerCommand(PlayerCommand.State.STOP, commands),
         1f / commands.length);
   }
 }
