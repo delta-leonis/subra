@@ -22,9 +22,9 @@ public class CombineByPlayerStrategySupplier implements Strategy.Supplier {
    * Computes the {@link Strategy.Supplier} as a result of combining the supplied strategies by
    * {@link io.leonis.subra.game.data.Player.PlayerIdentity}.
    *
-   * @param leftMap  The first strategy to combine.
-   * @param rightMap The second strategy to combine.
-   * @param combiner The {@link BinaryOperator combinator} function.
+   * @param leftMap   The first strategy to combine.
+   * @param rightMaps The second strategy to combine.
+   * @param combiner  The {@link BinaryOperator combinator} function.
    */
   public CombineByPlayerStrategySupplier(
       final BinaryOperator<PlayerCommand> combiner,
