@@ -1,6 +1,7 @@
 package io.leonis.subra.math;
 
 import io.leonis.subra.game.data.PlayerCommand;
+import java.util.stream.Stream;
 import lombok.experimental.Delegate;
 
 /**
@@ -15,18 +16,21 @@ public class AddPlayerCommand implements PlayerCommand {
   private final PlayerCommand playerCommand;
 
   /**
-   * Computes the addition of the supplied two {@link PlayerCommand}.
+   * Computes the addition of the supplied more than two {@link PlayerCommand}.
    *
-   * @param leftCommand  The first command to add.
-   * @param rightCommand The second command to add.
+   * @param leftCommand   The first command to add.
+   * @param rightCommands The remaining commands to add.
    */
-  public AddPlayerCommand(final PlayerCommand leftCommand, final PlayerCommand rightCommand) {
-    this.playerCommand = new PlayerCommand.State(
-        leftCommand.getVelocityX() + rightCommand.getVelocityX(),
-        leftCommand.getVelocityY() + rightCommand.getVelocityY(),
-        leftCommand.getVelocityR() + rightCommand.getVelocityR(),
-        leftCommand.getFlatKick() + rightCommand.getFlatKick(),
-        leftCommand.getChipKick() + rightCommand.getChipKick(),
-        leftCommand.getDribblerSpin() + rightCommand.getDribblerSpin());
+  public AddPlayerCommand(final PlayerCommand leftCommand, final PlayerCommand... rightCommands) {
+    this.playerCommand = Stream.of(rightCommands)
+        .reduce(leftCommand,
+            (left, right) ->
+                new PlayerCommand.State(
+                    left.getVelocityX() + right.getVelocityX(),
+                    left.getVelocityY() + right.getVelocityY(),
+                    left.getVelocityR() + right.getVelocityR(),
+                    left.getFlatKick() + right.getFlatKick(),
+                    left.getChipKick() + right.getChipKick(),
+                    left.getDribblerSpin() + right.getDribblerSpin()));
   }
 }

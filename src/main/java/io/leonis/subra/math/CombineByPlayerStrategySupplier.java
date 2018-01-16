@@ -3,7 +3,7 @@ package io.leonis.subra.math;
 import io.leonis.subra.game.data.*;
 import java.util.Map.Entry;
 import java.util.function.BinaryOperator;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 import lombok.experimental.Delegate;
 
 /**
@@ -27,16 +27,21 @@ public class CombineByPlayerStrategySupplier implements Strategy.Supplier {
    * @param combiner The {@link BinaryOperator combinator} function.
    */
   public CombineByPlayerStrategySupplier(
+      final BinaryOperator<PlayerCommand> combiner,
       final Strategy.Supplier leftMap,
-      final Strategy.Supplier rightMap,
-      final BinaryOperator<PlayerCommand> combiner
+      final Strategy.Supplier... rightMaps
   ) {
-    this.strategy = () -> leftMap.getStrategy().entrySet().stream()
-        .collect(Collectors.toMap(
-            Entry::getKey,
-            entry ->
-                rightMap.getStrategy().containsKey(entry.getKey())
-                    ? combiner.apply(rightMap.getStrategy().get(entry.getKey()), entry.getValue())
-                    : entry.getValue()));
+    this.strategy =
+        Stream.of(rightMaps)
+            .reduce(leftMap,
+                (left, right) ->
+                    () -> left.getStrategy().entrySet().stream()
+                        .collect(Collectors.toMap(
+                            Entry::getKey,
+                            entry ->
+                                right.getStrategy().containsKey(entry.getKey())
+                                    ? combiner.apply(right.getStrategy().get(entry.getKey()),
+                                    entry.getValue())
+                                    : entry.getValue())));
   }
 }
