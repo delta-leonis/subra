@@ -1,6 +1,6 @@
 package io.leonis.subra.ipc.serialization.protobuf;
 
-import io.leonis.subra.game.data.Strategy.Supplier;
+import io.leonis.subra.game.data.Strategy;
 import io.leonis.subra.protocol.Robot.Command;
 import io.leonis.zosma.game.engine.Deducer;
 import org.reactivestreams.Publisher;
@@ -13,10 +13,10 @@ import reactor.core.publisher.Flux;
  *
  * @author Jeroen de Jong
  */
-public class SSLCommandDeducer implements Deducer<Supplier, Command> {
+public class SSLCommandDeducer implements Deducer<Strategy.Supplier, Command> {
 
   @Override
-  public Publisher<Command> apply(final Publisher<Supplier> supplierPublisher) {
+  public Publisher<Command> apply(final Publisher<Strategy.Supplier> supplierPublisher) {
     return Flux.from(supplierPublisher)
         .flatMapIterable(strategyContainer -> strategyContainer.getStrategy().entrySet())
         .map(robotCommandEntry ->
