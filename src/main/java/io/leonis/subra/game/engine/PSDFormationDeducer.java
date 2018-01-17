@@ -2,7 +2,7 @@ package io.leonis.subra.game.engine;
 
 import com.google.common.collect.Lists;
 import io.leonis.algieba.control.PSDController;
-import io.leonis.algieba.geometry.Rotation;
+import io.leonis.algieba.geometry.Vectors;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.game.data.Player.PlayerIdentity;
 import io.leonis.zosma.game.Formation;
@@ -27,7 +27,7 @@ import reactor.util.function.*;
  */
 @Value
 public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.Supplier<Formation<PlayerIdentity, INDArray>>>
-    implements Rotation, Deducer<F, Strategy.Supplier> {
+    implements Deducer<F, Strategy.Supplier> {
 
   private final double proportionalFactorX;
   private final double summationFactorX;
@@ -55,7 +55,7 @@ public class PSDFormationDeducer<F extends MovingPlayer.SetSupplier & Formation.
             .collect(Collectors.toMap(
                 Player::getIdentity,
                 player -> new PlayerCommand.State(
-                    Nd4j.vstack(this.planarCartesian(Nd4j.vstack(
+                    Nd4j.vstack(Vectors.rotatePlanarCartesian(Nd4j.vstack(
                         this.computeCoordinateMagnitude(gameBuffer, player, 0),
                         this.computeCoordinateMagnitude(gameBuffer, player, 1)),
                         -1 * player.getOrientation()),
