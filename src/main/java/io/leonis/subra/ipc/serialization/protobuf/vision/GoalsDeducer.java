@@ -22,7 +22,9 @@ public class GoalsDeducer implements Deducer<WrapperPacket, Set<Goal>> {
   @Override
   public Publisher<Set<Goal>> apply(final Publisher<WrapperPacket> geometryPublisher) {
     return Flux.from(geometryPublisher)
+        .filter(WrapperPacket::hasGeometry)
         .map(WrapperPacket::getGeometry)
+        .filter(GeometryData::hasField)
         .map(GeometryData::getField)
         .map(input -> Stream.of(input)
             .flatMap(packet -> Stream.of(

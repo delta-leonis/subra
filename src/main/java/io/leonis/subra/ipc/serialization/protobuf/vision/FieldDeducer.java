@@ -22,7 +22,9 @@ public class FieldDeducer implements Deducer<WrapperPacket, Field> {
   @Override
   public Publisher<Field> apply(final Publisher<WrapperPacket> visionPublisher) {
     return Flux.from(visionPublisher)
+        .filter(WrapperPacket::hasGeometry)
         .map(WrapperPacket::getGeometry)
+        .filter(GeometryData::hasField)
         .map(GeometryData::getField)
         .map(input ->
             new Field.State(
