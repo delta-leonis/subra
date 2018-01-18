@@ -19,6 +19,7 @@ public class BallsDeducer implements Deducer<WrapperPacket, Set<Ball>> {
   @Override
   public Publisher<Set<Ball>> apply(final Publisher<WrapperPacket> detectionFramePublisher) {
     return Flux.from(detectionFramePublisher)
+        .filter(WrapperPacket::hasDetection)
         .map(WrapperPacket::getDetection)
         .map(input ->
             input.getBallsList().stream()

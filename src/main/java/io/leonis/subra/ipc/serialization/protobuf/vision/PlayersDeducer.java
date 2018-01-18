@@ -20,6 +20,7 @@ public class PlayersDeducer implements Deducer<WrapperPacket, Set<Player>> {
   @Override
   public Publisher<Set<Player>> apply(final Publisher<WrapperPacket> detectionFramePublisher) {
     return Flux.from(detectionFramePublisher)
+        .filter(WrapperPacket::hasDetection)
         .map(WrapperPacket::getDetection)
         .map(packet ->
             Stream.of(packet)
