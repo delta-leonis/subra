@@ -5,6 +5,7 @@ import io.leonis.zosma.game.engine.Deducer;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.reactivestreams.Publisher;
+import org.robocup.ssl.Detection.DetectionFrame;
 import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 
@@ -15,12 +16,10 @@ import reactor.core.publisher.Flux;
  *
  * @author Jeroen de Jong
  */
-public class BallsDeducer implements Deducer<WrapperPacket, Set<Ball>> {
+public class BallsDeducer implements Deducer<DetectionFrame, Set<Ball>> {
   @Override
-  public Publisher<Set<Ball>> apply(final Publisher<WrapperPacket> detectionFramePublisher) {
+  public Publisher<Set<Ball>> apply(final Publisher<DetectionFrame> detectionFramePublisher) {
     return Flux.from(detectionFramePublisher)
-        .filter(WrapperPacket::hasDetection)
-        .map(WrapperPacket::getDetection)
         .map(input ->
             input.getBallsList().stream()
                 .map(ball ->
