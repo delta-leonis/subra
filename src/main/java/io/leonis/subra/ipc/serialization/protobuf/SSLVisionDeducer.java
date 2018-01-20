@@ -4,6 +4,8 @@ import io.leonis.algieba.Temporal;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
 import io.leonis.subra.ipc.serialization.protobuf.vision.*;
+import io.leonis.subra.ipc.serialization.protobuf.vision.DetectionFrameDeducer.Detection;
+import io.leonis.subra.ipc.serialization.protobuf.vision.GeometryDataDeducer.Geometry;
 import io.leonis.zosma.game.engine.*;
 import java.util.Set;
 import lombok.*;
@@ -26,12 +28,24 @@ public class SSLVisionDeducer implements Deducer<WrapperPacket, VisionPacket> {
   @Override
   public Publisher<VisionPacket> apply(final Publisher<WrapperPacket> wrapperPacketPublisher) {
     return Flux.from(wrapperPacketPublisher)
-        .transform(new ParallelDeducer<>(
-            new PlayersDeducer(),
-            new GoalsDeducer(),
-            new BallsDeducer(),
-            new FieldDeducer(),
-            VisionPacket::new));
+        .transform(
+            new ParallelDeducer<>(
+                new GeometryDataDeducer()
+                    .andThen(new ParallelDeducer<>(
+                        new FieldDeducer(),
+                        new GoalsDeducer(),
+                        Geometry::new)),
+                new DetectionFrameDeducer()
+                    .andThen(new ParallelDeducer<>(
+                        new BallsDeducer(),
+                        new PlayersDeducer(),
+                        Detection::new)),
+                (geometry, detection) ->
+                    new VisionPacket(
+                        detection.getPlayers(),
+                        geometry.getGoals(),
+                        detection.getBalls(),
+                        geometry.getField())));
   }
 
   @Value

@@ -18,12 +18,10 @@ import reactor.core.publisher.Flux;
  *
  * @author Jeroen de Jong
  */
-public class GoalsDeducer implements Deducer<WrapperPacket, Set<Goal>> {
+public class GoalsDeducer implements Deducer<GeometryData, Set<Goal>> {
   @Override
-  public Publisher<Set<Goal>> apply(final Publisher<WrapperPacket> geometryPublisher) {
+  public Publisher<Set<Goal>> apply(final Publisher<GeometryData> geometryPublisher) {
     return Flux.from(geometryPublisher)
-        .filter(WrapperPacket::hasGeometry)
-        .map(WrapperPacket::getGeometry)
         .filter(GeometryData::hasField)
         .map(GeometryData::getField)
         .map(input -> Stream.of(input)

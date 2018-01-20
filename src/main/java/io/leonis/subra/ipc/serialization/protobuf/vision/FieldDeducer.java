@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
 import org.robocup.ssl.Geometry.GeometryData;
-import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 
 /**
@@ -18,12 +17,10 @@ import reactor.core.publisher.Flux;
  * @author Rimon Oz
  */
 @AllArgsConstructor
-public class FieldDeducer implements Deducer<WrapperPacket, Field> {
+public class FieldDeducer implements Deducer<GeometryData, Field> {
   @Override
-  public Publisher<Field> apply(final Publisher<WrapperPacket> visionPublisher) {
+  public Publisher<Field> apply(final Publisher<GeometryData> visionPublisher) {
     return Flux.from(visionPublisher)
-        .filter(WrapperPacket::hasGeometry)
-        .map(WrapperPacket::getGeometry)
         .filter(GeometryData::hasField)
         .map(GeometryData::getField)
         .map(input ->
