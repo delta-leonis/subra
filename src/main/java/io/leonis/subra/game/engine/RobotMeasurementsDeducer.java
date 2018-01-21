@@ -4,7 +4,7 @@ import io.leonis.subra.game.data.Player.PlayerIdentity;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.protocol.Robot;
 import io.leonis.subra.protocol.Robot.Measurements;
-import io.leonis.zosma.function.LambdaExceptions;
+import io.leonis.zosma.exception.UnsafeFunction;
 import io.leonis.zosma.game.engine.Deducer;
 import java.net.DatagramPacket;
 import java.util.Arrays;
@@ -32,7 +32,7 @@ public class RobotMeasurementsDeducer implements Deducer<DatagramPacket, RobotMe
     return Flux.from(datagramPacketPublisher)
         .map(datagramPacket ->
             Arrays.copyOfRange(datagramPacket.getData(), 0, datagramPacket.getLength()))
-        .map(LambdaExceptions.rethrowFunction(Robot.Measurements::parseFrom))
+        .map(new UnsafeFunction<>(Robot.Measurements::parseFrom))
         // get rid of empty measurements
         .filter(measurementsList -> !measurementsList.getMeasurementsList().isEmpty())
         // and put the measurements in a map
