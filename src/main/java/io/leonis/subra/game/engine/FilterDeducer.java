@@ -37,7 +37,7 @@ public class FilterDeducer<I extends MovingPlayer.SetSupplier & Goal.SetSupplier
   public Publisher<FilteredGameState> apply(final Publisher<I> soccerGamePublisher) {
     return Flux.from(soccerGamePublisher)
         .transform(new ParallelDeducer<>(
-            new Deducer.Identity<>(),
+            new IdentityDeducer<>(),
             this.getBallFilter(),
             this.getRobotFilter(),
             FilteredGameState::build));
