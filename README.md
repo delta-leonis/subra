@@ -16,14 +16,14 @@ to run `subra`.
 <dependency>
     <groupId>io.leonis</groupId>
     <artifactId>subra</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
 </dependency>
 ```
 
 #### Gradle
 
 ```
-compile 'io.leonis:subra:0.0.7'
+compile 'io.leonis:subra:0.0.8'
 ```
 
 ## Documentation
