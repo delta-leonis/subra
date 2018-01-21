@@ -20,7 +20,7 @@ public final class ControllerHandler<C extends Stick.LeftSupplier & Stick.RightS
   public PlayerCommand apply(final C controller) {
     return new PlayerCommand.State(
         -1f * controller.getLeftStick().getX(),
-        -1f *controller.getLeftStick().getY(),
+        -1f * controller.getLeftStick().getY(),
         controller.getRightStick().getX(),
         controller.isAPressed() ? 1f : 0f,
         controller.isBPressed() ? 1f : 0f,
