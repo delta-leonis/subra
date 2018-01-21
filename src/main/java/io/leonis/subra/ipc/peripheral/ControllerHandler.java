@@ -19,11 +19,9 @@ public final class ControllerHandler<C extends Stick.LeftSupplier & Stick.RightS
   @Override
   public PlayerCommand apply(final C controller) {
     return new PlayerCommand.State(
-        -1f * (float) Math.tanh(Math.pow(controller.getLeftStick().getX(), 3))
-            / 0.8f,
-        -1f * (float) Math.tanh(Math.pow(controller.getLeftStick().getY(), 3))
-            / 0.8f,
-        (float) Math.tanh(Math.pow(controller.getRightStick().getX(), 3)) / 3.5f,
+        -1f * controller.getLeftStick().getX(),
+        -1f *controller.getLeftStick().getY(),
+        controller.getRightStick().getX(),
         controller.isAPressed() ? 1f : 0f,
         controller.isBPressed() ? 1f : 0f,
         controller.getRightTrigger());
