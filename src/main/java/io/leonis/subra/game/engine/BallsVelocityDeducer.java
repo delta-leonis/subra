@@ -31,7 +31,7 @@ public class BallsVelocityDeducer<I extends Ball.SetSupplier>
                                 closerBall.getXY(), currentBall.getXY())
                                 ? newBall
                                 : closerBall)
-                        .map(closestBall -> this.calculateVelocity(currentBall, closestBall))
+                        .map(closestBall -> new MovingBall.State(currentBall, closestBall))
                         .orElse(
                             new MovingBall.State(
                                 currentBall.getTimestamp(),
@@ -42,24 +42,5 @@ public class BallsVelocityDeducer<I extends Ball.SetSupplier>
                                 0d,
                                 0d)))
                 .collect(Collectors.toSet()));
-  }
-
-  /**
-   * @param currentBall  The current state of the {@link Ball}.
-   * @param previousBall The previous state of the {@link Ball}.
-   * @return An updated state representation of the current {@link Ball} with velocity data.
-   */
-  private MovingBall calculateVelocity(final Ball currentBall, final MovingBall previousBall) {
-    return new MovingBall.State(
-        currentBall.getTimestamp(),
-        currentBall.getX(),
-        currentBall.getY(),
-        currentBall.getZ(),
-        (currentBall.getX() - previousBall.getX())
-            / (currentBall.getTimestamp() - previousBall.getTimestamp()),
-        (currentBall.getY() - previousBall.getY())
-            / (currentBall.getTimestamp() - previousBall.getTimestamp()),
-        (currentBall.getZ() - previousBall.getZ())
-            / (currentBall.getTimestamp() - previousBall.getTimestamp()));
   }
 }

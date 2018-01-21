@@ -58,11 +58,29 @@ public interface MovingBall extends Ball, Moving {
     MovingBall getBall();
   }
 
-
   @Value
   @AllArgsConstructor
   class State implements MovingBall {
     private final Distribution state;
+
+    /**
+     * Creates a representation of the current {@link Ball} with velocity data.
+     *
+     * @param currentBall  The current state of the {@link Ball}.
+     * @param previousBall The previous state of the {@link Ball}.
+     */
+    public State(final Ball currentBall, final Ball previousBall) {
+      this(currentBall.getTimestamp(),
+          currentBall.getX(),
+          currentBall.getY(),
+          currentBall.getZ(),
+          (currentBall.getX() - previousBall.getX())
+              / (currentBall.getTimestamp() - previousBall.getTimestamp()),
+          (currentBall.getY() - previousBall.getY())
+              / (currentBall.getTimestamp() - previousBall.getTimestamp()),
+          (currentBall.getZ() - previousBall.getZ())
+              / (currentBall.getTimestamp() - previousBall.getTimestamp()));
+    }
 
     public State(
         final double timestamp,
