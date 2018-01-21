@@ -30,7 +30,7 @@ public class PlayersVelocityDeducer<I extends Player.SetSupplier>
                                 previousPlayer.getIdentity().equals(currentPlayer.getIdentity()))
                             .findFirst()
                             .map(previousPlayer ->
-                                this.calculateVelocity(currentPlayer, previousPlayer))
+                                new MovingPlayer.State(currentPlayer, previousPlayer))
                             .orElse(
                                 new MovingPlayer.State(
                                     currentPlayer.getId(),
@@ -43,29 +43,5 @@ public class PlayersVelocityDeducer<I extends Player.SetSupplier>
                                     0d,
                                     currentPlayer.getTeamColor())))
                     .collect(Collectors.toSet()));
-  }
-
-  /**
-   * @param currentPlayer  The current state of the {@link Player}.
-   * @param previousPlayer The previous state of the {@link Player}.
-   * @return An updated state representation of the current {@link Player} with velocity data.
-   */
-  private MovingPlayer calculateVelocity(
-      final Player currentPlayer,
-      final MovingPlayer previousPlayer
-  ) {
-    return new MovingPlayer.State(
-        currentPlayer.getId(),
-        currentPlayer.getTimestamp(),
-        currentPlayer.getX(),
-        currentPlayer.getY(),
-        currentPlayer.getOrientation(),
-        (currentPlayer.getX() - previousPlayer.getX())
-            / (currentPlayer.getTimestamp() - previousPlayer.getTimestamp()),
-        (currentPlayer.getY() - previousPlayer.getY())
-            / (currentPlayer.getTimestamp() - previousPlayer.getTimestamp()),
-        (currentPlayer.getOrientation() - previousPlayer.getOrientation())
-            / (currentPlayer.getTimestamp() - previousPlayer.getTimestamp()),
-        currentPlayer.getTeamColor());
   }
 }
