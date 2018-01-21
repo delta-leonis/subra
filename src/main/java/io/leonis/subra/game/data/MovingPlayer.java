@@ -2,7 +2,7 @@ package io.leonis.subra.game.data;
 
 import io.leonis.algieba.spatial.Moving;
 import io.leonis.algieba.statistic.*;
-import java.util.Set;
+import java.util.*;
 import lombok.*;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -70,6 +70,27 @@ public interface MovingPlayer extends Player, Moving {
     private final int id;
     private final Distribution state;
     private final TeamColor teamColor;
+
+    /**
+     * Creates an state representation of the current {@link Player} with velocity data.
+     *
+     * @param currentPlayer  The current state of the {@link Player}.
+     * @param previousPlayer The previous state of the {@link Player}.
+     */
+    public State(final Player currentPlayer, final Player previousPlayer) {
+      this(currentPlayer.getId(),
+          currentPlayer.getTimestamp(),
+          currentPlayer.getX(),
+          currentPlayer.getY(),
+          currentPlayer.getOrientation(),
+          (currentPlayer.getX() - previousPlayer.getX())
+              / (currentPlayer.getTimestamp() - previousPlayer.getTimestamp()),
+          (currentPlayer.getY() - previousPlayer.getY())
+              / (currentPlayer.getTimestamp() - previousPlayer.getTimestamp()),
+          (currentPlayer.getOrientation() - previousPlayer.getOrientation())
+              / (currentPlayer.getTimestamp() - previousPlayer.getTimestamp()),
+          currentPlayer.getTeamColor());
+    }
 
     public State(
         final int id,
