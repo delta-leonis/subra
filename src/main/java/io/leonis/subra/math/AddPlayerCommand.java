@@ -1,7 +1,7 @@
 package io.leonis.subra.math;
 
 import io.leonis.subra.game.data.PlayerCommand;
-import java.util.stream.Stream;
+import java.util.*;
 import lombok.experimental.Delegate;
 
 /**
@@ -21,8 +21,8 @@ public class AddPlayerCommand implements PlayerCommand {
    * @param leftCommand   The first command to add.
    * @param rightCommands The remaining commands to add.
    */
-  public AddPlayerCommand(final PlayerCommand leftCommand, final PlayerCommand... rightCommands) {
-    this.playerCommand = Stream.of(rightCommands)
+  public AddPlayerCommand(final PlayerCommand leftCommand, final Collection<PlayerCommand> rightCommands) {
+    this.playerCommand = rightCommands.stream()
         .reduce(leftCommand,
             (left, right) ->
                 new PlayerCommand.State(
@@ -32,5 +32,15 @@ public class AddPlayerCommand implements PlayerCommand {
                     left.getFlatKick() + right.getFlatKick(),
                     left.getChipKick() + right.getChipKick(),
                     left.getDribblerSpin() + right.getDribblerSpin()));
+  }
+
+  /**
+   * Computes the addition of the supplied more than two {@link PlayerCommand}.
+   *
+   * @param leftCommand   The first command to add.
+   * @param rightCommands The remaining commands to add.
+   */
+  public AddPlayerCommand(final PlayerCommand leftCommand, final PlayerCommand... rightCommands) {
+    this(leftCommand, Arrays.asList(rightCommands));
   }
 }

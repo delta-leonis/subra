@@ -1,6 +1,7 @@
 package io.leonis.subra.math;
 
 import io.leonis.subra.game.data.PlayerCommand;
+import java.util.*;
 import lombok.experimental.Delegate;
 
 /**
@@ -20,8 +21,16 @@ public class AveragePlayerCommand implements PlayerCommand {
    * @param commands The {@link PlayerCommand commands} to compute the average of.
    */
   public AveragePlayerCommand(final PlayerCommand... commands) {
+    this(Arrays.asList(commands));
+  }
+  /**
+   * Computes the average of the supplied {@link PlayerCommand commands}.
+   *
+   * @param commands The {@link PlayerCommand commands} to compute the average of.
+   */
+  public AveragePlayerCommand(final Collection<PlayerCommand> commands){
     this.playerCommand = new MultiplyPlayerCommand(
         new AddPlayerCommand(PlayerCommand.State.STOP, commands),
-        1f / commands.length);
+        1f / commands.size());
   }
 }

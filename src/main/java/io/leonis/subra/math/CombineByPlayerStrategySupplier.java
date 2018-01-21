@@ -1,6 +1,7 @@
 package io.leonis.subra.math;
 
 import io.leonis.subra.game.data.*;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.BinaryOperator;
 import java.util.stream.*;
@@ -22,17 +23,17 @@ public class CombineByPlayerStrategySupplier implements Strategy.Supplier {
    * Computes the {@link Strategy.Supplier} as a result of combining the supplied strategies by
    * {@link io.leonis.subra.game.data.Player.PlayerIdentity}.
    *
-   * @param leftMap   The first strategy to combine.
-   * @param rightMaps The second strategy to combine.
-   * @param combiner  The {@link BinaryOperator combinator} function.
+   * @param combinator The {@link BinaryOperator combinator} function.
+   * @param leftMap    The first strategy to combine.
+   * @param rightMaps  The remaining strategies to combine.
    */
   public CombineByPlayerStrategySupplier(
-      final BinaryOperator<PlayerCommand> combiner,
+      final BinaryOperator<PlayerCommand> combinator,
       final Strategy.Supplier leftMap,
-      final Strategy.Supplier... rightMaps
+      final Collection<Strategy.Supplier> rightMaps
   ) {
     this.strategy =
-        Stream.of(rightMaps)
+        rightMaps.stream()
             .reduce(leftMap,
                 (left, right) ->
                     () -> left.getStrategy().entrySet().stream()
@@ -40,8 +41,24 @@ public class CombineByPlayerStrategySupplier implements Strategy.Supplier {
                             Entry::getKey,
                             entry ->
                                 right.getStrategy().containsKey(entry.getKey())
-                                    ? combiner.apply(right.getStrategy().get(entry.getKey()),
+                                    ? combinator.apply(right.getStrategy().get(entry.getKey()),
                                     entry.getValue())
                                     : entry.getValue())));
+  }
+
+  /**
+   * Computes the {@link Strategy.Supplier} as a result of combining the supplied strategies by
+   * {@link io.leonis.subra.game.data.Player.PlayerIdentity}.
+   *
+   * @param combinator The {@link BinaryOperator combinator} function.
+   * @param leftMap    The first strategy to combine.
+   * @param rightMaps  The remaining strategies to combine.
+   */
+  public CombineByPlayerStrategySupplier(
+      final BinaryOperator<PlayerCommand> combinator,
+      final Strategy.Supplier leftMap,
+      final Strategy.Supplier... rightMaps
+  ) {
+    this(combinator, leftMap, Arrays.asList(rightMaps));
   }
 }
