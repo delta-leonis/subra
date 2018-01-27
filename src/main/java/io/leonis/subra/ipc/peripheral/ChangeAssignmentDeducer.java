@@ -36,7 +36,7 @@ implements Deducer<T, Frame<I>> {
 
   private Comparator<I> comparator;
 
-  private BiFunction<Map<I, Set<ControllerIdentity>>, C, Map<I, Set<ControllerIdentity>>> f =
+  private BiFunction<Map<I, Set<ControllerIdentity>>, C, Map<I, Set<ControllerIdentity>>> combiner =
       (controllerMapping, controller) -> {
         final TreeSet<I> ids = controllerMapping.entrySet().stream()
             .map(Entry::getKey)
@@ -72,17 +72,17 @@ implements Deducer<T, Frame<I>> {
     return Flux.from(tPublisher)
         .map(c -> c.getControllerSet().stream()
             .reduce(c.getControllerMapping(),
-                f,
+                combiner,
                 (a, b) -> Stream.of(a.entrySet(), b.entrySet())
                     .flatMap(Collection::stream)
                     .flatMap(entry -> entry.getValue().stream().map(controller -> new SimpleImmutableEntry<>(entry.getKey(), controller)))
-                    .collect(groupingBy(SimpleImmutableEntry::getKey,
-                        mapping(SimpleImmutableEntry::getValue, toSet())))))
+                    .collect(groupingBy(Entry::getKey,
+                        mapping(Entry::getValue, toSet())))))
         .map(Frame::new);
   }
 
   @Value
-  static class Frame<I extends Identity> implements Controller.MapSupplier<I> {
+  public static class Frame<I extends Identity> implements Controller.MapSupplier<I> {
     private final Map<I, Set<ControllerIdentity>> controllerMapping;
   }
 }
