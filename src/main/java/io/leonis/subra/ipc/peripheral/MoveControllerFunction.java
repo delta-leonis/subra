@@ -28,16 +28,15 @@ public final class MoveControllerFunction<I extends Identity, C extends Controll
       final TreeSet<I> ids = controllerMapping.entrySet().stream()
           .map(Entry::getKey)
           .collect(Collectors.toCollection(() -> new TreeSet<>(keyComparator)));
-
       return controllerMapping.entrySet().stream()
           .collect(Collectors.toMap(
               Entry::getKey,
               entry -> {
-                if (controller.getDpad().isRight()
+                if (controller.getDpad().isLeft()
                     && controllerMapping.containsKey(ids.higher(entry.getKey()))
                     && controllerMapping.get(ids.higher(entry.getKey()))
                     .contains(controller.getIdentity())
-                    || (controller.getDpad().isLeft()
+                    || (controller.getDpad().isRight()
                     && controllerMapping.containsKey(ids.lower(entry.getKey()))
                     && controllerMapping.get(ids.lower(entry.getKey()))
                     .contains(controller.getIdentity()))
@@ -48,7 +47,7 @@ public final class MoveControllerFunction<I extends Identity, C extends Controll
                       .build();
                 } else if (controller.getDpad().isLeft() || controller.getDpad().isRight()) {
                   return entry.getValue().stream()
-                      .filter(a -> a.equals(controller.getIdentity()))
+                      .filter(a -> !a.equals(controller.getIdentity()))
                       .collect(Collectors.toSet());
                 }
                 return entry.getValue();
