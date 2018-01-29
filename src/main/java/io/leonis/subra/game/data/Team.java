@@ -1,6 +1,7 @@
 package io.leonis.subra.game.data;
 
 import io.leonis.algieba.Temporal;
+import io.leonis.zosma.game.Identity;
 import java.io.Serializable;
 import java.util.List;
 import lombok.Value;
@@ -11,13 +12,14 @@ import lombok.Value;
  * This interface describes the functionality of a team in a Small Size League game.
  *
  * @author Rimon Oz
+ * @author Jeroen de Jong
  */
-public interface Team extends Serializable, Temporal {
+public interface Team extends Identity.Supplier, Serializable, Temporal {
 
   /**
-   * @return The {@link TeamColor color} of the team.
+   * @return The {@link TeamIdentity identity} of the team.
    */
-  TeamColor getTeamColor();
+  TeamIdentity getIdentity();
 
   /**
    * @return The name of the team.
@@ -59,6 +61,21 @@ public interface Team extends Serializable, Temporal {
    */
   int getGoalieNumber();
 
+  /**
+   * The Interface TeamIdentity.
+   *
+   * Describes the identity of a Team.
+   *
+   * @author Jeroen de Jong
+   */
+  interface TeamIdentity extends Identity {
+
+    /**
+     * @return The color that identifies this team.
+     */
+    String getColor();
+  }
+
   @Value
   class State implements Team {
     private final long timestamp;
@@ -70,6 +87,6 @@ public interface Team extends Serializable, Temporal {
     private final int timeOutsLeft;
     private final long timeOutTimeLeft;
     private final int goalieNumber;
-    private final TeamColor teamColor;
+    private final TeamIdentity identity;
   }
 }
