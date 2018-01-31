@@ -11,8 +11,17 @@ import lombok.Value;
  *
  * @author Rimon Oz
  */
-@Value
-public class RobotMeasurements {
-  private final PlayerIdentity playerIdentity;
-  private final Map<String, Double> measurements;
+public interface RobotMeasurements {
+  PlayerIdentity getPlayerIdentity();
+  Map<String, Double> getMeasurements();
+
+  interface Supplier {
+    RobotMeasurements getRobotMeasurements();
+  }
+
+  @Value
+  class State implements RobotMeasurements {
+    private final PlayerIdentity playerIdentity;
+    private final Map<String, Double> measurements;
+  }
 }
