@@ -20,12 +20,12 @@ import reactor.core.publisher.Flux;
  */
 @AllArgsConstructor
 public class SSLRefboxDeducer
-    implements Deducer<org.robocup.ssl.RefereeOuterClass.Referee, Referee> {
+    implements Deducer<org.robocup.ssl.RefereeOuterClass.Referee, Referee.Supplier> {
   @Override
-  public Publisher<Referee> apply(
+  public Publisher<Referee.Supplier> apply(
       final Publisher<org.robocup.ssl.RefereeOuterClass.Referee> refboxPublisher) {
     return Flux.from(refboxPublisher)
-        .map(packet -> new Referee.State(
+        .map(packet -> () -> new Referee.State(
             packet.getPacketTimestamp(),
             Stage.valueOf(packet.getStage().name()),
             packet.getStageTimeLeft(),
