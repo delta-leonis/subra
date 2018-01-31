@@ -45,18 +45,17 @@ public final class GameStatePublisher implements Publisher<GameState> {
       Referee.Supplier {
     @Delegate
     private final VisionPacket visionPacket;
-    @Delegate
-    private final Referee.Supplier refSupplier;
+    private final Referee referee;
   }
 
   @Value
   public static class GameState
-      implements Player.SetSupplier, PositionedGoal.SetSupplier, Field.Supplier, Ball.SetSupplier,
+      implements Player.SetSupplier, Goal.SetSupplier, Field.Supplier, Ball.SetSupplier,
       Referee.Supplier, Temporal {
     @Delegate
     private final GameStateWithoutGoals gameStateWithoutGoals;
     @Delegate
-    private final PositionedGoal.SetSupplier goalsSupplier;
+    private final Goal.SetSupplier goalsSupplier;
     private final long timestamp = System.currentTimeMillis();
   }
 }

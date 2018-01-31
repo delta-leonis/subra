@@ -3,7 +3,7 @@ package io.leonis.subra.ipc.serialization.protobuf.vision;
 import com.google.common.collect.ImmutableSet;
 import io.leonis.algieba.geometry.Vectors;
 import io.leonis.subra.game.data.*;
-import io.leonis.subra.game.data.PositionedGoal.SetSupplier;
+import io.leonis.subra.game.data.Goal.SetSupplier;
 import io.leonis.zosma.game.engine.Deducer;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
@@ -18,12 +18,12 @@ public class GoalsDeducer<I extends Referee.Supplier & GoalDimension.Supplier & 
     return Flux.from(iPublisher)
         .map(frame ->
             () -> ImmutableSet.of(
-              new PositionedGoal.State(
+              new Goal.State(
                   frame.getGoalDimension(),
                   Vectors.columnVector((frame.getField().getLength() + frame.getGoalDimension().getDepth()) / 2f, 0f),
                   true ? TeamColor.BLUE : TeamColor.YELLOW, // TODO update subra-protocol
                   PlayDirection.POSITIVE),
-              new PositionedGoal.State(
+              new Goal.State(
                   frame.getGoalDimension(),
                   Vectors.columnVector(-1f * ((frame.getField().getLength() + frame.getGoalDimension().getDepth()) / 2f), 0f),
                   true ? TeamColor.YELLOW : TeamColor.BLUE, // TODO update subra-protocol

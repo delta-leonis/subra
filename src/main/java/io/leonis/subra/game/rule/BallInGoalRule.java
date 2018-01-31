@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  *
  * @author Rimon Oz
  */
-public class BallInGoalRule<I extends PositionedGoal.SetSupplier & Ball.SetSupplier>
+public class BallInGoalRule<I extends Goal.SetSupplier & Ball.SetSupplier>
     implements Rule<I, TeamIdentity> {
 
   @Override
@@ -23,7 +23,7 @@ public class BallInGoalRule<I extends PositionedGoal.SetSupplier & Ball.SetSuppl
         .flatMap(ball ->
             input.getGoals().stream()
                 .filter(goal -> this.isBallInGoal(ball, goal))
-                .map(PositionedGoal::getTeamIdentity))
+                .map(Goal::getTeamIdentity))
         .collect(Collectors.toSet());
   }
 
@@ -36,7 +36,7 @@ public class BallInGoalRule<I extends PositionedGoal.SetSupplier & Ball.SetSuppl
    *             bounds.
    * @return True if the ball is in the goal, false otherwise.
    */
-  public boolean isBallInGoal(final Ball ball, final PositionedGoal goal) {
+  public boolean isBallInGoal(final Ball ball, final Goal goal) {
     return Math.abs(ball.getX() - goal.getX()) < goal.getDepth() / 2f
         && Math.abs(ball.getY() - goal.getY()) < goal.getWidth() / 2f;
   }

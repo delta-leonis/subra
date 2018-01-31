@@ -7,7 +7,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 /**
  * The Interface GoalDimension.
  *
- * This interface describes the functionality of a goal.
+ * This interface describes the dimension of a goal.
  *
  * @author Rimon Oz
  * @author Jeroen de Jong

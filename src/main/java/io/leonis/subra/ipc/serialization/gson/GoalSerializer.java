@@ -5,14 +5,14 @@ import io.leonis.subra.game.data.*;
 import java.lang.reflect.Type;
 
 /**
- * Class for handling serialization of PositionedGoal objects.
+ * Class for handling serialization of Goal objects.
  *
  * @author Ryan Meulenkamp
  */
-public class GoalSerializer implements JsonSerializer<PositionedGoal> {
+public class GoalSerializer implements JsonSerializer<Goal> {
   @Override
   public JsonElement serialize(
-      final PositionedGoal src,
+      final Goal src,
       final Type typeOfSrc,
       final JsonSerializationContext context
   ) {
