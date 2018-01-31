@@ -48,12 +48,12 @@ public final class GameDeducer<I extends WrapperPacketSupplier & SSLRefereeSuppl
     private final Field field;
     private final Referee referee;
 
-    GameFrameWithoutGoals(final VisionPacket packet, final Referee referee) {
+    GameFrameWithoutGoals(final VisionPacket packet, final Referee.Supplier referee) {
       this.goalDimension = packet.getGoalDimension();
       this.players = packet.getPlayers();
       this.balls = packet.getBalls();
       this.field = packet.getField();
-      this.referee = referee;
+      this.referee = referee.getReferee();
     }
   }
 
