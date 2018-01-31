@@ -9,7 +9,7 @@ import java.util.function.Function;
 /**
  * @author Jeroen de Jong
  */
-public class GameWriter<G extends MovingPlayer.SetSupplier & Goal.SetSupplier & Field.Supplier & MovingBall.SetSupplier & Referee.Supplier & Temporal>
+public class GameWriter<G extends MovingPlayer.SetSupplier & PositionedGoal.SetSupplier & Field.Supplier & MovingBall.SetSupplier & Referee.Supplier & Temporal>
     implements Function<G, String> {
   private final Gson gson;
 
@@ -22,7 +22,7 @@ public class GameWriter<G extends MovingPlayer.SetSupplier & Goal.SetSupplier & 
         .registerTypeAdapter(Field.class, new FieldSerializer())
         .registerTypeAdapter(Referee.class, new RefereeSerializer())
         .registerTypeAdapter(Team.class, new TeamSerializer())
-        .registerTypeAdapter(Goal.class, new GoalSerializer())
+        .registerTypeAdapter(PositionedGoal.class, new GoalSerializer())
         .create();
   }
 

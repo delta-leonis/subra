@@ -5,8 +5,10 @@ import io.leonis.subra.game.data.*;
 import io.leonis.subra.ipc.network.GameStatePublisher.GameState;
 import io.leonis.subra.ipc.serialization.protobuf.*;
 import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
-import java.util.Set;
+import io.leonis.subra.ipc.serialization.protobuf.vision.GoalsDeducer;
+import io.leonis.zosma.game.engine.*;
 import lombok.*;
+import lombok.experimental.Delegate;
 import org.reactivestreams.*;
 import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
@@ -26,43 +28,35 @@ public final class GameStatePublisher implements Publisher<GameState> {
   @Override
   public void subscribe(final Subscriber<? super GameState> subscriber) {
     Flux.combineLatest(
-        Flux.from(this.visionPublisher)
-            .transform(new SSLVisionDeducer()),
-        Flux.from(this.refboxPublisher)
-            .transform(new SSLRefboxDeducer()),
-        GameState::build)
-        .subscribe(subscriber);
+        Flux.from(this.visionPublisher).transform(new SSLVisionDeducer()),
+        Flux.from(this.refboxPublisher).transform(new SSLRefboxDeducer()),
+        GameStateWithoutGoals::new)
+      .transform(new ParallelDeducer<>(
+          new IdentityDeducer<>(),
+          new GoalsDeducer<>(),
+          GameState::new
+      ))
+      .subscribe(subscriber);
   }
 
   @Value
-  @AllArgsConstructor
-  public static class GameState
-      implements Player.SetSupplier, Goal.SetSupplier, Field.Supplier, Ball.SetSupplier,
-      Referee.Supplier, Temporal {
-    private final Set<Player> players;
-    private final Set<Goal> goals;
-    private final Set<Ball> balls;
-    private final Field field;
-    private final Referee referee;
-    private final long timestamp = System.currentTimeMillis();
+  public static class GameStateWithoutGoals
+      implements Player.SetSupplier, GoalDimension.Supplier, Field.Supplier, Ball.SetSupplier,
+      Referee.Supplier {
+    @Delegate
+    private final VisionPacket visionPacket;
+    @Delegate
+    private final Referee.Supplier refSupplier;
+  }
 
-    /**
-     * Constructs a new GameState from a {@link VisionPacket} and a {@link Referee}.
-     *
-     * @param visionPacket The {@link VisionPacket} to extract the players, goals, balls, and field
-     *                     from.
-     * @param refboxPacket The {@link Referee}.
-     * @param <V>          The type of {@link VisionPacket}.
-     * @return The {@link VisionPacket} reconstructed as an {@link GameState}.
-     */
-    public static <V extends Player.SetSupplier & Goal.SetSupplier & Field.Supplier & Ball.SetSupplier & Temporal>
-    GameState build(final V visionPacket, final Referee refboxPacket) {
-      return new GameState(
-          visionPacket.getPlayers(),
-          visionPacket.getGoals(),
-          visionPacket.getBalls(),
-          visionPacket.getField(),
-          refboxPacket);
-    }
+  @Value
+  public static class GameState
+      implements Player.SetSupplier, PositionedGoal.SetSupplier, Field.Supplier, Ball.SetSupplier,
+      Referee.Supplier, Temporal {
+    @Delegate
+    private final GameStateWithoutGoals gameStateWithoutGoals;
+    @Delegate
+    private final PositionedGoal.SetSupplier goalsSupplier;
+    private final long timestamp = System.currentTimeMillis();
   }
 }

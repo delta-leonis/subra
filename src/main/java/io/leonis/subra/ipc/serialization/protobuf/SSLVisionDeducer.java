@@ -4,9 +4,11 @@ import io.leonis.algieba.Temporal;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
 import io.leonis.subra.ipc.serialization.protobuf.vision.*;
+import io.leonis.subra.ipc.serialization.protobuf.vision.DetectionFrameDeducer.DetectionFrame;
+import io.leonis.subra.ipc.serialization.protobuf.vision.GeometryDeducer.GeometryFrame;
 import io.leonis.zosma.game.engine.*;
-import java.util.Set;
 import lombok.*;
+import lombok.experimental.Delegate;
 import org.reactivestreams.Publisher;
 import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
@@ -30,21 +32,16 @@ public class SSLVisionDeducer implements Deducer<WrapperPacket, VisionPacket> {
             new ParallelDeducer<>(
                 new GeometryDeducer(),
                 new DetectionFrameDeducer(),
-                (geometry, detection) ->
-                    new VisionPacket(
-                        detection.getPlayers(),
-                        geometry.getGoals(),
-                        detection.getBalls(),
-                        geometry.getField())));
+                VisionPacket::new));
   }
 
-  @Value
-  public static class VisionPacket
-      implements Player.SetSupplier, Goal.SetSupplier, Field.Supplier, Ball.SetSupplier, Temporal {
-    private final Set<Player> players;
-    private final Set<Goal> goals;
-    private final Set<Ball> balls;
-    private final Field field;
+  @AllArgsConstructor
+  public final static class VisionPacket implements Player.SetSupplier, GoalDimension.Supplier, Field.Supplier, Ball.SetSupplier, Temporal {
+    @Delegate
+    private final GeometryFrame geometryContainer;
+    @Delegate
+    private final DetectionFrame detectionContainer;
+    @Getter
     private final long timestamp = System.currentTimeMillis();
   }
 }
