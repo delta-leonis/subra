@@ -8,7 +8,7 @@ import lombok.experimental.Delegate;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**
- * The Class Goal.
+ * The Interface Goal.
  *
  * This interface describes the state of a goal.
  *

@@ -8,7 +8,7 @@ import java.util.stream.*;
 import lombok.Value;
 import org.reactivestreams.Publisher;
 import org.robocup.ssl.Detection;
-import org.robocup.ssl.Detection.*;
+import org.robocup.ssl.Detection.DetectionRobot;
 import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 

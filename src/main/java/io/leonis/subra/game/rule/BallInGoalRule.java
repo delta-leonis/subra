@@ -28,11 +28,11 @@ public class BallInGoalRule<I extends Goal.SetSupplier & Ball.SetSupplier>
   }
 
   /**
-   * Determines whether a given {@link Ball} is within the given {@link GoalDimension}.
+   * Determines whether a given {@link Ball} is within the given {@link Goal}.
    *
    * @param ball The {@link Ball} to determine whether or not is within the bounds of the {@link
-   *             GoalDimension}.
-   * @param goal The {@link GoalDimension} to determine whether or not the {@link Ball} is within its
+   *             Goal}.
+   * @param goal The {@link Goal} to determine whether or not the {@link Ball} is within its
    *             bounds.
    * @return True if the ball is in the goal, false otherwise.
    */
