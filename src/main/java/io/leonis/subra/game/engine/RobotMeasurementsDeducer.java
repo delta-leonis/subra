@@ -22,11 +22,11 @@ import reactor.core.publisher.Flux;
  * @author Rimon Oz
  */
 @Value
-public class RobotMeasurementsDeducer implements Deducer<DatagramPacket, RobotMeasurements> {
+public class RobotMeasurementsDeducer implements Deducer<DatagramPacket, PlayerMeasurements.Supplier> {
   private final TeamColor color;
 
   @Override
-  public Publisher<RobotMeasurements> apply(
+  public Publisher<PlayerMeasurements.Supplier> apply(
       final Publisher<DatagramPacket> datagramPacketPublisher
   ) {
     return Flux.from(datagramPacketPublisher)
@@ -37,7 +37,7 @@ public class RobotMeasurementsDeducer implements Deducer<DatagramPacket, RobotMe
         .filter(measurementsList -> !measurementsList.getMeasurementsList().isEmpty())
         // and put the measurements in a map
         .map(measurements ->
-            new RobotMeasurements(
+            () -> new PlayerMeasurements.State(
                 new PlayerIdentity(measurements.getRobotId(), this.color),
                 measurements.getMeasurementsList().stream()
                     .collect(Collectors.toMap(
