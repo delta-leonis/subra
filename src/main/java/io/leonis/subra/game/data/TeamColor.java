@@ -1,5 +1,7 @@
 package io.leonis.subra.game.data;
 
+import io.leonis.subra.game.data.Team.TeamIdentity;
+
 /**
  * The Enum TeamColor.
  *
@@ -9,7 +11,7 @@ package io.leonis.subra.game.data;
  * @author Jeroen de Jong
  * @author Rimon Oz
  */
-public enum TeamColor {
+public enum TeamColor implements TeamIdentity {
   /**
    * Blue team color.
    */
@@ -21,5 +23,13 @@ public enum TeamColor {
   /**
    * None team color.
    */
-  NONE
+  NONE;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getColor() {
+    return toString();
+  }
 }
