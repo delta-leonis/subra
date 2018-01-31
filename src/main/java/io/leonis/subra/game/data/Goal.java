@@ -14,7 +14,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
  *
  * @author Jeroen de Jong
  */
-public interface Goal extends GoalDimension, Spatial, PlayDirection.Supplier {
+public interface Goal extends GoalDimension, Spatial, FieldHalf.Supplier {
 
   /**
    * @return The {@link TeamIdentity} defending to this goal.
@@ -45,6 +45,6 @@ public interface Goal extends GoalDimension, Spatial, PlayDirection.Supplier {
     private final GoalDimension dimensions;
     private final INDArray position;
     private final TeamIdentity teamIdentity;
-    private final PlayDirection playDirection;
+    private final FieldHalf fieldHalf;
   }
 }
