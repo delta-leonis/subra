@@ -51,18 +51,18 @@ public final class GameStatePublisher implements Publisher<GameState> {
      *
      * @param visionPacket The {@link VisionPacket} to extract the players, goals, balls, and field
      *                     from.
-     * @param refboxPacket The {@link Referee}.
+     * @param refSupplier The {@link Referee.Supplier}.
      * @param <V>          The type of {@link VisionPacket}.
      * @return The {@link VisionPacket} reconstructed as an {@link GameState}.
      */
     public static <V extends Player.SetSupplier & Goal.SetSupplier & Field.Supplier & Ball.SetSupplier & Temporal>
-    GameState build(final V visionPacket, final Referee refboxPacket) {
+    GameState build(final V visionPacket, final Referee.Supplier refSupplier) {
       return new GameState(
           visionPacket.getPlayers(),
           visionPacket.getGoals(),
           visionPacket.getBalls(),
           visionPacket.getField(),
-          refboxPacket);
+          refSupplier.getReferee());
     }
   }
 }
