@@ -7,9 +7,11 @@ import io.leonis.subra.ipc.serialization.protobuf.*;
 import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GoalsDeducer;
 import io.leonis.zosma.game.engine.*;
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.Delegate;
 import org.reactivestreams.*;
+import org.robocup.ssl.RefereeOuterClass;
 import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 
@@ -23,7 +25,7 @@ import reactor.core.publisher.Flux;
 @AllArgsConstructor
 public final class GameStatePublisher implements Publisher<GameState> {
   private final Publisher<WrapperPacket> visionPublisher;
-  private final Publisher<org.robocup.ssl.RefereeOuterClass.Referee> refboxPublisher;
+  private final Publisher<RefereeOuterClass.Referee> refboxPublisher;
 
   @Override
   public void subscribe(final Subscriber<? super GameState> subscriber) {
@@ -40,12 +42,22 @@ public final class GameStatePublisher implements Publisher<GameState> {
   }
 
   @Value
-  public static class GameStateWithoutGoals
+  static class GameStateWithoutGoals
       implements Player.SetSupplier, GoalDimension.Supplier, Field.Supplier, Ball.SetSupplier,
       Referee.Supplier {
-    @Delegate
-    private final VisionPacket visionPacket;
+    private final Set<Player> players;
+    private final GoalDimension goalDimension;
+    private final Set<Ball> balls;
+    private final Field field;
     private final Referee referee;
+
+    GameStateWithoutGoals(final VisionPacket packet, final Referee referee) {
+      this.goalDimension = packet.getGoalDimension();
+      this.players = packet.getPlayers();
+      this.balls = packet.getBalls();
+      this.field = packet.getField();
+      this.referee = referee;
+    }
   }
 
   @Value
@@ -53,9 +65,9 @@ public final class GameStatePublisher implements Publisher<GameState> {
       implements Player.SetSupplier, Goal.SetSupplier, Field.Supplier, Ball.SetSupplier,
       Referee.Supplier, Temporal {
     @Delegate
-    private final GameStateWithoutGoals gameStateWithoutGoals;
+    private final GameStateWithoutGoals state;
     @Delegate
-    private final Goal.SetSupplier goalsSupplier;
+    private final Goal.SetSupplier goalSupplier;
     private final long timestamp = System.currentTimeMillis();
   }
 }
