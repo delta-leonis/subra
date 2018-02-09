@@ -4,7 +4,6 @@ import io.leonis.algieba.Spatial;
 import io.leonis.subra.game.data.Team.TeamIdentity;
 import java.util.Set;
 import lombok.Value;
-import lombok.experimental.Delegate;
 import org.nd4j.linalg.api.ndarray.INDArray;
 
 /**
