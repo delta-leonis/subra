@@ -11,7 +11,7 @@ import java.util.Set;
 import lombok.*;
 import lombok.experimental.Delegate;
 import org.reactivestreams.*;
-import org.robocup.ssl.RefereeOuterClass;
+import org.robocup.ssl.Referee.SSL_Referee;
 import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 
@@ -25,7 +25,7 @@ import reactor.core.publisher.Flux;
 @AllArgsConstructor
 public final class GameStatePublisher implements Publisher<GameState> {
   private final Publisher<WrapperPacket> visionPublisher;
-  private final Publisher<RefereeOuterClass.Referee> refboxPublisher;
+  private final Publisher<SSL_Referee> refboxPublisher;
 
   @Override
   public void subscribe(final Subscriber<? super GameState> subscriber) {

@@ -7,23 +7,23 @@ import io.leonis.zosma.game.engine.Deducer;
 import java.util.Collections;
 import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
-import org.robocup.ssl.RefereeOuterClass.Referee.TeamInfo;
+import org.robocup.ssl.Referee.SSL_Referee.TeamInfo;
 import reactor.core.publisher.Flux;
 
 /**
  * The Class SSLRefboxDeducer
  *
- * Reads {@link org.robocup.ssl.RefereeOuterClass.Referee} and formats this into a {@link
- * org.robocup.ssl.RefereeOuterClass.Referee}
+ * Reads {@link org.robocup.ssl.Referee.SSL_Referee} and formats this into a {@link
+ * org.robocup.ssl.Referee.SSL_Referee}
  *
  * @author Jeroen de Jong
  */
 @AllArgsConstructor
 public class SSLRefboxDeducer
-    implements Deducer<org.robocup.ssl.RefereeOuterClass.Referee, Referee> {
+    implements Deducer<org.robocup.ssl.Referee.SSL_Referee, Referee> {
   @Override
   public Publisher<Referee> apply(
-      final Publisher<org.robocup.ssl.RefereeOuterClass.Referee> refboxPublisher) {
+      final Publisher<org.robocup.ssl.Referee.SSL_Referee> refboxPublisher) {
     return Flux.from(refboxPublisher)
         .map(packet -> new Referee.State(
             packet.getPacketTimestamp(),
@@ -34,6 +34,8 @@ public class SSLRefboxDeducer
                 this.createTeam(TeamColor.BLUE, packet.getBlue(), packet.getPacketTimestamp()),
                 this.createTeam(TeamColor.YELLOW, packet.getYellow(), packet.getPacketTimestamp())),
             packet.getCommandTimestamp(),
+            packet.getBlueTeamOnPositiveHalf() ? TeamColor.BLUE : TeamColor.YELLOW,
+            packet.getBlueTeamOnPositiveHalf() ? TeamColor.YELLOW : TeamColor.BLUE,
             packet.getCommandCounter()));
   }
 

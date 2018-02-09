@@ -1,6 +1,7 @@
 package io.leonis.subra.game.data;
 
 import io.leonis.algieba.Temporal;
+import io.leonis.subra.game.data.Team.TeamIdentity;
 import java.io.Serializable;
 import java.util.Set;
 import lombok.Value;
@@ -34,6 +35,16 @@ public interface Referee extends Temporal, Serializable {
    * @return The timestamp of the last issued command.
    */
   double getCommandTimeStamp();
+
+  /**
+   * @return the {@link TeamIdentity} on the {@link FieldHalf#POSITIVE}.
+   */
+  TeamIdentity getPositiveHalfTeam();
+
+  /**
+   * @return the {@link TeamIdentity} on the {@link FieldHalf#NEGATIVE}.
+   */
+  TeamIdentity getNegativeHalfTeam();
 
   /**
    * @return The number of commands sent since the start of the game.
@@ -98,6 +109,7 @@ public interface Referee extends Temporal, Serializable {
     private final Command command;
     private final Set<Team> teams;
     private final double commandTimeStamp;
+    private final TeamIdentity positiveHalfTeam, negativeHalfTeam;
     private final double commandCount;
   }
 }
