@@ -24,7 +24,6 @@ public class GeometryDeducer implements Deducer<WrapperPacket, Geometry> {
   @Override
   public Publisher<Geometry> apply(final Publisher<WrapperPacket> detectionFramePublisher) {
     return Flux.from(detectionFramePublisher)
-        .filter(WrapperPacket::hasGeometry)
         .map(WrapperPacket::getGeometry)
         .map(geom ->
             new Geometry(
@@ -62,7 +61,6 @@ public class GeometryDeducer implements Deducer<WrapperPacket, Geometry> {
     private final Field field;
     private final Set<Goal> goals;
   }
-
 
   private Goal createGoal(
       final TeamColor teamColor,

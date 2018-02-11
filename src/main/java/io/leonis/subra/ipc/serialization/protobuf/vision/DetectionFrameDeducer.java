@@ -23,7 +23,6 @@ public class DetectionFrameDeducer implements Deducer<WrapperPacket, DetectionFr
   @Override
   public Publisher<DetectionFrame> apply(final Publisher<WrapperPacket> detectionFramePublisher) {
     return Flux.from(detectionFramePublisher)
-        .filter(WrapperPacket::hasDetection)
         .map(WrapperPacket::getDetection)
         .map(detectionFrame ->
             new DetectionFrame(
