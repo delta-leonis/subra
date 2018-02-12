@@ -36,8 +36,7 @@ public final class GameStatePublisher implements Publisher<GameState> {
       .transform(new ParallelDeducer<>(
           new IdentityDeducer<>(),
           new GoalsDeducer<>(),
-          GameState::new
-      ))
+          GameState::new))
       .subscribe(subscriber);
   }
 
