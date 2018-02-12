@@ -38,12 +38,12 @@ public interface Referee extends Temporal, Serializable {
   double getCommandTimeStamp();
 
   /**
-   * @return The {@link TeamIdentity} on the {@link FieldHalf#POSITIVE positive field half}.
+   * @return The {@link TeamIdentity} playing on the {@link FieldHalf#POSITIVE positive field half}.
    */
   TeamIdentity getPositiveHalfTeam();
 
   /**
-   * @return The {@link TeamIdentity} on the {@link FieldHalf#NEGATIVE negative field half}.
+   * @return The {@link TeamIdentity} playing on the {@link FieldHalf#NEGATIVE negative field half}.
    */
   TeamIdentity getNegativeHalfTeam();
 
