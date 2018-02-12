@@ -21,8 +21,8 @@ public class GoalSerializer implements JsonSerializer<Goal> {
     jsonObject.addProperty("y", src.getY());
     jsonObject.addProperty("width", src.getGoalDimension().getWidth());
     jsonObject.addProperty("depth", src.getGoalDimension().getDepth());
+    jsonObject.addProperty("teamColor", src.getTeamIdentity().getColor());
     jsonObject.add("fieldHalf", context.serialize(src.getFieldHalf()));
-    jsonObject.add("teamIdentity", context.serialize(src.getTeamIdentity()));
     return jsonObject;
   }
 }
