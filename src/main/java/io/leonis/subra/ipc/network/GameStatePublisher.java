@@ -41,7 +41,7 @@ public final class GameStatePublisher implements Publisher<GameState> {
   }
 
   @Value
-  static class GameStateWithoutGoals
+  private static class GameStateWithoutGoals
       implements Player.SetSupplier, GoalDimension.Supplier, Field.Supplier, Ball.SetSupplier,
       Referee.Supplier {
     private final Set<Player> players;
