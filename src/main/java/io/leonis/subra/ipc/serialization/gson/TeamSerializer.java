@@ -24,6 +24,7 @@ public class TeamSerializer implements JsonSerializer<Team> {
     jsonObject.add("yellowCards", context.serialize(src.getYellowCards()));
     jsonObject.addProperty("timeOutsLeft", src.getTimeOutsLeft());
     jsonObject.addProperty("goalieNumber", src.getGoalieNumber());
+    jsonObject.addProperty("color", src.getIdentity().getColor());
     return jsonObject;
   }
 }
