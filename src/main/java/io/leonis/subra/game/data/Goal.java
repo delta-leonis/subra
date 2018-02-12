@@ -24,14 +24,14 @@ public interface Goal extends GoalDimension.Supplier, Spatial, FieldHalf.Supplie
    * @return The X-position coordinate of the {@link Goal}.
    */
   default double getX() {
-    return this.getPosition().getDouble(2, 0);
+    return this.getPosition().getDouble(0, 0);
   }
 
   /**
    * @return The Y-position coordinate of the {@link Goal}.
    */
   default double getY() {
-    return this.getPosition().getDouble(3, 0);
+    return this.getPosition().getDouble(1, 0);
   }
 
   interface SetSupplier {
