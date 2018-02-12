@@ -2,13 +2,11 @@ package io.leonis.subra.ipc.serialization.protobuf;
 
 import io.leonis.algieba.Temporal;
 import io.leonis.subra.game.data.*;
-import io.leonis.subra.game.data.Referee.Supplier;
 import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
 import io.leonis.subra.ipc.serialization.protobuf.vision.*;
 import io.leonis.subra.ipc.serialization.protobuf.vision.DetectionFrameDeducer.DetectionFrame;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GeometryDeducer.GeometryFrame;
 import io.leonis.zosma.game.engine.*;
-import java.util.concurrent.Callable;
 import lombok.*;
 import lombok.experimental.Delegate;
 import org.reactivestreams.Publisher;
