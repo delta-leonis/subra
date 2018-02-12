@@ -1,15 +1,14 @@
 package io.leonis.subra.ipc.serialization.protobuf.vision;
 
-import io.leonis.algieba.geometry.*;
+import io.leonis.algieba.geometry.Vectors;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GeometryDeducer.GeometryFrame;
 import io.leonis.zosma.game.engine.Deducer;
-import java.util.Set;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 import lombok.Value;
-import org.nd4j.linalg.factory.Nd4j;
 import org.reactivestreams.Publisher;
-import org.robocup.ssl.Geometry.*;
+import org.robocup.ssl.Geometry.GeometryData;
+import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 
 /**
@@ -19,10 +18,13 @@ import reactor.core.publisher.Flux;
  *
  * @author Rimon Oz
  */
-public class GeometryDeducer implements Deducer<GeometryData, GeometryFrame> {
+public class GeometryDeducer<I extends WrapperPacketSupplier> implements Deducer<I, GeometryFrame> {
   @Override
-  public Publisher<GeometryFrame> apply(final Publisher<GeometryData> geometryDataPublisher) {
-    return Flux.from(geometryDataPublisher)
+  public Publisher<GeometryFrame> apply(final Publisher<I> dataPublisher) {
+    return Flux.from(dataPublisher)
+        .map(WrapperPacketSupplier::getWrapperPacket)
+        .filter(WrapperPacket::hasGeometry)
+        .map(WrapperPacket::getGeometry)
         .map(geometryData ->
             new GeometryFrame(
                 new Field.State(
