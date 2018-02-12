@@ -10,9 +10,7 @@ import io.leonis.zosma.game.engine.*;
 import java.util.Set;
 import lombok.*;
 import lombok.experimental.Delegate;
-import org.reactivestreams.*;
-import org.robocup.ssl.Referee.SSL_Referee;
-import org.robocup.ssl.Wrapper.WrapperPacket;
+import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 
 /**
@@ -23,21 +21,19 @@ import reactor.core.publisher.Flux;
  * @author Rimon Oz
  */
 @AllArgsConstructor
-public final class GamePublisher implements Publisher<GameFrame> {
-  private final Publisher<WrapperPacket> visionPublisher;
-  private final Publisher<SSL_Referee> refboxPublisher;
+public final class GamePublisher<I extends WrapperPacketSupplier & SSLRefereeSupplier> implements Deducer<I, GameFrame> {
 
   @Override
-  public void subscribe(final Subscriber<? super GameFrame> subscriber) {
-    Flux.combineLatest(
-        Flux.from(this.visionPublisher).transform(new SSLVisionDeducer()),
-        Flux.from(this.refboxPublisher).transform(new SSLRefboxDeducer()),
-        GameFrameWithoutGoals::new)
-      .transform(new ParallelDeducer<>(
+  public Publisher<GameFrame> apply(final Publisher<I> entryPublisher) {
+    return Flux.from(entryPublisher)
+        .transform(new ParallelDeducer<>(
+            new SSLVisionDeducer<>(),
+            new SSLRefboxDeducer<>(),
+            GameFrameWithoutGoals::new))
+        .transform(new ParallelDeducer<>(
           new IdentityDeducer<>(),
           new GoalsDeducer<>(),
-          GameFrame::new))
-      .subscribe(subscriber);
+          GameFrame::new));
   }
 
   @Value
@@ -50,12 +46,12 @@ public final class GamePublisher implements Publisher<GameFrame> {
     private final Field field;
     private final Referee referee;
 
-    GameFrameWithoutGoals(final VisionPacket packet, final Referee.Supplier referee) {
+    GameFrameWithoutGoals(final VisionPacket packet, final Referee referee) {
       this.goalDimension = packet.getGoalDimension();
       this.players = packet.getPlayers();
       this.balls = packet.getBalls();
       this.field = packet.getField();
-      this.referee = referee.getReferee();
+      this.referee = referee;
     }
   }
 
