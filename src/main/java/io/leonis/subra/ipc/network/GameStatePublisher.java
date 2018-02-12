@@ -51,12 +51,12 @@ public final class GameStatePublisher implements Publisher<GameState> {
     private final Field field;
     private final Referee referee;
 
-    GameStateWithoutGoals(final VisionPacket packet, final Referee referee) {
+    GameStateWithoutGoals(final VisionPacket packet, final Referee.Supplier referee) {
       this.goalDimension = packet.getGoalDimension();
       this.players = packet.getPlayers();
       this.balls = packet.getBalls();
       this.field = packet.getField();
-      this.referee = referee;
+      this.referee = referee.getReferee();
     }
   }
 

@@ -18,15 +18,15 @@ public class GoalsDeducer<I extends Referee.Supplier & GoalDimension.Supplier & 
     return Flux.from(iPublisher)
         .map(frame ->
             () -> ImmutableSet.of(
-              new Goal.State(
-                  frame.getGoalDimension(),
-                  Vectors.columnVector((frame.getField().getLength() + frame.getGoalDimension().getDepth()) / 2f, 0f),
-                  frame.getReferee().getPositiveHalfTeam(),
-                  FieldHalf.POSITIVE),
-              new Goal.State(
-                  frame.getGoalDimension(),
-                  Vectors.columnVector(-1f * ((frame.getField().getLength() + frame.getGoalDimension().getDepth()) / 2f), 0f),
-                  frame.getReferee().getNegativeHalfTeam(),
-                  FieldHalf.NEGATIVE)));
+                new Goal.State(
+                    frame.getGoalDimension(),
+                    Vectors.columnVector((frame.getField().getLength() + frame.getGoalDimension().getDepth()) / 2f, 0f),
+                    frame.getReferee().getPositiveHalfTeam(),
+                    FieldHalf.POSITIVE),
+                new Goal.State(
+                    frame.getGoalDimension(),
+                    Vectors.columnVector(-1f * ((frame.getField().getLength() + frame.getGoalDimension().getDepth()) / 2f), 0f),
+                    frame.getReferee().getNegativeHalfTeam(),
+                    FieldHalf.NEGATIVE)));
   }
 }

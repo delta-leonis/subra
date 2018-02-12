@@ -1,36 +1,34 @@
 package io.leonis.subra.ipc.serialization.protobuf.vision;
 
-import io.leonis.algieba.geometry.Vectors;
+import io.leonis.algieba.geometry.*;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GeometryDeducer.GeometryFrame;
 import io.leonis.zosma.game.engine.Deducer;
-import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.stream.*;
 import lombok.Value;
+import org.nd4j.linalg.factory.Nd4j;
 import org.reactivestreams.Publisher;
-import org.robocup.ssl.Geometry.GeometryData;
-import org.robocup.ssl.Wrapper.WrapperPacket;
+import org.robocup.ssl.Geometry.*;
 import reactor.core.publisher.Flux;
 
 /**
  * The Class GeometryDeducer.
  *
- * This class represents a {@link Deducer} of {@link GeometryData} from {@link WrapperPacket}.
+ * This class represents a {@link Deducer} of {@link GeometryData} to {@link GeometryFrame}.
  *
  * @author Rimon Oz
  */
-public class GeometryDeducer implements Deducer<WrapperPacket, GeometryFrame> {
-
+public class GeometryDeducer implements Deducer<GeometryData, GeometryFrame> {
   @Override
-  public Publisher<GeometryFrame> apply(final Publisher<WrapperPacket> detectionFramePublisher) {
-    return Flux.from(detectionFramePublisher)
-        .filter(WrapperPacket::hasGeometry)
-        .map(WrapperPacket::getGeometry)
-        .map(geom ->
+  public Publisher<GeometryFrame> apply(final Publisher<GeometryData> geometryDataPublisher) {
+    return Flux.from(geometryDataPublisher)
+        .map(geometryData ->
             new GeometryFrame(
                 new Field.State(
-                    geom.getField().getFieldWidth(),
-                    geom.getField().getFieldLength(),
-                    geom.getField().getFieldLinesList().stream()
+                    geometryData.getField().getFieldWidth(),
+                    geometryData.getField().getFieldLength(),
+                    geometryData.getField().getFieldLinesList().stream()
                         .map(fieldLineSegment ->
                             new FieldLine.State(
                                 fieldLineSegment.getP1().getX(),
@@ -39,7 +37,7 @@ public class GeometryDeducer implements Deducer<WrapperPacket, GeometryFrame> {
                                 fieldLineSegment.getP2().getY(),
                                 fieldLineSegment.getThickness()))
                         .collect(Collectors.toSet()),
-                    geom.getField().getFieldArcsList().stream()
+                    geometryData.getField().getFieldArcsList().stream()
                         .map(fieldCircularArc ->
                             new FieldArc.State(
                                 fieldCircularArc.getCenter().getX(),
@@ -51,8 +49,8 @@ public class GeometryDeducer implements Deducer<WrapperPacket, GeometryFrame> {
                         .collect(Collectors.toSet())),
                 new GoalDimension.State(
                     Vectors.columnVector(
-                        geom.getField().getGoalWidth(),
-                        geom.getField().getGoalDepth()))));
+                        geometryData.getField().getGoalWidth(),
+                        geometryData.getField().getGoalDepth()))));
   }
 
   @Value

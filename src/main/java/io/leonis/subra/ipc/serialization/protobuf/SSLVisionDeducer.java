@@ -30,8 +30,14 @@ public class SSLVisionDeducer implements Deducer<WrapperPacket, VisionPacket> {
     return Flux.from(wrapperPacketPublisher)
         .transform(
             new ParallelDeducer<>(
-                new GeometryDeducer(),
-                new DetectionFrameDeducer(),
+                input -> Flux.from(input)
+                    .filter(WrapperPacket::hasGeometry)
+                    .map(WrapperPacket::getGeometry)
+                    .transform(new GeometryDeducer()),
+                input -> Flux.from(input)
+                    .filter(WrapperPacket::hasDetection)
+                    .map(WrapperPacket::getDetection)
+                    .transform(new DetectionFrameDeducer()),
                 VisionPacket::new));
   }
 
