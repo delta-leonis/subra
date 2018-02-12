@@ -2,7 +2,7 @@ package io.leonis.subra.ipc.network;
 
 import io.leonis.algieba.Temporal;
 import io.leonis.subra.game.data.*;
-import io.leonis.subra.ipc.network.GameStatePublisher.GameState;
+import io.leonis.subra.ipc.network.GameStatePublisher.GameFrame;
 import io.leonis.subra.ipc.serialization.protobuf.*;
 import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GoalsDeducer;
@@ -18,30 +18,30 @@ import reactor.core.publisher.Flux;
 /**
  * The Class SSLGameStatePublisher.
  *
- * This class contains the functionality of a {@link Publisher} of {@link GameState}.
+ * This class contains the functionality of a {@link Publisher} of {@link GameFrame}.
  *
  * @author Rimon Oz
  */
 @AllArgsConstructor
-public final class GameStatePublisher implements Publisher<GameState> {
+public final class GameStatePublisher implements Publisher<GameFrame> {
   private final Publisher<WrapperPacket> visionPublisher;
   private final Publisher<SSL_Referee> refboxPublisher;
 
   @Override
-  public void subscribe(final Subscriber<? super GameState> subscriber) {
+  public void subscribe(final Subscriber<? super GameFrame> subscriber) {
     Flux.combineLatest(
         Flux.from(this.visionPublisher).transform(new SSLVisionDeducer()),
         Flux.from(this.refboxPublisher).transform(new SSLRefboxDeducer()),
-        GameStateWithoutGoals::new)
+        GameFrameWithoutGoals::new)
       .transform(new ParallelDeducer<>(
           new IdentityDeducer<>(),
           new GoalsDeducer<>(),
-          GameState::new))
+          GameFrame::new))
       .subscribe(subscriber);
   }
 
   @Value
-  private static class GameStateWithoutGoals
+  private static class GameFrameWithoutGoals
       implements Player.SetSupplier, GoalDimension.Supplier, Field.Supplier, Ball.SetSupplier,
       Referee.Supplier {
     private final Set<Player> players;
@@ -50,7 +50,7 @@ public final class GameStatePublisher implements Publisher<GameState> {
     private final Field field;
     private final Referee referee;
 
-    GameStateWithoutGoals(final VisionPacket packet, final Referee.Supplier referee) {
+    GameFrameWithoutGoals(final VisionPacket packet, final Referee.Supplier referee) {
       this.goalDimension = packet.getGoalDimension();
       this.players = packet.getPlayers();
       this.balls = packet.getBalls();
@@ -60,11 +60,11 @@ public final class GameStatePublisher implements Publisher<GameState> {
   }
 
   @Value
-  public static class GameState
+  public static class GameFrame
       implements Player.SetSupplier, Goal.SetSupplier, Field.Supplier, Ball.SetSupplier,
       Referee.Supplier, Temporal {
     @Delegate
-    private final GameStateWithoutGoals state;
+    private final GameFrameWithoutGoals state;
     @Delegate
     private final Goal.SetSupplier goalSupplier;
     private final long timestamp = System.currentTimeMillis();
