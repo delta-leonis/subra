@@ -7,24 +7,24 @@ import io.leonis.zosma.game.engine.Deducer;
 import java.util.Collections;
 import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
+import org.robocup.ssl.Referee.SSL_Referee;
 import org.robocup.ssl.Referee.SSL_Referee.TeamInfo;
 import reactor.core.publisher.Flux;
 
 /**
  * The Class SSLRefboxDeducer
  *
- * Reads {@link org.robocup.ssl.Referee.SSL_Referee} and formats this into a {@link
- * org.robocup.ssl.Referee.SSL_Referee}
+ * Reads {@link SSL_Referee} and formats this into a {@link Referee}.
  *
  * @author Jeroen de Jong
  */
 @AllArgsConstructor
 public class SSLRefboxDeducer
-    implements Deducer<org.robocup.ssl.Referee.SSL_Referee, Referee.Supplier> {
+    implements Deducer<SSL_Referee, Referee.Supplier> {
 
   @Override
   public Publisher<Referee.Supplier> apply(
-      final Publisher<org.robocup.ssl.Referee.SSL_Referee> refboxPublisher) {
+      final Publisher<SSL_Referee> refboxPublisher) {
     return Flux.from(refboxPublisher)
         .map(packet -> () -> new Referee.State(
             packet.getPacketTimestamp(),
