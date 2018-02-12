@@ -2,7 +2,7 @@ package io.leonis.subra.ipc.network;
 
 import io.leonis.algieba.Temporal;
 import io.leonis.subra.game.data.*;
-import io.leonis.subra.ipc.network.GamePublisher.GameFrame;
+import io.leonis.subra.ipc.network.GameDeducer.GameFrame;
 import io.leonis.subra.ipc.serialization.protobuf.*;
 import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GoalsDeducer;
@@ -11,17 +11,19 @@ import java.util.Set;
 import lombok.*;
 import lombok.experimental.Delegate;
 import org.reactivestreams.Publisher;
+import org.robocup.ssl.Referee.SSL_Referee;
+import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 
 /**
- * The Class GamePublisher.
+ * The Class GameDeducer.
  *
- * This class contains the functionality of a {@link Publisher} of {@link GameFrame}.
+ * This class deduces a {@link WrapperPacket} and {@link SSL_Referee} to a {@link GameFrame}.
  *
  * @author Rimon Oz
  */
 @AllArgsConstructor
-public final class GamePublisher<I extends WrapperPacketSupplier & SSLRefereeSupplier> implements Deducer<I, GameFrame> {
+public final class GameDeducer<I extends WrapperPacketSupplier & SSLRefereeSupplier> implements Deducer<I, GameFrame> {
 
   @Override
   public Publisher<GameFrame> apply(final Publisher<I> entryPublisher) {
