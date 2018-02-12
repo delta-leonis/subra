@@ -4,7 +4,7 @@ import io.leonis.subra.game.data.*;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.BinaryOperator;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 import lombok.experimental.Delegate;
 
 /**

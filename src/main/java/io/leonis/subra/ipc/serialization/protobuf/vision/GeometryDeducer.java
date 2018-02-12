@@ -1,6 +1,6 @@
 package io.leonis.subra.ipc.serialization.protobuf.vision;
 
-import io.leonis.algieba.geometry.CardinalDirection;
+import io.leonis.algieba.geometry.*;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GeometryDeducer.GeometryFrame;
 import io.leonis.zosma.game.engine.Deducer;
@@ -47,71 +47,15 @@ public class GeometryDeducer implements Deducer<GeometryData, GeometryFrame> {
                                 fieldCircularArc.getThickness(),
                                 fieldCircularArc.getRadius()))
                         .collect(Collectors.toSet())),
-                Stream.of(geometryData)
-                    .flatMap(packet -> Stream.of(
-                        this.createGoal(TeamColor.BLUE, CardinalDirection.NORTH, packet.getField()),
-                        this.createGoal(TeamColor.YELLOW, CardinalDirection.SOUTH, packet.getField())))
-                    .collect(Collectors.toSet())));
+                new GoalDimension.State(
+                    Vectors.columnVector(
+                        geometryData.getField().getGoalWidth(),
+                        geometryData.getField().getGoalDepth()))));
   }
 
   @Value
-  public static class GeometryFrame implements Field.Supplier, Goal.SetSupplier {
+  public static class GeometryFrame implements Field.Supplier, GoalDimension.Supplier {
     private final Field field;
-    private final Set<Goal> goals;
-  }
-
-  private Goal createGoal(
-      final TeamColor teamColor,
-      final CardinalDirection direction,
-      final GeometryFieldSize geometryData
-  ) {
-    switch (direction) {
-      case NORTH:
-        return new Goal.State(
-            Nd4j.create(
-                new float[]{
-                    geometryData.getGoalWidth(),
-                    geometryData.getGoalDepth(),
-                    ((geometryData.getFieldLength() + geometryData.getGoalDepth()) / 2f),
-                    0
-                }),
-            teamColor,
-            direction);
-      case SOUTH:
-        return new Goal.State(
-            Nd4j.create(
-                new float[]{
-                    geometryData.getGoalWidth(),
-                    geometryData.getGoalDepth(),
-                    -1f * ((geometryData.getFieldLength() + geometryData.getGoalDepth()) / 2f),
-                    0
-                }),
-            teamColor,
-            direction);
-      case EAST:
-        return new Goal.State(
-            Nd4j.create(
-                new float[]{
-                    geometryData.getGoalWidth(),
-                    geometryData.getGoalDepth(),
-                    0,
-                    ((geometryData.getFieldWidth() + geometryData.getGoalWidth()) / 2f)
-                }),
-            teamColor,
-            direction);
-      case WEST:
-        return new Goal.State(
-            Nd4j.create(
-                new float[]{
-                    geometryData.getGoalWidth(),
-                    geometryData.getGoalDepth(),
-                    0,
-                    -1f * ((geometryData.getFieldWidth() + geometryData.getGoalWidth()) / 2f)
-                }),
-            teamColor,
-            direction);
-      default:
-        return new Goal.State(Nd4j.zeros(1, 4), TeamColor.NONE, CardinalDirection.NORTH);
-    }
+    private final GoalDimension goalDimension;
   }
 }
