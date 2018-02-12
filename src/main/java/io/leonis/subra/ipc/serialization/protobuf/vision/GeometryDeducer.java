@@ -2,7 +2,7 @@ package io.leonis.subra.ipc.serialization.protobuf.vision;
 
 import io.leonis.algieba.geometry.CardinalDirection;
 import io.leonis.subra.game.data.*;
-import io.leonis.subra.ipc.serialization.protobuf.vision.GeometryDeducer.Geometry;
+import io.leonis.subra.ipc.serialization.protobuf.vision.GeometryDeducer.GeometryFrame;
 import io.leonis.zosma.game.engine.Deducer;
 import java.util.Set;
 import java.util.stream.*;
@@ -15,16 +15,16 @@ import reactor.core.publisher.Flux;
 /**
  * The Class GeometryDeducer.
  *
- * This class represents a {@link Deducer} of {@link GeometryData} to {@link Geometry}.
+ * This class represents a {@link Deducer} of {@link GeometryData} to {@link GeometryFrame}.
  *
  * @author Rimon Oz
  */
-public class GeometryDeducer implements Deducer<GeometryData, Geometry> {
+public class GeometryDeducer implements Deducer<GeometryData, GeometryFrame> {
   @Override
-  public Publisher<Geometry> apply(final Publisher<GeometryData> geometryDataPublisher) {
+  public Publisher<GeometryFrame> apply(final Publisher<GeometryData> geometryDataPublisher) {
     return Flux.from(geometryDataPublisher)
         .map(geometryData ->
-            new Geometry(
+            new GeometryFrame(
                 new Field.State(
                     geometryData.getField().getFieldWidth(),
                     geometryData.getField().getFieldLength(),
@@ -55,7 +55,7 @@ public class GeometryDeducer implements Deducer<GeometryData, Geometry> {
   }
 
   @Value
-  public static class Geometry implements Field.Supplier, Goal.SetSupplier {
+  public static class GeometryFrame implements Field.Supplier, Goal.SetSupplier {
     private final Field field;
     private final Set<Goal> goals;
   }
