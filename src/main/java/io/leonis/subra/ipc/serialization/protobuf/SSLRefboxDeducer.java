@@ -19,14 +19,15 @@ import reactor.core.publisher.Flux;
  * @author Jeroen de Jong
  */
 @AllArgsConstructor
-public class SSLRefboxDeducer
-    implements Deducer<SSL_Referee, Referee.Supplier> {
+public class SSLRefboxDeducer<I extends SSLRefereeSupplier>
+    implements Deducer<I, Referee> {
 
   @Override
-  public Publisher<Referee.Supplier> apply(
-      final Publisher<SSL_Referee> refboxPublisher) {
+  public Publisher<Referee> apply(
+      final Publisher<I> refboxPublisher) {
     return Flux.from(refboxPublisher)
-        .map(packet -> () -> new Referee.State(
+        .map(SSLRefereeSupplier::getSSLReferee)
+        .map(packet -> new Referee.State(
             packet.getPacketTimestamp(),
             Stage.valueOf(packet.getStage().name()),
             packet.getStageTimeLeft(),
