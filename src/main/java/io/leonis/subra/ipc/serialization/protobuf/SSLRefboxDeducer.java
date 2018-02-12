@@ -23,8 +23,7 @@ public class SSLRefboxDeducer<I extends SSLRefereeSupplier>
     implements Deducer<I, Referee> {
 
   @Override
-  public Publisher<Referee> apply(
-      final Publisher<I> refboxPublisher) {
+  public Publisher<Referee> apply(final Publisher<I> refboxPublisher) {
     return Flux.from(refboxPublisher)
         .map(SSLRefereeSupplier::getSSLReferee)
         .map(packet -> new Referee.State(
