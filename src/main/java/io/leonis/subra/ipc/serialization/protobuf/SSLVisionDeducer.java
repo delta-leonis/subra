@@ -26,12 +26,22 @@ public class SSLVisionDeducer implements Deducer<WrapperPacket, VisionPacket> {
   @Override
   public Publisher<VisionPacket> apply(final Publisher<WrapperPacket> wrapperPacketPublisher) {
     return Flux.from(wrapperPacketPublisher)
-        .transform(new ParallelDeducer<>(
-            new PlayersDeducer(),
-            new GoalsDeducer(),
-            new BallsDeducer(),
-            new FieldDeducer(),
-            VisionPacket::new));
+        .transform(
+            new ParallelDeducer<>(
+                input -> Flux.from(input)
+                    .filter(WrapperPacket::hasGeometry)
+                    .map(WrapperPacket::getGeometry)
+                    .transform(new GeometryDeducer()),
+                input -> Flux.from(input)
+                    .filter(WrapperPacket::hasDetection)
+                    .map(WrapperPacket::getDetection)
+                    .transform(new DetectionFrameDeducer()),
+                (geometry, detection) ->
+                    new VisionPacket(
+                        detection.getPlayers(),
+                        geometry.getGoals(),
+                        detection.getBalls(),
+                        geometry.getField())));
   }
 
   @Value
