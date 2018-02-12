@@ -8,22 +8,22 @@ import java.util.stream.*;
 import lombok.Value;
 import org.reactivestreams.Publisher;
 import org.robocup.ssl.Detection;
-import org.robocup.ssl.Detection.*;
-import org.robocup.ssl.Wrapper.WrapperPacket;
+import org.robocup.ssl.Detection.DetectionRobot;
 import reactor.core.publisher.Flux;
 
 /**
  * The Class DetectionFrameDeducer.
  *
- * This class represents a {@link Deducer} of {@link Detection.DetectionFrame} from {@link WrapperPacket}.
+ * This class represents a {@link Deducer} of {@link Detection.DetectionFrame} to {@link DetectionFrame}.
  *
  * @author Rimon Oz
  */
-public class DetectionFrameDeducer implements Deducer<WrapperPacket, DetectionFrame> {
+public class DetectionFrameDeducer implements Deducer<Detection.DetectionFrame, DetectionFrame> {
   @Override
-  public Publisher<DetectionFrame> apply(final Publisher<WrapperPacket> detectionFramePublisher) {
+  public Publisher<DetectionFrame> apply(
+      final Publisher<Detection.DetectionFrame> detectionFramePublisher
+  ) {
     return Flux.from(detectionFramePublisher)
-        .map(WrapperPacket::getDetection)
         .map(detectionFrame ->
             new DetectionFrame(
                 detectionFrame.getBallsList().stream()

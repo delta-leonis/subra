@@ -10,27 +10,25 @@ import lombok.Value;
 import org.nd4j.linalg.factory.Nd4j;
 import org.reactivestreams.Publisher;
 import org.robocup.ssl.Geometry.*;
-import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 
 /**
  * The Class GeometryDeducer.
  *
- * This class represents a {@link Deducer} of {@link GeometryData} from {@link WrapperPacket}.
+ * This class represents a {@link Deducer} of {@link GeometryData} to {@link Geometry}.
  *
  * @author Rimon Oz
  */
-public class GeometryDeducer implements Deducer<WrapperPacket, Geometry> {
+public class GeometryDeducer implements Deducer<GeometryData, Geometry> {
   @Override
-  public Publisher<Geometry> apply(final Publisher<WrapperPacket> detectionFramePublisher) {
-    return Flux.from(detectionFramePublisher)
-        .map(WrapperPacket::getGeometry)
-        .map(geom ->
+  public Publisher<Geometry> apply(final Publisher<GeometryData> geometryDataPublisher) {
+    return Flux.from(geometryDataPublisher)
+        .map(geometryData ->
             new Geometry(
                 new Field.State(
-                    geom.getField().getFieldWidth(),
-                    geom.getField().getFieldLength(),
-                    geom.getField().getFieldLinesList().stream()
+                    geometryData.getField().getFieldWidth(),
+                    geometryData.getField().getFieldLength(),
+                    geometryData.getField().getFieldLinesList().stream()
                         .map(fieldLineSegment ->
                             new FieldLine.State(
                                 fieldLineSegment.getP1().getX(),
@@ -39,7 +37,7 @@ public class GeometryDeducer implements Deducer<WrapperPacket, Geometry> {
                                 fieldLineSegment.getP2().getY(),
                                 fieldLineSegment.getThickness()))
                         .collect(Collectors.toSet()),
-                    geom.getField().getFieldArcsList().stream()
+                    geometryData.getField().getFieldArcsList().stream()
                         .map(fieldCircularArc ->
                             new FieldArc.State(
                                 fieldCircularArc.getCenter().getX(),
@@ -49,7 +47,7 @@ public class GeometryDeducer implements Deducer<WrapperPacket, Geometry> {
                                 fieldCircularArc.getThickness(),
                                 fieldCircularArc.getRadius()))
                         .collect(Collectors.toSet())),
-                Stream.of(geom)
+                Stream.of(geometryData)
                     .flatMap(packet -> Stream.of(
                         this.createGoal(TeamColor.BLUE, CardinalDirection.NORTH, packet.getField()),
                         this.createGoal(TeamColor.YELLOW, CardinalDirection.SOUTH, packet.getField())))
