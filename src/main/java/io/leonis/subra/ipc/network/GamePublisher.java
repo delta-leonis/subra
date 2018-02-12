@@ -2,7 +2,7 @@ package io.leonis.subra.ipc.network;
 
 import io.leonis.algieba.Temporal;
 import io.leonis.subra.game.data.*;
-import io.leonis.subra.ipc.network.GameStatePublisher.GameFrame;
+import io.leonis.subra.ipc.network.GamePublisher.GameFrame;
 import io.leonis.subra.ipc.serialization.protobuf.*;
 import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GoalsDeducer;
@@ -16,14 +16,14 @@ import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 
 /**
- * The Class SSLGameStatePublisher.
+ * The Class GamePublisher.
  *
  * This class contains the functionality of a {@link Publisher} of {@link GameFrame}.
  *
  * @author Rimon Oz
  */
 @AllArgsConstructor
-public final class GameStatePublisher implements Publisher<GameFrame> {
+public final class GamePublisher implements Publisher<GameFrame> {
   private final Publisher<WrapperPacket> visionPublisher;
   private final Publisher<SSL_Referee> refboxPublisher;
 
