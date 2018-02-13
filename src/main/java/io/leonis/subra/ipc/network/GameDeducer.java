@@ -39,16 +39,16 @@ public final class GameDeducer<I extends DetectionSupplier & GeometrySupplier & 
   }
 
   @Value
-  private static class GameFrameWithoutGoals<J extends Player.SetSupplier & GoalDimension.Supplier & Field.Supplier & Ball.SetSupplier>
-      implements Player.SetSupplier, GoalDimension.Supplier, Field.Supplier, Ball.SetSupplier,
-      Referee.Supplier {
+  private static class GameFrameWithoutGoals
+      implements Player.SetSupplier, GoalDimension.Supplier, Field.Supplier, Ball.SetSupplier, Referee.Supplier {
     private final Set<Player> players;
     private final GoalDimension goalDimension;
     private final Set<Ball> balls;
     private final Field field;
     private final Referee referee;
 
-    GameFrameWithoutGoals(final J packet, final Referee.Supplier referee) {
+    <J extends Player.SetSupplier & GoalDimension.Supplier & Field.Supplier & Ball.SetSupplier>
+      GameFrameWithoutGoals(final J packet, final Referee.Supplier referee) {
       this.goalDimension = packet.getGoalDimension();
       this.players = packet.getPlayers();
       this.balls = packet.getBalls();
