@@ -4,7 +4,6 @@ import io.leonis.algieba.Temporal;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.ipc.network.GameDeducer.GameFrame;
 import io.leonis.subra.ipc.serialization.protobuf.*;
-import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GoalsDeducer;
 import io.leonis.zosma.game.engine.*;
 import java.util.Set;
@@ -23,7 +22,8 @@ import reactor.core.publisher.Flux;
  * @author Rimon Oz
  */
 @AllArgsConstructor
-public final class GameDeducer<I extends WrapperPacketSupplier & SSLRefereeSupplier> implements Deducer<I, GameFrame> {
+public final class GameDeducer<I extends DetectionSupplier & GeometrySupplier & SSLRefereeSupplier>
+    implements Deducer<I, GameFrame> {
 
   @Override
   public Publisher<GameFrame> apply(final Publisher<I> entryPublisher) {
@@ -39,7 +39,7 @@ public final class GameDeducer<I extends WrapperPacketSupplier & SSLRefereeSuppl
   }
 
   @Value
-  private static class GameFrameWithoutGoals
+  private static class GameFrameWithoutGoals<J extends Player.SetSupplier & GoalDimension.Supplier & Field.Supplier & Ball.SetSupplier>
       implements Player.SetSupplier, GoalDimension.Supplier, Field.Supplier, Ball.SetSupplier,
       Referee.Supplier {
     private final Set<Player> players;
@@ -48,7 +48,7 @@ public final class GameDeducer<I extends WrapperPacketSupplier & SSLRefereeSuppl
     private final Field field;
     private final Referee referee;
 
-    GameFrameWithoutGoals(final VisionPacket packet, final Referee.Supplier referee) {
+    GameFrameWithoutGoals(final J packet, final Referee.Supplier referee) {
       this.goalDimension = packet.getGoalDimension();
       this.players = packet.getPlayers();
       this.balls = packet.getBalls();

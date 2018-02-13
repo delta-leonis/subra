@@ -23,7 +23,7 @@ import reactor.core.publisher.Flux;
  * @author Rimon Oz
  */
 @AllArgsConstructor
-public class SSLVisionDeducer<I extends WrapperPacketSupplier> implements Deducer<I, VisionPacket> {
+public class SSLVisionDeducer<I extends GeometrySupplier & DetectionSupplier> implements Deducer<I, VisionPacket> {
 
   @Override
   public Publisher<VisionPacket> apply(final Publisher<I> publisher) {

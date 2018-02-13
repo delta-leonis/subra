@@ -19,14 +19,11 @@ import reactor.core.publisher.Flux;
  *
  * @author Rimon Oz
  */
-public class DetectionDeducer<I extends WrapperPacketSupplier>
-    implements Deducer<I, DetectionFrame> {
+public class DetectionDeducer<I extends DetectionSupplier> implements Deducer<I, DetectionFrame> {
   @Override
   public Publisher<DetectionFrame> apply(final Publisher<I> dataPublisher) {
     return Flux.from(dataPublisher)
-        .map(WrapperPacketSupplier::getWrapperPacket)
-        .filter(WrapperPacket::hasDetection)
-        .map(WrapperPacket::getDetection)
+        .map(DetectionSupplier::getDetection)
         .map(detectionFrame ->
             new DetectionFrame(
                 detectionFrame.getBallsList().stream()

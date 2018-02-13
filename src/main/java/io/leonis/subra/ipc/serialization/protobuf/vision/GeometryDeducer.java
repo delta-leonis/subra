@@ -7,6 +7,7 @@ import io.leonis.zosma.game.engine.Deducer;
 import java.util.stream.Collectors;
 import lombok.Value;
 import org.reactivestreams.Publisher;
+import org.robocup.ssl.Geometry;
 import org.robocup.ssl.Geometry.GeometryData;
 import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
@@ -18,13 +19,11 @@ import reactor.core.publisher.Flux;
  *
  * @author Rimon Oz
  */
-public class GeometryDeducer<I extends WrapperPacketSupplier> implements Deducer<I, GeometryFrame> {
+public class GeometryDeducer<I extends GeometrySupplier> implements Deducer<I, GeometryFrame> {
   @Override
   public Publisher<GeometryFrame> apply(final Publisher<I> dataPublisher) {
     return Flux.from(dataPublisher)
-        .map(WrapperPacketSupplier::getWrapperPacket)
-        .filter(WrapperPacket::hasGeometry)
-        .map(WrapperPacket::getGeometry)
+        .map(GeometrySupplier::getGeometry)
         .map(geometryData ->
             new GeometryFrame(
                 new Field.State(
