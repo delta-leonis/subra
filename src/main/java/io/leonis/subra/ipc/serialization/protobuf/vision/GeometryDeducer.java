@@ -7,9 +7,7 @@ import io.leonis.zosma.game.engine.Deducer;
 import java.util.stream.Collectors;
 import lombok.Value;
 import org.reactivestreams.Publisher;
-import org.robocup.ssl.Geometry;
 import org.robocup.ssl.Geometry.GeometryData;
-import org.robocup.ssl.Wrapper.WrapperPacket;
 import reactor.core.publisher.Flux;
 
 /**

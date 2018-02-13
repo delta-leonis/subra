@@ -46,7 +46,7 @@ public final class VisionPublisher implements Publisher<VisionFrame> {
 
   @Value
   public static class VisionFrame implements GeometrySupplier, DetectionSupplier {
-    GeometryData geometry;
-    DetectionFrame detection;
+    private final GeometryData geometry;
+    private final DetectionFrame detection;
   }
 }
