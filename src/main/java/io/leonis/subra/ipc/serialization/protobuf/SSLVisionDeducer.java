@@ -4,7 +4,7 @@ import io.leonis.algieba.Temporal;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.ipc.serialization.protobuf.SSLVisionDeducer.VisionPacket;
 import io.leonis.subra.ipc.serialization.protobuf.vision.*;
-import io.leonis.subra.ipc.serialization.protobuf.vision.DetectionFrameDeducer.DetectionFrame;
+import io.leonis.subra.ipc.serialization.protobuf.vision.DetectionDeducer.DetectionFrame;
 import io.leonis.subra.ipc.serialization.protobuf.vision.GeometryDeducer.GeometryFrame;
 import io.leonis.zosma.game.engine.*;
 import lombok.*;
@@ -23,21 +23,15 @@ import reactor.core.publisher.Flux;
  * @author Rimon Oz
  */
 @AllArgsConstructor
-public class SSLVisionDeducer implements Deducer<WrapperPacket, VisionPacket> {
+public class SSLVisionDeducer<I extends GeometrySupplier & DetectionSupplier> implements Deducer<I, VisionPacket> {
 
   @Override
-  public Publisher<VisionPacket> apply(final Publisher<WrapperPacket> wrapperPacketPublisher) {
-    return Flux.from(wrapperPacketPublisher)
+  public Publisher<VisionPacket> apply(final Publisher<I> publisher) {
+    return Flux.from(publisher)
         .transform(
             new ParallelDeducer<>(
-                input -> Flux.from(input)
-                    .filter(WrapperPacket::hasGeometry)
-                    .map(WrapperPacket::getGeometry)
-                    .transform(new GeometryDeducer()),
-                input -> Flux.from(input)
-                    .filter(WrapperPacket::hasDetection)
-                    .map(WrapperPacket::getDetection)
-                    .transform(new DetectionFrameDeducer()),
+                new GeometryDeducer<>(),
+                new DetectionDeducer<>(),
                 VisionPacket::new));
   }
 
