@@ -2,48 +2,43 @@ package io.leonis.subra.game.engine;
 
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.game.formations.PositionFormation;
-import io.leonis.zosma.game.engine.Deducer;
+import io.reactivex.functions.*;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Value;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.ops.transforms.Transforms;
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Flux;
 
 /**
  * The Class BallTrackerFormationDeducer.
  *
- * This class represents a {@link Deducer} which builds a {@link PositionFormation} which places
+ * This class represents a {@link Function} which builds a {@link PositionFormation} which places
  * {@link Player} formation positions on a circle around the ball.
  *
- * @param <G> A value object containing a {@link java.util.Set} of {@link Player} and a {@link
- *            java.util.Set}
  * @author Rimon Oz
  */
 @Value
-public class BallTrackerFormationDeducer<G extends Player.SetSupplier & Ball.Supplier>
-    implements Deducer<G, PositionFormation> {
+public class BallTrackerFormationDeducer
+    implements BiFunction<Set<Player>, Ball, PositionFormation> {
   private final TeamColor teamColor;
   private final double distanceFromBall;
 
   @Override
-  public Publisher<PositionFormation> apply(final Publisher<G> inputPublisher) {
-    return Flux.from(inputPublisher)
-        .map(game ->
-            new PositionFormation(
-                game.getPlayers().stream()
-                    .filter(player -> player.getTeamColor().equals(this.getTeamColor()))
-                    .collect(Collectors.toMap(
-                        Player::getIdentity,
-                        player ->
-                            Nd4j.vstack(
-                                game.getBall().getXY()
-                                    .add(Transforms
-                                        .unitVec(game.getBall().getXY().sub(player.getXY()))
-                                        .mul(this.getDistanceFromBall())),
-                                Nd4j.create(new double[]{
-                                    Math.acos(Transforms.cosineSim(
-                                        player.getXY(),
-                                        game.getBall().getXY()))}))))));
+  public PositionFormation apply(final Set<Player> players, final Ball ball) {
+    return new PositionFormation(
+        players.stream()
+            .filter(player -> player.getTeamIdentity().equals(this.getTeamColor()))
+            .collect(Collectors.toMap(
+                Player::getIdentity,
+                player ->
+                    Nd4j.vstack(
+                        ball.getXY()
+                            .add(Transforms
+                                .unitVec(ball.getXY().sub(player.getXY()))
+                                .mul(this.getDistanceFromBall())),
+                        Nd4j.create(new double[]{
+                            Math.acos(Transforms.cosineSim(
+                                player.getXY(),
+                                ball.getXY()))})))));
   }
 }

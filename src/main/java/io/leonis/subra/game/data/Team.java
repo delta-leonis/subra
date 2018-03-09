@@ -1,7 +1,8 @@
 package io.leonis.subra.game.data;
 
 import io.leonis.algieba.Temporal;
-import io.leonis.zosma.game.Identity;
+import io.leonis.subra.Identity;
+import io.leonis.subra.Identity.Identifiable;
 import java.io.Serializable;
 import java.util.List;
 import lombok.Value;
@@ -14,7 +15,7 @@ import lombok.Value;
  * @author Rimon Oz
  * @author Jeroen de Jong
  */
-public interface Team extends Identity.Supplier, Serializable, Temporal {
+public interface Team extends Identifiable, Serializable, Temporal {
 
   /**
    * @return The {@link TeamIdentity identity} of the team.

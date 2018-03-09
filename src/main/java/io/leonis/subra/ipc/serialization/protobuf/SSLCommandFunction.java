@@ -2,23 +2,21 @@ package io.leonis.subra.ipc.serialization.protobuf;
 
 import io.leonis.subra.game.data.Strategy;
 import io.leonis.subra.protocol.Robot.Command;
-import io.leonis.zosma.game.engine.Deducer;
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Flux;
+import io.reactivex.functions.Function;
+import java.util.Optional;
 
 /**
- * The Class SSLCommandDeducer.
+ * The Class SSLCommandFunction.
  *
  * Deduces a {@link io.leonis.subra.game.data.Strategy} to individual {@link Command Commands}.
  *
  * @author Jeroen de Jong
  */
-public class SSLCommandDeducer implements Deducer<Strategy.Supplier, Command> {
+public class SSLCommandFunction implements Function<Strategy.Supplier, Optional<Command>> {
 
   @Override
-  public Publisher<Command> apply(final Publisher<Strategy.Supplier> supplierPublisher) {
-    return Flux.from(supplierPublisher)
-        .flatMapIterable(strategyContainer -> strategyContainer.getStrategy().entrySet())
+  public Optional<Command> apply(final Strategy.Supplier strategyContainer) {
+    return strategyContainer.getStrategy().entrySet().stream()
         .map(robotCommandEntry ->
             Command.newBuilder()
                 .setRobotId(robotCommandEntry.getKey().getId())
@@ -32,6 +30,7 @@ public class SSLCommandDeducer implements Deducer<Strategy.Supplier, Command> {
                     .setChip(robotCommandEntry.getValue().getChipKick())
                     .setDribble(robotCommandEntry.getValue().getDribblerSpin())
                     .build())
-                .build());
+                .build())
+        .findFirst();
   }
 }

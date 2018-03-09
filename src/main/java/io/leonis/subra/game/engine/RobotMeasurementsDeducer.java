@@ -4,46 +4,30 @@ import io.leonis.subra.game.data.Player.PlayerIdentity;
 import io.leonis.subra.game.data.*;
 import io.leonis.subra.protocol.Robot;
 import io.leonis.subra.protocol.Robot.Measurements;
-import io.leonis.zosma.exception.UnsafeFunction;
-import io.leonis.zosma.game.engine.Deducer;
-import java.net.DatagramPacket;
-import java.util.Arrays;
+import io.reactivex.functions.Function;
 import java.util.stream.Collectors;
-import lombok.Value;
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Flux;
+import lombok.*;
 
 /**
  * The Class RobotMeasurementsDeducer.
  *
- * This class represents a {@link Deducer} which converts {@link DatagramPacket} to
- * {@link Robot.Measurements}.
+ * A {@link Function} which converts {@link Robot.Measurements} to {@link PlayerMeasurements}.
  *
  * @author Rimon Oz
  */
-@Value
-public class RobotMeasurementsDeducer implements Deducer<DatagramPacket, PlayerMeasurements.Supplier> {
+@AllArgsConstructor
+public final class RobotMeasurementsDeducer
+    implements Function<Robot.Measurements, PlayerMeasurements> {
   private final TeamColor color;
 
   @Override
-  public Publisher<PlayerMeasurements.Supplier> apply(
-      final Publisher<DatagramPacket> datagramPacketPublisher
-  ) {
-    return Flux.from(datagramPacketPublisher)
-        .map(datagramPacket ->
-            Arrays.copyOfRange(datagramPacket.getData(), 0, datagramPacket.getLength()))
-        .map(new UnsafeFunction<>(Robot.Measurements::parseFrom))
-        // get rid of empty measurements
-        .filter(measurementsList -> !measurementsList.getMeasurementsList().isEmpty())
-        // and put the measurements in a map
-        .map(measurements ->
-            () -> new PlayerMeasurements.State(
-                new PlayerIdentity(measurements.getRobotId(), this.color),
-                measurements.getMeasurementsList().stream()
-                    .collect(Collectors.toMap(
-                        Measurements.Single::getLabel,
-                        measurement ->
-                            measurement.getValue()
-                                * Math.pow(10, measurement.getTenFoldMultiplier())))));
+  public PlayerMeasurements apply(final Robot.Measurements measurements) {
+    return new PlayerMeasurements.State(
+        new PlayerIdentity(measurements.getRobotId(), this.color),
+        measurements.getMeasurementsList().stream()
+            .collect(Collectors.toMap(
+                Measurements.Single::getLabel,
+                measurement ->
+                    measurement.getValue() * Math.pow(10, measurement.getTenFoldMultiplier()))));
   }
 }

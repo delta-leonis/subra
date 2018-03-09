@@ -2,7 +2,6 @@ package io.leonis.subra.game.formations;
 
 import io.leonis.subra.game.data.Player;
 import io.leonis.subra.game.data.Player.PlayerIdentity;
-import io.leonis.zosma.game.Formation;
 import java.util.Map;
 import lombok.Value;
 import org.nd4j.linalg.api.ndarray.INDArray;
