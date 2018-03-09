@@ -2,46 +2,42 @@ package io.leonis.subra.game.engine;
 
 import io.leonis.algieba.spatial.*;
 import io.leonis.subra.game.data.*;
-import io.leonis.zosma.game.engine.Deducer;
-import java.util.function.*;
+import io.leonis.subra.game.data.Strategy.Supplier;
+import io.leonis.subra.game.data.Team.TeamIdentity;
+import io.reactivex.functions.Function3;
+import java.util.Set;
 import java.util.stream.*;
-import lombok.Value;
+import lombok.AllArgsConstructor;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Flux;
 
 /**
  * The Class PotentialFieldDeducer.
  *
  * @author Rimon Oz
  */
-@Value
-public class PotentialFieldDeducer<G extends MovingPlayer.SetSupplier & Field.Supplier & MovingBall.SetSupplier>
-    implements Deducer<G, Strategy.Supplier> {
-  private final TeamColor teamColor;
+@AllArgsConstructor
+public final class PotentialFieldDeducer
+    implements Function3<Set<MovingPlayer>, Set<MovingBall>, Field, Strategy.Supplier> {
+
+  private final TeamIdentity teamIdentity;
   private final INDArray origin;
-  private final Function<MovingPlayer, PotentialField> playerFieldGenerator;
-  private final Function<MovingBall, PotentialField> ballFieldGenerator;
-  private final BiFunction<MovingPlayer, PotentialField, PlayerCommand> commandGenerator;
+  private final java.util.function.Function<MovingPlayer, PotentialField> playerFieldGenerator;
+  private final java.util.function.Function<MovingBall, PotentialField> ballFieldGenerator;
+  private final java.util.function.BiFunction<MovingPlayer, PotentialField, PlayerCommand> commandGenerator;
 
   @Override
-  public Publisher<Strategy.Supplier> apply(
-      final Publisher<G> inputPublisher
-  ) {
-    return Flux.from(inputPublisher)
-        .map(game -> {
-          final AggregatedPotentialField aggregatedPotentialField = new AggregatedPotentialField(
-              this.origin,
-              Stream.concat(
-                  game.getPlayers().stream().map(this.playerFieldGenerator),
-                  game.getBalls().stream().map(this.ballFieldGenerator))
-                  .collect(Collectors.toSet()));
-
-          return () -> game.getPlayers().stream()
-              .filter(player -> player.getTeamColor().equals(this.getTeamColor()))
-              .collect(Collectors.toMap(
-                  Player::getIdentity,
-                  player -> this.commandGenerator.apply(player, aggregatedPotentialField)));
-        });
+  public Supplier apply(final Set<MovingPlayer> players, final Set<MovingBall> balls,
+      final Field field) {
+    return () -> players.stream()
+        .filter(player -> player.getTeamIdentity().equals(teamIdentity))
+        .collect(Collectors.toMap(
+            Player::getIdentity,
+            player -> this.commandGenerator.apply(player,
+                new AggregatedPotentialField(
+                    this.origin,
+                    Stream.concat(
+                        players.stream().map(this.playerFieldGenerator),
+                        balls.stream().map(this.ballFieldGenerator))
+                        .collect(Collectors.toSet())))));
   }
 }
