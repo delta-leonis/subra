@@ -1,47 +1,48 @@
 package io.leonis.subra.game.engine;
 
 import io.leonis.subra.game.data.*;
-import io.leonis.zosma.game.engine.Deducer;
-import java.util.*;
+import io.reactivex.functions.*;
+import java.util.Set;
 import java.util.stream.Collectors;
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Flux;
 
 /**
  * The Class PlayersVelocityDeducer.
  *
- * This class represents a {@link Deducer} which calculates velocities of {@link Player}.
+ * This class represents a {@link Function} which calculates velocities of {@link Player}.
  *
- * @param <I> The type of state carrying a {@link Set} of {@link Player}.
  * @author Rimon Oz
  */
-public class PlayersVelocityDeducer<I extends Player.SetSupplier>
-    implements Deducer<I, Set<MovingPlayer>> {
+public class PlayersVelocityDeducer implements BiFunction<Set<Player>, Set<MovingPlayer>, Set<MovingPlayer>> {
+
   @Override
-  public Publisher<Set<MovingPlayer>> apply(final Publisher<I> iPublisher) {
-    return Flux.from(iPublisher)
-        .scan(
-            Collections.emptySet(),
-            (previousGame, currentGame) ->
-                currentGame.getPlayers().stream()
-                    .map(currentPlayer ->
-                        previousGame.stream()
-                            .filter(previousPlayer ->
-                                previousPlayer.getIdentity().equals(currentPlayer.getIdentity()))
-                            .findFirst()
-                            .map(previousPlayer ->
-                                new MovingPlayer.State(currentPlayer, previousPlayer))
-                            .orElse(
-                                new MovingPlayer.State(
-                                    currentPlayer.getId(),
-                                    currentPlayer.getTimestamp(),
-                                    currentPlayer.getX(),
-                                    currentPlayer.getY(),
-                                    currentPlayer.getOrientation(),
-                                    0d,
-                                    0d,
-                                    0d,
-                                    currentPlayer.getTeamColor())))
-                    .collect(Collectors.toSet()));
+  public Set<MovingPlayer> apply(final Set<Player> currentPlayers, final Set<MovingPlayer> previousPlayers) {
+    return currentPlayers.stream()
+        .map(currentPlayer ->
+            previousPlayers.stream()
+                .filter(previousPlayer ->
+                    previousPlayer.getIdentity().equals(currentPlayer.getIdentity()))
+                .findFirst()
+                .map(previousPlayer ->
+                    new MovingPlayer.State(currentPlayer.getId(),
+                        currentPlayer.getTimestamp(),
+                        currentPlayer.getX(),
+                        currentPlayer.getY(),
+                        currentPlayer.getOrientation(),
+                        (currentPlayer.getX() - previousPlayer.getX())
+                            / (currentPlayer.getTimestamp() - previousPlayer.getTimestamp()),
+                        (currentPlayer.getY() - previousPlayer.getY())
+                            / (currentPlayer.getTimestamp() - previousPlayer.getTimestamp()),
+                        (currentPlayer.getOrientation() - previousPlayer.getOrientation())
+                            / (currentPlayer.getTimestamp() - previousPlayer.getTimestamp()),
+                        currentPlayer.getTeamIdentity()))
+                .orElse(
+                    new MovingPlayer.State(
+                        currentPlayer.getId(),
+                        currentPlayer.getTimestamp(),
+                        currentPlayer.getX(),
+                        currentPlayer.getY(),
+                        currentPlayer.getOrientation(),
+                        currentPlayer.getTeamIdentity())))
+        .collect(Collectors.toSet());
   }
 }
