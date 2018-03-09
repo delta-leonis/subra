@@ -1,1 +1,3 @@
 rootProject.name = 'subra'
+include ':mx'
+project(':mx').projectDir = new File(settingsDir, '../Mx')
